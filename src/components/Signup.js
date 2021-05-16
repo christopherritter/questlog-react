@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Form, Card, Button, Alert } from "react-bootstrap";
-import { useAuth } from '../contexts/AuthContext'
-import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { Link, useHistory } from "react-router-dom";
 
 export default function Signup() {
   const emailRef = useRef();
@@ -9,23 +9,25 @@ export default function Signup() {
   const passwordConfirmRef = useRef();
   const { signup } = useAuth();
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-      return setError("Passwords do not match.")
+      return setError("Passwords do not match.");
     }
 
     try {
       setError("");
-      setLoading(true)
+      setLoading(true);
       await signup(emailRef.current.value, passwordRef.current.value);
+      history.push("/");
     } catch {
-      setError("Failed to create account")
+      setError("Failed to create account");
     }
-    setLoading(false)
+    setLoading(false);
   }
 
   return (
@@ -33,8 +35,8 @@ export default function Signup() {
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Sign Up</h2>
-          { error && <Alert variant="danger">{error}</Alert>}
-          <Form onSubmit={ handleSubmit }>
+          {error && <Alert variant="danger">{error}</Alert>}
+          <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>
               <Form.Control type="email" ref={emailRef} required />
