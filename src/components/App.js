@@ -1,4 +1,5 @@
 import React from "react";
+import './App.css';
 import Signup from "./Signup";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { Switch, Route, Link } from "react-router-dom";
