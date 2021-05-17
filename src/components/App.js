@@ -13,7 +13,7 @@ function App() {
   return (
     <>
       <Navbar bg="dark" variant="dark" expand="lg">
-        <Navbar.Brand href="/" style={{ marginLeft: "1rem" }}>QuestLog</Navbar.Brand>
+        <Link to={"/"} className="navbar-brand" style={{ marginLeft: "1rem" }}>QuestLog</Link>
         <Nav className="mr-auto">
           <Link to={"/tutorials"} className="nav-link">Tutorials</Link>
           <Link to={"/add"} className="nav-link">Add</Link>
