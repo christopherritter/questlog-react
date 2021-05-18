@@ -1,5 +1,4 @@
 import React from "react";
-import mapboxgl from 'mapbox-gl';
 import './App.css';
 import Signup from "./Signup";
 import { Container, Navbar, Nav } from "react-bootstrap";
@@ -10,8 +9,7 @@ import PrivateRoute from "./PrivateRoute";
 import UpdateProfile from "./UpdateProfile";
 import AddTutorial from "./AddTutorial";
 import TutorialsList from "./TutorialsList";
-
-mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+import Quest from "./Quest";
 
 const App = () => {
   return (
@@ -21,6 +19,7 @@ const App = () => {
         <Nav className="mr-auto">
           <Link to={"/tutorials"} className="nav-link">Tutorials</Link>
           <Link to={"/add"} className="nav-link">Add</Link>
+          <Link to={"/quest"} className="nav-link">Quest</Link>
         </Nav>
       </Navbar>
       <Container
@@ -35,6 +34,7 @@ const App = () => {
             <Route path="/login" component={Login} />
             <Route exact path={["/", "/tutorials"]} component={TutorialsList} />
             <Route exact path="/add" component={AddTutorial} />
+            <Route exact path="/quest" component={Quest} />
           </Switch>
         </div>
       </Container>

@@ -18,3 +18,11 @@
   max-width: 300px;
   margin: auto;
 }
+
+.map-container {
+  position: absolute;
+  top: 56px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}

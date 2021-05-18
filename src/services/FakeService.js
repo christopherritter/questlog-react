@@ -1,0 +1,39 @@
+const fetchFakeData = (centerCoordinates) => {
+  console.log(centerCoordinates)
+  const newFeaturesList = [];
+  for (let i = 0; i < 20; i++) {
+    const id = i;
+    const { longitude, latitude } = getRandomCoordinate(centerCoordinates);
+    console.log({ longitude, latitude })
+    newFeaturesList.push({
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [longitude, latitude],
+      },
+      properties: {
+        id,
+        name: `Random Point #${id}`,
+        description: `description for Random Point #${id}`,
+      },
+    });
+  }
+
+  return Promise.resolve({
+    type: "FeatureCollection",
+    features: newFeaturesList,
+  });
+};
+
+const getRandomCoordinate = ({ lng: centerLon, lat: centerLat }) => {
+  const r = 0.025 * Math.sqrt(Math.random());
+  const theta = Math.random() * 2 * Math.PI;
+  const latitude = centerLat + r * Math.cos(theta);
+  const longitude = centerLon + r * Math.sin(theta);
+  return {
+    longitude,
+    latitude,
+  };
+};
+
+export default fetchFakeData;
