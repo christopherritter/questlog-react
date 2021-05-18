@@ -1,12 +1,16 @@
 import React, { useRef, useEffect } from 'react'
+import ReactDOM from "react-dom";
 import mapboxgl from 'mapbox-gl';
 
 import fetchFakeData from "../services/FakeService";
+import Popup from "./Popup";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
 const Quest = () => {
   const mapContainerRef = useRef(null);
+  // offset puts the popup 15px above the feature
+  const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }));
 
   // initialize map when component mounts
   useEffect(() => {
@@ -49,6 +53,30 @@ const Quest = () => {
       // update "random-points-data" source with new data
       // all layers that consume the "random-points-data" data source will be updated automatically
       map.getSource('random-points-data').setData(results);
+    });
+
+    // add popup when user clicks a point
+    map.on('click', 'random-points-layer', e => {
+      if (e.features.length) {
+        const feature = e.features[0];
+        // create popup node
+        const popupNode = document.createElement('div');
+        ReactDOM.render(<Popup feature={feature} />, popupNode);
+        // set popup on map
+        popUpRef.current.setLngLat(feature.geometry.coordinates).setDOMContent(popupNode).addTo(map);
+      }
+    });
+
+    // change cursor to pointer when user hovers over a clickable feature
+    map.on('mouseenter', 'random-points-layer', e => {
+      if (e.features.length) {
+        map.getCanvas().style.cursor = 'pointer';
+      }
+    });
+
+    // reset cursor to default when user is no longer hovering over a clickable feature
+    map.on('mouseleave', 'random-points-layer', () => {
+      map.getCanvas().style.cursor = '';
     });
 
     // add navigation control (the +/- zoom buttons)
