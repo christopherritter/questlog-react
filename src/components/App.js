@@ -9,7 +9,7 @@ import PrivateRoute from "./PrivateRoute";
 import UpdateProfile from "./UpdateProfile";
 import AddTutorial from "./AddTutorial";
 import TutorialsList from "./TutorialsList";
-import Quest from "./Quest";
+import QuestMap from "./QuestMap";
 
 const App = () => {
   return (
@@ -19,7 +19,7 @@ const App = () => {
         <Nav className="mr-auto">
           <Link to={"/tutorials"} className="nav-link">Tutorials</Link>
           <Link to={"/add"} className="nav-link">Add</Link>
-          <Link to={"/quest"} className="nav-link">Quest</Link>
+          <Link to={"/quest-map"} className="nav-link">Quest Map</Link>
         </Nav>
       </Navbar>
       <Container
@@ -34,7 +34,7 @@ const App = () => {
             <Route path="/login" component={Login} />
             <Route exact path={["/", "/tutorials"]} component={TutorialsList} />
             <Route exact path="/add" component={AddTutorial} />
-            <Route exact path="/quest" component={Quest} />
+            <Route exact path="/quest-map" component={QuestMap} />
           </Switch>
         </div>
       </Container>

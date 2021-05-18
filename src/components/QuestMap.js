@@ -7,7 +7,7 @@ import Popup from "./Popup";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
-const Quest = () => {
+const QuestMap = () => {
   const mapContainerRef = useRef(null);
   // offset puts the popup 15px above the feature
   const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }));
@@ -89,4 +89,4 @@ const Quest = () => {
   return <div className="map-container" ref={mapContainerRef} />;
 };
 
-export default Quest;
+export default QuestMap;
