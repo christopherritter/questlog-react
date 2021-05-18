@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
-import TutorialDataService from "../services/TutorialService";
-import Tutorial from "./Tutorial";
+import TutorialDataService from "../../services/TutorialService";
+import Tutorial from "./Tutorial.jsx";
 
 const TutorialsList = () => {
   const [currentTutorial, setCurrentTutorial] = useState(null);

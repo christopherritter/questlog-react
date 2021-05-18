@@ -1,15 +1,17 @@
 import React from "react";
 import './App.css';
-import Signup from "./Signup";
+
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { Switch, Route, Link } from "react-router-dom";
-import Dashboard from "./Dashboard";
-import Login from "./Login";
-import PrivateRoute from "./PrivateRoute";
-import UpdateProfile from "./UpdateProfile";
-import AddTutorial from "./AddTutorial";
-import TutorialsList from "./TutorialsList";
-import QuestMap from "./QuestMap";
+
+import Signup from "./auth/Signup.jsx";
+import Dashboard from "./user/Dashboard.jsx";
+import Login from "./auth/Login.jsx";
+import PrivateRoute from "./utils/PrivateRoute.jsx";
+import UpdateProfile from "./user/UpdateProfile.jsx";
+import AddTutorial from "./tutorials/AddTutorial.jsx";
+import TutorialsList from "./tutorials/TutorialsList.jsx";
+import QuestMap from "./quests/QuestMap.jsx";
 
 const App = () => {
   return (
