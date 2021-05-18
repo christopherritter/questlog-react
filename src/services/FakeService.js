@@ -1,10 +1,8 @@
 const fetchFakeData = (centerCoordinates) => {
-  console.log(centerCoordinates)
   const newFeaturesList = [];
   for (let i = 0; i < 20; i++) {
     const id = i;
     const { longitude, latitude } = getRandomCoordinate(centerCoordinates);
-    console.log({ longitude, latitude })
     newFeaturesList.push({
       type: "Feature",
       geometry: {
