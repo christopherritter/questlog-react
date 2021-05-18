@@ -1,4 +1,5 @@
 import React from "react";
+import mapboxgl from 'mapbox-gl';
 import './App.css';
 import Signup from "./Signup";
 import { Container, Navbar, Nav } from "react-bootstrap";
@@ -10,7 +11,9 @@ import UpdateProfile from "./UpdateProfile";
 import AddTutorial from "./AddTutorial";
 import TutorialsList from "./TutorialsList";
 
-function App() {
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
+
+const App = () => {
   return (
     <>
       <Navbar bg="dark" variant="dark" expand="lg">
@@ -37,6 +40,6 @@ function App() {
       </Container>
     </>
   );
-}
+};
 
 export default App;
