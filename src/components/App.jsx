@@ -36,7 +36,7 @@ const App = () => {
               <Link to={"/quests"} className="nav-link">
                 Quests List
               </Link>
-              <Link to={"/editor"} className="nav-link">
+              <Link to={"/quest-editor"} className="nav-link">
                 Quest Editor
               </Link>
             </Nav>
@@ -54,8 +54,8 @@ const App = () => {
           <Route exact path={["/", "/tutorials"]} component={TutorialsList} />
           <Route exact path="/add-tutorial" component={AddTutorial} />
           <Route path="/quests" component={QuestsList} />
-          <Route path="/editor" component={QuestEditor} />
-          <Route path="/quest" component={Quest} />
+          <Route exact path="/quest-editor/" component={QuestEditor} />
+          <Route exact path="/quest/:id" component={Quest} />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
           <PrivateRoute path="/profile" component={Profile} />

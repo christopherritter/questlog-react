@@ -22,27 +22,27 @@ const Quest = (props) => {
     zoom: 17,
   };
   
-  const [currentQuest, setCurrentQuest] = useState(initialQuestState);
+  const [quest, setQuest] = useState(initialQuestState);
   const [currentRegion, setCurrentRegion] = useState(initialRegionState);
   const [error, setError] = useState("");
 
-  const { quest } = props;
-
   useEffect(() => {
+    console.log(props)
     const unsubscribe = QuestDataService.getAll()
-      .where("questId", "==", props.questId)
+      .where("questId", "==", props.match.params.id)
       .onSnapshot((snapshot) => {
-        snapshot.docs.map((doc) => setCurrentQuest(doc.data()));
+        snapshot.docs.map((doc) => setQuest(doc.data()));
       });
 
     return unsubscribe;
-  }, [currentQuest]);
+  }, [props]);
 
   return (
     <Container>
       <Row>
         <Col>
-          <h1>Quest</h1>
+          <h1 class="mt-5">{ quest.title }</h1>
+          <p>{ quest.description }</p>
         </Col>
       </Row>
     </Container>
