@@ -15,7 +15,6 @@ import TutorialsList from "./tutorials/TutorialsList.jsx";
 import QuestsList from "./quests/QuestsList.jsx";
 import QuestEditor from "./quests/QuestEditor.jsx";
 import Quest from "./quests/Quest.jsx";
-import QuestMap from "./quests/QuestMap.jsx";
 
 const App = () => {
   return (
