@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Form, Card, Button, Alert } from "react-bootstrap";
+import { Container, Form, Card, Button, Alert } from "react-bootstrap";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 import UserDataService from "../../services/UserService";
 import { Link, useHistory } from "react-router-dom";
@@ -51,7 +51,11 @@ const Signup = () => {
   }
 
   return (
-    <>
+    <Container
+        className="d-flex align-items-center justify-content-center"
+        style={{ minHeight: "80vh" }}
+      >
+        <div className="w-100" style={{ maxWidth: "400px" }}>
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Sign Up</h2>
@@ -82,7 +86,8 @@ const Signup = () => {
       <div className="w-100 text-center mt-2">
         Already have an account? <Link to="/login">Log In</Link>
       </div>
-    </>
+    </div>
+    </Container>
   );
 };
 

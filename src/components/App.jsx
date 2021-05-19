@@ -40,22 +40,17 @@ const App = () => {
           </Nav>
         </Container>
       </Navbar>
-      <Container
-        className="d-flex align-items-center justify-content-center"
-        style={{ minHeight: "80vh" }}
-      >
-        <div className="w-100" style={{ maxWidth: "400px" }}>
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <PrivateRoute path="/dashboard" component={Dashboard} />
-            <PrivateRoute path="/update-profile" component={UpdateProfile} />
-            <Route path="/signup" component={Signup} />
-            <Route path="/login" component={Login} />
-            <Route exact path={["/", "/tutorials"]} component={TutorialsList} />
-            <Route exact path="/add" component={AddTutorial} />
-            <Route path="/quest-map" component={QuestMap} />
-          </Switch>
-        </div>
+      <Container fluid>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <PrivateRoute path="/dashboard" component={Dashboard} />
+          <PrivateRoute path="/update-profile" component={UpdateProfile} />
+          <Route path="/signup" component={Signup} />
+          <Route path="/login" component={Login} />
+          <Route exact path={["/", "/tutorials"]} component={TutorialsList} />
+          <Route exact path="/add" component={AddTutorial} />
+          <Route path="/quest-map" component={QuestMap} />
+        </Switch>
       </Container>
     </>
   );
