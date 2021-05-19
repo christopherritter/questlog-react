@@ -2,8 +2,8 @@ import { firestore } from "../firebase";
 
 const db = firestore.collection("/users");
 
-const get = (uid) => {
-  return db.doc(uid).get();
+const getAll = () => {
+  return db;
 };
 
 const create = (data) => {
@@ -19,7 +19,7 @@ const remove = (id) => {
 };
 
 const UserService = {
-  get,
+  getAll,
   create,
   update,
   remove

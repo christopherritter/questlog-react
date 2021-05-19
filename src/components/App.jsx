@@ -8,7 +8,7 @@ import PrivateRoute from "./utils/PrivateRoute.jsx";
 import Home from "./Home.jsx";
 import Signup from "./auth/Signup.jsx";
 import Login from "./auth/Login.jsx";
-import Dashboard from "./user/Dashboard.jsx";
+import Profile from "./user/Profile.jsx";
 import UpdateProfile from "./user/UpdateProfile.jsx";
 import AddTutorial from "./tutorials/AddTutorial.jsx";
 import TutorialsList from "./tutorials/TutorialsList.jsx";
@@ -34,7 +34,7 @@ const App = () => {
             </Link>
           </Nav>
           <Nav>
-            <Link to={"/dashboard"} className="nav-link">
+            <Link to={"/profile"} className="nav-link">
               Profile
             </Link>
           </Nav>
@@ -43,7 +43,7 @@ const App = () => {
       <Container fluid>
         <Switch>
           <Route exact path="/" component={Home} />
-          <PrivateRoute path="/dashboard" component={Dashboard} />
+          <PrivateRoute path="/profile" component={Profile} />
           <PrivateRoute path="/update-profile" component={UpdateProfile} />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
