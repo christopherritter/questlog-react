@@ -41,7 +41,7 @@ const Quest = (props) => {
     <Container>
       <Row>
         <Col>
-          <h1 class="mt-5">{ quest.title }</h1>
+          <h1 className="mt-5">{ quest.title }</h1>
           <p>{ quest.description }</p>
         </Col>
       </Row>
