@@ -13,6 +13,7 @@ import UpdateProfile from "./user/UpdateProfile.jsx";
 import AddTutorial from "./tutorials/AddTutorial.jsx";
 import TutorialsList from "./tutorials/TutorialsList.jsx";
 import QuestsList from "./quests/QuestsList.jsx";
+import QuestEditor from "./quests/QuestEditor.jsx";
 import Quest from "./quests/Quest.jsx";
 import QuestMap from "./quests/QuestMap.jsx";
 
@@ -36,11 +37,8 @@ const App = () => {
               <Link to={"/quests"} className="nav-link">
                 Quests List
               </Link>
-              <Link to={"/quest"} className="nav-link">
-                Quest
-              </Link>
-              <Link to={"/quest-map"} className="nav-link">
-                Quest Map
+              <Link to={"/editor"} className="nav-link">
+                Quest Editor
               </Link>
             </Nav>
             <Nav>
@@ -57,8 +55,8 @@ const App = () => {
           <Route exact path={["/", "/tutorials"]} component={TutorialsList} />
           <Route exact path="/add-tutorial" component={AddTutorial} />
           <Route path="/quests" component={QuestsList} />
+          <Route path="/editor" component={QuestEditor} />
           <Route path="/quest" component={Quest} />
-          <Route path="/quest-map" component={QuestMap} />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
           <PrivateRoute path="/profile" component={Profile} />
