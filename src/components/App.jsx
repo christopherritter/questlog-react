@@ -27,17 +27,11 @@ const App = () => {
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav className="mr-auto">
-              <Link to={"/tutorials"} className="nav-link">
-                Tutorials
-              </Link>
-              <Link to={"/add"} className="nav-link">
-                Add
-              </Link>
               <Link to={"/quests"} className="nav-link">
-                Quests List
+                Browse Quests
               </Link>
               <Link to={"/quest-editor"} className="nav-link">
-                Quest Editor
+                Create Your Own!
               </Link>
             </Nav>
             <Nav>
@@ -51,8 +45,6 @@ const App = () => {
       <Container fluid>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path={["/", "/tutorials"]} component={TutorialsList} />
-          <Route exact path="/add-tutorial" component={AddTutorial} />
           <Route path="/quests" component={QuestsList} />
           <Route exact path="/quest-editor/" component={QuestEditor} />
           <Route exact path="/quest/:id" component={Quest} />
