@@ -12,6 +12,8 @@ import Profile from "./user/Profile.jsx";
 import UpdateProfile from "./user/UpdateProfile.jsx";
 import AddTutorial from "./tutorials/AddTutorial.jsx";
 import TutorialsList from "./tutorials/TutorialsList.jsx";
+import QuestsList from "./quests/QuestsList.jsx";
+import Quest from "./quests/Quest.jsx";
 import QuestMap from "./quests/QuestMap.jsx";
 
 const App = () => {
@@ -22,34 +24,45 @@ const App = () => {
           <Link to={"/"} className="navbar-brand">
             QuestLog
           </Link>
-          <Nav className="mr-auto">
-            <Link to={"/tutorials"} className="nav-link">
-              Tutorials
-            </Link>
-            <Link to={"/add"} className="nav-link">
-              Add
-            </Link>
-            <Link to={"/quest-map"} className="nav-link">
-              Quest Map
-            </Link>
-          </Nav>
-          <Nav>
-            <Link to={"/profile"} className="nav-link">
-              Profile
-            </Link>
-          </Nav>
+          <Navbar.Toggle aria-controls="navbarScroll" />
+          <Navbar.Collapse id="navbarScroll">
+            <Nav className="mr-auto">
+              <Link to={"/tutorials"} className="nav-link">
+                Tutorials
+              </Link>
+              <Link to={"/add"} className="nav-link">
+                Add
+              </Link>
+              <Link to={"/quests"} className="nav-link">
+                Quests List
+              </Link>
+              <Link to={"/quest"} className="nav-link">
+                Quest
+              </Link>
+              <Link to={"/quest-map"} className="nav-link">
+                Quest Map
+              </Link>
+            </Nav>
+            <Nav>
+              <Link to={"/profile"} className="nav-link">
+                Profile
+              </Link>
+            </Nav>
+          </Navbar.Collapse>
         </Container>
       </Navbar>
       <Container fluid>
         <Switch>
           <Route exact path="/" component={Home} />
-          <PrivateRoute path="/profile" component={Profile} />
-          <PrivateRoute path="/update-profile" component={UpdateProfile} />
+          <Route exact path={["/", "/tutorials"]} component={TutorialsList} />
+          <Route exact path="/add-tutorial" component={AddTutorial} />
+          <Route path="/quests" component={QuestsList} />
+          <Route path="/quest" component={Quest} />
+          <Route path="/quest-map" component={QuestMap} />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
-          <Route exact path={["/", "/tutorials"]} component={TutorialsList} />
-          <Route exact path="/add" component={AddTutorial} />
-          <Route path="/quest-map" component={QuestMap} />
+          <PrivateRoute path="/profile" component={Profile} />
+          <PrivateRoute path="/update-profile" component={UpdateProfile} />
         </Switch>
       </Container>
     </>
