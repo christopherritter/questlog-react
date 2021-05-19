@@ -36,7 +36,7 @@ const Signup = () => {
           };
           UserDataService.create(data)
             .then(() => {
-              history.push("/");
+              history.push("/dashboard");
             })
             .catch((e) => {
               console.log(e);
