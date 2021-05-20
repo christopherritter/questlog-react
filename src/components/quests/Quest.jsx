@@ -29,7 +29,7 @@ const Quest = (props) => {
   useEffect(() => {
     console.log(props)
     const unsubscribe = QuestDataService.getAll()
-      .where("questId", "==", props.match.params.id)
+      .where("questId", "==", props.match.params.questId)
       .onSnapshot((snapshot) => {
         snapshot.docs.map((doc) => setQuest(doc.data()));
       });

@@ -157,8 +157,8 @@ const App = () => {
         <Switch>
           <Route exact path="/" component={QuestsList} />
           <Route path="/quests" component={QuestsList} />
-          <Route exact path="/quest-editor/" component={QuestEditor} />
-          <Route exact path="/quest/:id" component={Quest} />
+          <Route exact path="/quest-editor/:questId?" component={QuestEditor} />
+          <Route exact path="/quest/:questId" component={Quest} />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
           <PrivateRoute path="/profile" component={Profile} />

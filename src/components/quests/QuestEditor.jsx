@@ -4,17 +4,15 @@ import { useHistory } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 
 import { useAuth } from "../../contexts/AuthContext.jsx";
 import UserDataService from "../../services/UserService";
 import QuestDataService from "../../services/QuestService";
 
-const QuestEditor = () => {
+const QuestEditor = (props) => {
   const { currentUser } = useAuth();
   const [author, setAuthor] = useState("");
-  
+
   const initialQuestState = {
     title: "",
     authorId: currentUser.uid,
@@ -36,6 +34,18 @@ const QuestEditor = () => {
 
     return unsubscribe;
   }, [currentUser]);
+
+  useEffect(() => {
+    if (props.match.params.questId) {
+      const unsubscribe = QuestDataService.getAll()
+        .where("questId", "==", props.match.params.questId)
+        .onSnapshot((snapshot) => {
+          snapshot.docs.map((doc) => setQuest(doc.data()));
+        });
+
+      return unsubscribe;
+    }
+  }, [props]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
