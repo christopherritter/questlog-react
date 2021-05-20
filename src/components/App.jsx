@@ -100,7 +100,7 @@ const App = () => {
           >
             <ExploreIcon />
           </IconButton>
-          <Typography color="white" variant="h6" className={classes.title}>
+          <Typography variant="h6" className={classes.title}>
             QuestLog
           </Typography>
           {loggedIn ? (
