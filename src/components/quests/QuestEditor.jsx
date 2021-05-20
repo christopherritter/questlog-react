@@ -1,30 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+
+import { useAuth } from "../../contexts/AuthContext.jsx";
 import UserDataService from "../../services/UserService";
 import QuestDataService from "../../services/QuestService";
-import { useAuth } from "../../contexts/AuthContext.jsx";
-import { useHistory } from "react-router-dom";
 
 const QuestEditor = () => {
   const { currentUser } = useAuth();
+  const [author, setAuthor] = useState("");
+  
   const initialQuestState = {
-    questId: "",
     title: "",
-    author: "",
     authorId: currentUser.uid,
     description: "",
     categories: [],
     image: "",
-    featured: false,
-    isAnonymous: false,
-    isFeatured: false,
     startingPoint: "",
   };
 
   const [quest, setQuest] = useState(initialQuestState);
   const history = useHistory();
+
+  useEffect(() => {
+    const unsubscribe = UserDataService.getAll()
+      .where("uid", "==", currentUser.uid)
+      .onSnapshot((snapshot) => {
+        snapshot.docs.map((doc) => setAuthor(doc.data().username));
+      });
+
+    return unsubscribe;
+  }, [currentUser]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -35,15 +46,14 @@ const QuestEditor = () => {
     e.preventDefault();
     var data = {
       title: quest.title,
-      author: quest.author,
+      author: author,
       authorId: quest.authorId,
       description: quest.description,
       // categories: quest.categories,
       // image: quest.image,
-      // featured: quest.isFeatured,
-      // isAnonymous: quest.isAnonymous,
-      // isFeatured: quest.isFeatured,
-      // startingPoint: quest.description,
+      isFeatured: false,
+      isAnonymous: false,
+      // startingPoint: quest.startingPoint,
     };
 
     QuestDataService.create(data)
@@ -75,9 +85,20 @@ const QuestEditor = () => {
             id="questTitle"
             label="Quest Title"
             name="title"
-            autoComplete="questTitle"
             value={quest.title}
             onChange={handleInputChange}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            id="questAuthor"
+            label="Author"
+            name="author"
+            value={author}
+            InputProps={{
+              readOnly: true,
+            }}
           />
           <TextField
             variant="outlined"
@@ -87,11 +108,12 @@ const QuestEditor = () => {
             id="questDescription"
             label="Description"
             name="description"
-            autoComplete="questDescription"
+            multiline
+            rows={4}
             value={quest.description}
             onChange={handleInputChange}
           />
-          <Button variant="success" type="submit" onClick={saveQuest}>
+          <Button color="primary" type="submit" onClick={saveQuest}>
             Submit
           </Button>
         </form>
