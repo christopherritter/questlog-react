@@ -56,7 +56,7 @@ export default function UpdateProfile() {
       <Card>
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">Update Profile</Typography>
-          {error && <Alert variant="danger">{error}</Alert>}
+          {error && <Alert severity="error">{error}</Alert>}
           <form onSubmit={handleSubmit} noValidate>
             <TextField
               variant="outlined"
@@ -67,7 +67,7 @@ export default function UpdateProfile() {
               label="Email Address"
               name="email"
               autoComplete="email"
-              ref={emailRef}
+              inputRef={emailRef}
               defaultValue={currentUser.email}
             />
             <TextField
@@ -80,7 +80,7 @@ export default function UpdateProfile() {
               type="password"
               id="password"
               autoComplete="current-password"
-              ref={passwordRef}
+              inputRef={passwordRef}
             />
             <TextField
               variant="outlined"
@@ -92,7 +92,7 @@ export default function UpdateProfile() {
               type="password"
               id="passwordConfirm"
               autoComplete="confirm-password"
-              ref={passwordConfirmRef}
+              inputRef={passwordConfirmRef}
             />
             <CardActions>
               <Button className="w-100" type="submit" disabled={loading}>

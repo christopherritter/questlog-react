@@ -42,7 +42,7 @@ export default function Login() {
         <Card>
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">Log In</Typography>
-            {error && <Alert variant="danger">{error}</Alert>}
+            {error && <Alert severity="error">{error}</Alert>}
             <form onSubmit={handleSubmit} noValidate>
               <TextField
                 variant="outlined"
@@ -54,7 +54,7 @@ export default function Login() {
                 name="email"
                 autoComplete="email"
                 autoFocus
-                ref={emailRef}
+                inputRef={emailRef}
               />
               <TextField
                 variant="outlined"
@@ -66,7 +66,7 @@ export default function Login() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                ref={passwordRef}
+                inputRef={passwordRef}
               />
               <CardActions>
                 <Button className="w-100" type="submit" disabled={loading}>

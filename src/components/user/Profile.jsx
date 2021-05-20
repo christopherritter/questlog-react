@@ -48,7 +48,7 @@ const Profile = () => {
       <Card className="mt-5">
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">Profile</Typography>
-          {error && <Alert variant="danger">{error}</Alert>}
+          {error && <Alert severity="error">{error}</Alert>}
           <strong>Username:</strong> {currentProfile.username} <br />
           <strong>Email:</strong> {currentProfile.email}
           <CardActions>

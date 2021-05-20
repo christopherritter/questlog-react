@@ -67,7 +67,7 @@ const Signup = () => {
         <Card>
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">Sign Up</Typography>
-            {error && <Alert variant="danger">{error}</Alert>}
+            {error && <Alert severity="error">{error}</Alert>}
             <form onSubmit={handleSubmit} noValidate>
               <TextField
                 variant="outlined"
@@ -79,7 +79,7 @@ const Signup = () => {
                 name="email"
                 autoComplete="email"
                 autoFocus
-                ref={usernameRef}
+                inputRef={usernameRef}
               />
               <TextField
                 variant="outlined"
@@ -90,7 +90,7 @@ const Signup = () => {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                ref={emailRef}
+                inputRef={emailRef}
               />
               <TextField
                 variant="outlined"
@@ -102,7 +102,7 @@ const Signup = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                ref={passwordRef}
+                inputRef={passwordRef}
               />
               <TextField
                 variant="outlined"
@@ -114,7 +114,7 @@ const Signup = () => {
                 type="password"
                 id="passwordConfirm"
                 autoComplete="comfirm-password"
-                ref={passwordConfirmRef}
+                inputRef={passwordConfirmRef}
               />
               <CardActions>
                 <Button className="w-100" type="submit" disabled={loading}>
