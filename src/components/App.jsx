@@ -136,6 +136,13 @@ const App = () => {
                 >
                   Profile
                 </MenuItem>
+                <MenuItem
+                  onClick={handleClose}
+                  component={RouterLink}
+                  to="/quest-editor"
+                >
+                  Quest Editor
+                </MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>
