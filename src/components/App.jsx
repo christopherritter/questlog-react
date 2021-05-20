@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import { Link as RouterLink, Switch, Route } from "react-router-dom";
+import { Link as RouterLink, Switch, Route, useHistory } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
 
 import PrivateRoute from "./utils/PrivateRoute.jsx";
@@ -19,8 +19,11 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import IconButton from '@material-ui/core/IconButton';
-import ExploreIcon from '@material-ui/icons/Explore';
+import IconButton from "@material-ui/core/IconButton";
+import ExploreIcon from "@material-ui/icons/Explore";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,22 +60,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-
 const App = () => {
   const classes = useStyles();
   const [loggedIn, setLoggedIn] = useState(false);
-  const { currentUser } = useAuth();
+  const [error, setError] = useState("");
+  const { currentUser, logout } = useAuth();
+  const history = useHistory();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
 
   useEffect(() => {
-    console.log("checking logged in")
-    console.log(currentUser)
     if (currentUser) {
-      setLoggedIn(true)
+      setLoggedIn(true);
     } else {
-      setLoggedIn(false)
+      setLoggedIn(false);
     }
   }, [currentUser]);
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  async function handleLogout() {
+    setError("");
+    setAnchorEl(null);
+
+    try {
+      await logout();
+      history.push("/login");
+    } catch {
+      console.log("Failed to log out");
+    }
+  }
 
   return (
     <>
@@ -92,10 +115,42 @@ const App = () => {
           <Typography color="white" variant="h6" className={classes.title}>
             QuestLog
           </Typography>
-          { loggedIn ? (
-            <Button color="inherit" component={RouterLink} to="/profile">
-              Profile
-            </Button>
+          {loggedIn ? (
+            <div>
+              <IconButton
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={open}
+                onClose={handleClose}
+              >
+                <MenuItem
+                  onClick={handleClose}
+                  component={RouterLink}
+                  to="/profile"
+                >
+                  Profile
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </Menu>
+            </div>
           ) : (
             <Button color="inherit" component={RouterLink} to="/login">
               Login

@@ -4,11 +4,9 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import Alert from "@material-ui/lab/Alert";
 import Link from "@material-ui/core/Link";
 import { useAuth } from "../../contexts/AuthContext.jsx";
-import { Link as RouterLink, useHistory } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import UserDataService from "../../services/UserService";
 
 const Profile = () => {
@@ -18,9 +16,7 @@ const Profile = () => {
     email: "",
   };
   const [currentProfile, setCurrentProfile] = useState(initialProfileState);
-  const [error, setError] = useState("");
-  const { currentUser, logout } = useAuth();
-  const history = useHistory();
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     const unsubscribe = UserDataService.getAll()
@@ -32,23 +28,11 @@ const Profile = () => {
     return unsubscribe;
   }, [currentUser]);
 
-  async function handleLogout() {
-    setError("");
-
-    try {
-      await logout();
-      history.push("/login");
-    } catch {
-      setError("Failed to log out");
-    }
-  }
-
   return (
     <Grid>
       <Card className="mt-5">
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">Profile</Typography>
-          {error && <Alert severity="error">{error}</Alert>}
           <strong>Username:</strong> {currentProfile.username} <br />
           <strong>Email:</strong> {currentProfile.email}
           <CardActions>
@@ -58,11 +42,6 @@ const Profile = () => {
           </CardActions>
         </CardContent>
       </Card>
-      <div className="w-100 text-center mt-2">
-        <Button onClick={handleLogout}>
-          Log Out
-        </Button>
-      </div>
     </Grid>
   );
 };
