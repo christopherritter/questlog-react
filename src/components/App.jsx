@@ -19,7 +19,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+import ExploreIcon from '@material-ui/icons/Explore';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,8 +69,10 @@ const App = () => {
             className={classes.menuButton}
             color="inherit"
             aria-label="menu"
+            component={RouterLink}
+            to="/"
           >
-            <MenuIcon />
+            <ExploreIcon />
           </IconButton>
           <Typography color="white" variant="h6" className={classes.title}>
             QuestLog
