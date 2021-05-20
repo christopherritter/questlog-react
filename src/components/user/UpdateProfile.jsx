@@ -103,7 +103,7 @@ export default function UpdateProfile() {
         </CardContent>
       </Card>
       <div className="w-100 text-center mt-2">
-        <Link component={RouterLink} to="/">Cancel</Link>
+        <Link component={RouterLink} to="/profile">Cancel</Link>
       </div>
     </>
   );
