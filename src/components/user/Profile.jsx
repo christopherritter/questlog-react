@@ -1,15 +1,32 @@
 import React, { useState, useEffect } from "react";
+import { Link as RouterLink } from "react-router-dom";
+
+import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
+import Button from "@material-ui/core/Button";
+
 import { useAuth } from "../../contexts/AuthContext.jsx";
-import { Link as RouterLink } from "react-router-dom";
 import UserDataService from "../../services/UserService";
 
+const useStyles = makeStyles((theme) => ({
+  card: {
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+    padding: theme.spacing(2),
+    [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
+      marginTop: theme.spacing(6),
+      marginBottom: theme.spacing(6),
+      padding: theme.spacing(3),
+    },
+  },
+}));
+
 const Profile = () => {
+  const classes = useStyles();
   const initialProfileState = {
     uid: "",
     username: "",
@@ -30,15 +47,15 @@ const Profile = () => {
 
   return (
     <Grid>
-      <Card className="mt-5">
+      <Card className={classes.card}>
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">Profile</Typography>
           <strong>Username:</strong> {currentProfile.username} <br />
           <strong>Email:</strong> {currentProfile.email}
           <CardActions>
-            <Link component={RouterLink} to="/update-profile" className="btn btn-primary w-100 mt-3">
+            <Button component={RouterLink} to="/update-profile" className="btn btn-primary w-100 mt-3">
               Update Profile
-            </Link>
+            </Button>
           </CardActions>
         </CardContent>
       </Card>
