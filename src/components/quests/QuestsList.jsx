@@ -13,9 +13,7 @@ const Quests = () => {
   const [quests, loading, error] = useCollection(
     QuestDataService.getAll().orderBy("title", "asc")
   );
-
-  console.log(quests);
-
+  
   return (
     <Grid>
       <Grid>

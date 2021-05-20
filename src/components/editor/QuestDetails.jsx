@@ -9,7 +9,7 @@ import { useAuth } from "../../contexts/AuthContext.jsx";
 import UserDataService from "../../services/UserService";
 import QuestDataService from "../../services/QuestService";
 
-const QuestEditor = (props) => {
+const EditorDetails = (props) => {
   const { currentUser } = useAuth();
   const [author, setAuthor] = useState("");
 
@@ -35,17 +35,17 @@ const QuestEditor = (props) => {
     return unsubscribe;
   }, [currentUser]);
 
-  useEffect(() => {
-    if (props.match.params.questId) {
-      const unsubscribe = QuestDataService.getAll()
-        .where("questId", "==", props.match.params.questId)
-        .onSnapshot((snapshot) => {
-          snapshot.docs.map((doc) => setQuest(doc.data()));
-        });
+  // useEffect(() => {
+  //   if (props.match.params.questId) {
+  //     const unsubscribe = QuestDataService.getAll()
+  //       .where("questId", "==", props.match.params.questId)
+  //       .onSnapshot((snapshot) => {
+  //         snapshot.docs.map((doc) => setQuest(doc.data()));
+  //       });
 
-      return unsubscribe;
-    }
-  }, [props]);
+  //     return unsubscribe;
+  //   }
+  // }, [props]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -82,54 +82,49 @@ const QuestEditor = (props) => {
 
   return (
     <Grid>
-      <Grid>
-        <h1 className="mt-5 mb-4">Quest Editor</h1>
-      </Grid>
-      <Grid>
-        <form noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="questTitle"
-            label="Quest Title"
-            name="title"
-            value={quest.title}
-            onChange={handleInputChange}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            id="questAuthor"
-            label="Author"
-            name="author"
-            value={author}
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="questDescription"
-            label="Description"
-            name="description"
-            multiline
-            rows={4}
-            value={quest.description}
-            onChange={handleInputChange}
-          />
-          <Button color="primary" type="submit" onClick={saveQuest}>
-            Submit
-          </Button>
-        </form>
-      </Grid>
+      <form noValidate>
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          id="questTitle"
+          label="Quest Title"
+          name="title"
+          value={quest.title}
+          onChange={handleInputChange}
+        />
+        <TextField
+          variant="outlined"
+          margin="normal"
+          fullWidth
+          id="questAuthor"
+          label="Author"
+          name="author"
+          value={author}
+          InputProps={{
+            readOnly: true,
+          }}
+        />
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          id="questDescription"
+          label="Description"
+          name="description"
+          multiline
+          rows={4}
+          value={quest.description}
+          onChange={handleInputChange}
+        />
+        <Button color="primary" type="submit" onClick={saveQuest}>
+          Submit
+        </Button>
+      </form>
     </Grid>
   );
 };
 
-export default QuestEditor;
+export default EditorDetails;

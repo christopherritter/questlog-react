@@ -10,7 +10,7 @@ import Login from "./auth/Login.jsx";
 import Profile from "./user/Profile.jsx";
 import UpdateProfile from "./user/UpdateProfile.jsx";
 import QuestsList from "./quests/QuestsList.jsx";
-import QuestEditor from "./quests/QuestEditor.jsx";
+import QuestEditor from "./editor/QuestEditor.jsx";
 import Quest from "./quests/Quest.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -38,16 +38,16 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
-  layout: {
-    width: "auto",
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-      width: 600,
-      marginLeft: "auto",
-      marginRight: "auto",
-    },
-  },
+  // layout: {
+  //   width: "auto",
+  //   marginLeft: theme.spacing(2),
+  //   marginRight: theme.spacing(2),
+  //   [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
+  //     width: 600,
+  //     marginLeft: "auto",
+  //     marginRight: "auto",
+  //   },
+  // },
 }));
 
 const App = () => {
@@ -139,9 +139,9 @@ const App = () => {
                 <MenuItem
                   onClick={handleClose}
                   component={RouterLink}
-                  to="/quest-editor"
+                  to="/editor"
                 >
-                  Quest Editor
+                  Editor
                 </MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
@@ -153,11 +153,11 @@ const App = () => {
           )}
         </Toolbar>
       </AppBar>
-      <main className={classes.layout}>
+      <main>
         <Switch>
           <Route exact path="/" component={QuestsList} />
           <Route path="/quests" component={QuestsList} />
-          <Route exact path="/quest-editor/:questId?" component={QuestEditor} />
+          <Route exact path="/editor/:questId?" component={QuestEditor} />
           <Route exact path="/quest/:questId" component={Quest} />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
