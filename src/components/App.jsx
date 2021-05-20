@@ -1,9 +1,9 @@
 import React from "react";
 import "./App.css";
-import { Switch, Route } from "react-router-dom";
+import { Link as RouterLink, Switch, Route } from "react-router-dom";
 
 import PrivateRoute from "./utils/PrivateRoute.jsx";
-import Home from "./Home.jsx";
+// import Home from "./Home.jsx";
 import Signup from "./auth/Signup.jsx";
 import Login from "./auth/Login.jsx";
 import Profile from "./user/Profile.jsx";
@@ -12,19 +12,21 @@ import QuestsList from "./quests/QuestsList.jsx";
 import QuestEditor from "./quests/QuestEditor.jsx";
 import Quest from "./quests/Quest.jsx";
 
-import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { makeStyles } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from '@material-ui/core/Typography';
+import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
   appBar: {
-    position: 'relative',
+    position: "relative",
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -33,13 +35,13 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   layout: {
-    width: 'auto',
+    width: "auto",
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
       width: 600,
-      marginLeft: 'auto',
-      marginRight: 'auto',
+      marginLeft: "auto",
+      marginRight: "auto",
     },
   },
   paper: {
@@ -62,15 +64,25 @@ const App = () => {
       <CssBaseline />
       <AppBar color="primary" className={classes.appBar}>
         <Toolbar>
-        <Typography variant="h6" className={classes.title}>
-          QuestLog
-        </Typography>
-        <Button color="inherit">Login</Button>
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography color="white" variant="h6" className={classes.title}>
+            QuestLog
+          </Typography>
+          <Button color="inherit" component={RouterLink} to="/login">
+            Login
+          </Button>
         </Toolbar>
       </AppBar>
       <main className={classes.layout}>
         <Switch>
-          <Route exact path="/" component={Home} />
+          <Route exact path="/" component={QuestsList} />
           <Route path="/quests" component={QuestsList} />
           <Route exact path="/quest-editor/" component={QuestEditor} />
           <Route exact path="/quest/:id" component={Quest} />
