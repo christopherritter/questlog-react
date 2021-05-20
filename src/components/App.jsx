@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import { Link as RouterLink, Switch, Route } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext.jsx";
 
 import PrivateRoute from "./utils/PrivateRoute.jsx";
 // import Home from "./Home.jsx";
@@ -56,8 +57,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
 const App = () => {
   const classes = useStyles();
+  const [loggedIn, setLoggedIn] = useState(false);
+  const { currentUser } = useAuth();
+
+  useEffect(() => {
+    console.log("checking logged in")
+    console.log(currentUser)
+    if (currentUser) {
+      setLoggedIn(true)
+    } else {
+      setLoggedIn(false)
+    }
+  }, [currentUser]);
 
   return (
     <>
@@ -77,9 +92,15 @@ const App = () => {
           <Typography color="white" variant="h6" className={classes.title}>
             QuestLog
           </Typography>
-          <Button color="inherit" component={RouterLink} to="/login">
-            Login
-          </Button>
+          { loggedIn ? (
+            <Button color="inherit" component={RouterLink} to="/profile">
+              Profile
+            </Button>
+          ) : (
+            <Button color="inherit" component={RouterLink} to="/login">
+              Login
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
       <main className={classes.layout}>
