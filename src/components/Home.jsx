@@ -1,13 +1,11 @@
 import React from 'react'
-import { Container, Row, Col } from "react-bootstrap";
+import Grid from "@material-ui/core/Grid";
 
 const Home = () => {
   return (
-    <Container>
-      <Row>
-        <Col><h1>Home</h1></Col>
-      </Row>
-    </Container>
+    <Grid>
+      <h1>Home</h1>
+    </Grid>
   )
 }
 

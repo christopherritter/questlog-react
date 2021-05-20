@@ -1,8 +1,6 @@
 import React from "react";
 import "./App.css";
-
-import { Container, Navbar, Nav } from "react-bootstrap";
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
 import PrivateRoute from "./utils/PrivateRoute.jsx";
 import Home from "./Home.jsx";
@@ -10,39 +8,67 @@ import Signup from "./auth/Signup.jsx";
 import Login from "./auth/Login.jsx";
 import Profile from "./user/Profile.jsx";
 import UpdateProfile from "./user/UpdateProfile.jsx";
-import AddTutorial from "./tutorials/AddTutorial.jsx";
-import TutorialsList from "./tutorials/TutorialsList.jsx";
 import QuestsList from "./quests/QuestsList.jsx";
 import QuestEditor from "./quests/QuestEditor.jsx";
 import Quest from "./quests/Quest.jsx";
 
+import { makeStyles } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from '@material-ui/core/Typography';
+import Button from "@material-ui/core/Button";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  appBar: {
+    position: 'relative',
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+  layout: {
+    width: 'auto',
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
+      width: 600,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+    },
+  },
+  paper: {
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+    padding: theme.spacing(2),
+    [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
+      marginTop: theme.spacing(6),
+      marginBottom: theme.spacing(6),
+      padding: theme.spacing(3),
+    },
+  },
+}));
+
 const App = () => {
+  const classes = useStyles();
+
   return (
     <>
-      <Navbar bg="dark" variant="dark" expand="lg">
-        <Container>
-          <Link to={"/"} className="navbar-brand">
-            QuestLog
-          </Link>
-          <Navbar.Toggle aria-controls="navbarScroll" />
-          <Navbar.Collapse id="navbarScroll">
-            <Nav className="mr-auto">
-              <Link to={"/quests"} className="nav-link">
-                Browse Quests
-              </Link>
-              <Link to={"/quest-editor"} className="nav-link">
-                Create Your Own!
-              </Link>
-            </Nav>
-            <Nav>
-              <Link to={"/profile"} className="nav-link">
-                Profile
-              </Link>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-      <Container fluid>
+      <CssBaseline />
+      <AppBar color="primary" className={classes.appBar}>
+        <Toolbar>
+        <Typography variant="h6" className={classes.title}>
+          QuestLog
+        </Typography>
+        <Button color="inherit">Login</Button>
+        </Toolbar>
+      </AppBar>
+      <main className={classes.layout}>
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/quests" component={QuestsList} />
@@ -53,7 +79,7 @@ const App = () => {
           <PrivateRoute path="/profile" component={Profile} />
           <PrivateRoute path="/update-profile" component={UpdateProfile} />
         </Switch>
-      </Container>
+      </main>
     </>
   );
 };

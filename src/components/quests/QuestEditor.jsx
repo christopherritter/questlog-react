@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
 import UserDataService from "../../services/UserService";
 import QuestDataService from "../../services/QuestService";
 import { useAuth } from "../../contexts/AuthContext.jsx";
@@ -59,44 +61,42 @@ const QuestEditor = () => {
   };
 
   return (
-    <Container>
-      <Row>
-        <Col>
-          <h1 className="mt-5 mb-4">Quest Editor</h1>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Form>
-            <Form.Group controlId="formQuestTitle">
-              <Form.Label>Quest Title</Form.Label>
-              <Form.Control
-                required
-                type="text"
-                placeholder="Enter the title of your quest"
-                value={quest.title}
-                onChange={handleInputChange}
-                name="title"
-              />
-            </Form.Group>
-            <Form.Group controlId="formQuestDescription">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                required
-                type="text"
-                placeholder="Describe your quest and how to play"
-                value={quest.description}
-                onChange={handleInputChange}
-                name="description"
-              />
-            </Form.Group>
-            <Button variant="success" type="submit" onClick={saveQuest}>
-              Submit
-            </Button>
-          </Form>
-        </Col>
-      </Row>
-    </Container>
+    <Grid>
+      <Grid>
+        <h1 className="mt-5 mb-4">Quest Editor</h1>
+      </Grid>
+      <Grid>
+        <form noValidate>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="questTitle"
+            label="Quest Title"
+            name="title"
+            autoComplete="questTitle"
+            value={quest.title}
+            onChange={handleInputChange}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="questDescription"
+            label="Description"
+            name="description"
+            autoComplete="questDescription"
+            value={quest.description}
+            onChange={handleInputChange}
+          />
+          <Button variant="success" type="submit" onClick={saveQuest}>
+            Submit
+          </Button>
+        </form>
+      </Grid>
+    </Grid>
   );
 };
 

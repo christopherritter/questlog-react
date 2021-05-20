@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import Grid from "@material-ui/core/Grid";
 import QuestDataService from "../../services/QuestService";
 
 const Quest = (props) => {
@@ -38,14 +38,10 @@ const Quest = (props) => {
   }, [props]);
 
   return (
-    <Container>
-      <Row>
-        <Col>
-          <h1 className="mt-5">{ quest.title }</h1>
-          <p>{ quest.description }</p>
-        </Col>
-      </Row>
-    </Container>
+    <Grid>
+      <h1 className="mt-5">{ quest.title }</h1>
+      <p>{ quest.description }</p>
+    </Grid>
   );
 };
 

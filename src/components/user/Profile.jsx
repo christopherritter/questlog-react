@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Container, Card, Button, Alert } from "react-bootstrap";
+import Grid from "@material-ui/core/Grid";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import Alert from "@material-ui/lab/Alert";
+import Link from "@material-ui/core/Link";
 import { useAuth } from "../../contexts/AuthContext.jsx";
-import { Link, useHistory } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 import UserDataService from "../../services/UserService";
 
 const Profile = () => {
@@ -37,24 +44,26 @@ const Profile = () => {
   }
 
   return (
-    <Container>
+    <Grid>
       <Card className="mt-5">
-        <Card.Body>
-          <h2 className="text-center mb-4 mt-2">Profile</h2>
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">Profile</Typography>
           {error && <Alert variant="danger">{error}</Alert>}
           <strong>Username:</strong> {currentProfile.username} <br />
           <strong>Email:</strong> {currentProfile.email}
-          <Link to="/update-profile" className="btn btn-primary w-100 mt-3">
-            Update Profile
-          </Link>
-        </Card.Body>
+          <CardActions>
+            <Link component={RouterLink} to="/update-profile" className="btn btn-primary w-100 mt-3">
+              Update Profile
+            </Link>
+          </CardActions>
+        </CardContent>
       </Card>
       <div className="w-100 text-center mt-2">
-        <Button variant="link" onClick={handleLogout}>
+        <Button onClick={handleLogout}>
           Log Out
         </Button>
       </div>
-    </Container>
+    </Grid>
   );
 };
 

@@ -1,7 +1,16 @@
 import React, { useRef, useState } from "react";
-import { Form, Card, Button, Alert } from "react-bootstrap";
+
 import { useAuth } from "../../contexts/AuthContext.jsx";
-import { Link, useHistory } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
+
+import TextField from "@material-ui/core/TextField";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import Alert from "@material-ui/lab/Alert";
+import Link from '@material-ui/core/Link';
 
 export default function UpdateProfile() {
   const emailRef = useRef();
@@ -45,43 +54,56 @@ export default function UpdateProfile() {
   return (
     <>
       <Card>
-        <Card.Body>
-          <h2 className="text-center mb-4">Update Profile</h2>
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">Update Profile</Typography>
           {error && <Alert variant="danger">{error}</Alert>}
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                ref={emailRef}
-                required
-                defaultValue={currentUser.email}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                ref={passwordRef}
-                placeholder="Leave blank to keep same"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Password Confirmation</Form.Label>
-              <Form.Control
-                type="password"
-                ref={passwordConfirmRef}
-                placeholder="Leave blank to keep same"
-              />
-            </Form.Group>
-            <Button className="w-100" type="submit" disabled={loading}>
-              Update
-            </Button>
-          </Form>
-        </Card.Body>
+          <form onSubmit={handleSubmit} noValidate>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              ref={emailRef}
+              defaultValue={currentUser.email}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              ref={passwordRef}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="passwordConfirm"
+              label="Password Confirmation"
+              type="password"
+              id="passwordConfirm"
+              autoComplete="confirm-password"
+              ref={passwordConfirmRef}
+            />
+            <CardActions>
+              <Button className="w-100" type="submit" disabled={loading}>
+                Update
+              </Button>
+            </CardActions>
+          </form>
+        </CardContent>
       </Card>
       <div className="w-100 text-center mt-2">
-        <Link to="/">Cancel</Link>
+        <Link component={RouterLink} to="/">Cancel</Link>
       </div>
     </>
   );

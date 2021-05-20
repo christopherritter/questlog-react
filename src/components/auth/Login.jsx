@@ -1,7 +1,15 @@
 import React, { useRef, useState } from "react";
-import { Container, Form, Card, Button, Alert } from "react-bootstrap";
+import Container from "@material-ui/core/Container";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import Alert from "@material-ui/lab/Alert";
 import { useAuth } from "../../contexts/AuthContext.jsx";
-import { Link, useHistory } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
+import Link from '@material-ui/core/Link';
 
 export default function Login() {
   const emailRef = useRef();
@@ -32,26 +40,44 @@ export default function Login() {
     >
       <div className="w-100" style={{ maxWidth: "400px" }}>
         <Card>
-          <Card.Body>
-            <h2 className="text-center mb-4">Log In</h2>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">Log In</Typography>
             {error && <Alert variant="danger">{error}</Alert>}
-            <Form onSubmit={handleSubmit}>
-              <Form.Group className="mb-3">
-                <Form.Label>Email</Form.Label>
-                <Form.Control type="email" ref={emailRef} required />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Password</Form.Label>
-                <Form.Control type="password" ref={passwordRef} required />
-              </Form.Group>
-              <Button className="w-100" type="submit" disabled={loading}>
-                Log In
-              </Button>
-            </Form>
-          </Card.Body>
+            <form onSubmit={handleSubmit} noValidate>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                ref={emailRef}
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                ref={passwordRef}
+              />
+              <CardActions>
+                <Button className="w-100" type="submit" disabled={loading}>
+                  Log In
+                </Button>
+              </CardActions>
+            </form>
+          </CardContent>
         </Card>
         <div className="w-100 text-center mt-2">
-          Need an account? <Link to="/signup">Sign Up</Link>
+          Need an account? <Link component={RouterLink} to="/signup">Sign Up</Link>
         </div>
       </div>
     </Container>
