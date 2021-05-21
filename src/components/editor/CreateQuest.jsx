@@ -35,18 +35,6 @@ const CreateQuest = (props) => {
     return unsubscribe;
   }, [currentUser]);
 
-  // useEffect(() => {
-  //   if (props.match.params.questId) {
-  //     const unsubscribe = QuestDataService.getAll()
-  //       .where("questId", "==", props.match.params.questId)
-  //       .onSnapshot((snapshot) => {
-  //         snapshot.docs.map((doc) => setQuest(doc.data()));
-  //       });
-
-  //     return unsubscribe;
-  //   }
-  // }, [props]);
-
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setQuest({ ...quest, [name]: value });
@@ -76,9 +64,9 @@ const CreateQuest = (props) => {
       });
   };
 
-  const newQuest = () => {
-    setQuest(initialQuestState);
-  };
+  // const newQuest = () => {
+  //   setQuest(initialQuestState);
+  // };
 
   return (
     <Grid>
