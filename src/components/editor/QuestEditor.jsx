@@ -1,13 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
+import QuestDataService from "../../services/QuestService";
 import QuestDetails from "./QuestDetails.jsx";
+import QuestRegion from "./QuestRegion.jsx";
+import QuestObjectives from "./QuestObjectives.jsx";
+import QuestLocations from "./QuestLocations.jsx";
+import QuestEntries from "./QuestEntries.jsx";
+import QuestItems from "./QuestItems.jsx";
 
-import { makeStyles } from '@material-ui/core/styles';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import { makeStyles } from "@material-ui/core/styles";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Box from "@material-ui/core/Box";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -22,7 +27,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box p={3}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
     </div>
@@ -38,7 +43,7 @@ TabPanel.propTypes = {
 function a11yProps(index) {
   return {
     id: `vertical-tab-${index}`,
-    'aria-controls': `vertical-tabpanel-${index}`,
+    "aria-controls": `vertical-tabpanel-${index}`,
   };
 }
 
@@ -46,20 +51,48 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
-    display: 'flex',
+    display: "flex",
   },
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`,
   },
 }));
 
-export default function QuestEditor() {
+export default function QuestEditor(props) {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+
+  const initialQuestState = {
+    title: "",
+    authorId: "",
+    description: "",
+    categories: [],
+    image: "",
+    startingPoint: "",
+  };
+  const [quest, setQuest] = useState(initialQuestState);
+
+  useEffect(() => {
+    const unsubscribe = QuestDataService.getAll()
+      .where("questId", "==", props.match.params.questId)
+      .onSnapshot((snapshot) => {
+        snapshot.docs.map((doc) => {
+          return setQuest(doc.data())
+        });
+      });
+    return unsubscribe;
+  }, [props.match.params.questId]);
+
+
+  const [region, setRegion] = useState({});
+  const [objectives, setObjectives] = useState([]);
+  const [locations, setLocations] = useState([]);
+  const [entries, setEntries] = useState([]);
+  const [items, setItems] = useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const [value, setValue] = useState(0);
 
   return (
     <div className={classes.root}>
@@ -72,33 +105,29 @@ export default function QuestEditor() {
         className={classes.tabs}
       >
         <Tab label="Details" {...a11yProps(0)} />
-        <Tab label="Item Two" {...a11yProps(1)} />
-        <Tab label="Item Three" {...a11yProps(2)} />
-        <Tab label="Item Four" {...a11yProps(3)} />
-        <Tab label="Item Five" {...a11yProps(4)} />
-        <Tab label="Item Six" {...a11yProps(5)} />
-        <Tab label="Item Seven" {...a11yProps(6)} />
+        <Tab label="Region" {...a11yProps(1)} />
+        <Tab label="Objectives" {...a11yProps(2)} />
+        <Tab label="Locations" {...a11yProps(3)} />
+        <Tab label="Entries" {...a11yProps(4)} />
+        <Tab label="Items" {...a11yProps(5)} />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <QuestDetails></QuestDetails>
+        <QuestDetails quest={quest}></QuestDetails>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <QuestRegion region={region}></QuestRegion>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        <QuestObjectives objectives={objectives}></QuestObjectives>
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Item Four
+        <QuestLocations locations={locations}></QuestLocations>
       </TabPanel>
       <TabPanel value={value} index={4}>
-        Item Five
+        <QuestEntries entries={entries}></QuestEntries>
       </TabPanel>
       <TabPanel value={value} index={5}>
-        Item Six
-      </TabPanel>
-      <TabPanel value={value} index={6}>
-        Item Seven
+        <QuestItems items={items}></QuestItems>
       </TabPanel>
     </div>
   );

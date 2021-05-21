@@ -10,6 +10,7 @@ import Login from "./auth/Login.jsx";
 import Profile from "./user/Profile.jsx";
 import UpdateProfile from "./user/UpdateProfile.jsx";
 import QuestsList from "./quests/QuestsList.jsx";
+import CreateQuest from "./editor/CreateQuest.jsx";
 import QuestEditor from "./editor/QuestEditor.jsx";
 import Quest from "./quests/Quest.jsx";
 
@@ -139,9 +140,9 @@ const App = () => {
                 <MenuItem
                   onClick={handleClose}
                   component={RouterLink}
-                  to="/editor"
+                  to="/create-quest"
                 >
-                  Editor
+                  Create Quest
                 </MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
@@ -157,7 +158,8 @@ const App = () => {
         <Switch>
           <Route exact path="/" component={QuestsList} />
           <Route path="/quests" component={QuestsList} />
-          <Route exact path="/editor/:questId?" component={QuestEditor} />
+          <Route path="/create-quest" component={CreateQuest} />
+          <Route exact path="/quest-editor/:questId" component={QuestEditor} />
           <Route exact path="/quest/:questId" component={Quest} />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
