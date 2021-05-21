@@ -110,8 +110,8 @@ export default function QuestEditor(props) {
   };
   const [value, setValue] = useState(0);
 
-  const updateQuest = () => {
-    QuestDataService.update(quest.questId, quest)
+  const publishQuest = () => {
+    QuestDataService.update(quest.questId, { quest, region })
       .then(() => {
         console.log("Updated!");
       })
@@ -173,7 +173,7 @@ export default function QuestEditor(props) {
         <Grid item>
           <Grid container>
             <Grid item sm={12}>
-              <Button onClick={updateQuest}>Update</Button>
+              <Button onClick={publishQuest}>Publish</Button>
             </Grid>
           </Grid>
         </Grid>
