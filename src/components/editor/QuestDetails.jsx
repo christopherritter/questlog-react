@@ -1,33 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 
 function QuestDetails(props) {
-
-  const initialDetailsState = {
-    questId: "",
-    title: "",
-    author: "",
-    authorId: "",
-    description: "",
-    categories: "",
-    image: "",
-    startingPoint: "",
-  };
-  const [details, setDetails] = useState(initialDetailsState);
-
-  useEffect(() => {
-    const setInitialDetails = setDetails(props.quest)
-    return setInitialDetails;
-  }, [props.quest])
-
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setDetails({ ...details, [name]: value });
-  };
-
   return (
     <Grid>
       <form noValidate>
