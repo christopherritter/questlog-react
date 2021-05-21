@@ -10,9 +10,12 @@ import QuestEntries from "./QuestEntries.jsx";
 import QuestItems from "./QuestItems.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -25,11 +28,7 @@ function TabPanel(props) {
       aria-labelledby={`vertical-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box p={3}>
-          {children}
-        </Box>
-      )}
+      {value === index && <Box p={3}>{children}</Box>}
     </div>
   );
 }
@@ -78,7 +77,7 @@ export default function QuestEditor(props) {
       .where("questId", "==", props.match.params.questId)
       .onSnapshot((snapshot) => {
         snapshot.docs.map((doc) => {
-          return setQuest(doc.data())
+          return setQuest(doc.data());
         });
       });
     return unsubscribe;
@@ -96,6 +95,10 @@ export default function QuestEditor(props) {
   };
   const [region, setRegion] = useState(initialRegionState);
 
+  const onUpdateRegion = (event) => {
+    const { name, value } = event.target;
+    setRegion({ ...region, [name]: value });
+  };
 
   const [objectives, setObjectives] = useState([]);
   const [locations, setLocations] = useState([]);
@@ -107,41 +110,74 @@ export default function QuestEditor(props) {
   };
   const [value, setValue] = useState(0);
 
+  const updateQuest = () => {
+    QuestDataService.update(quest.questId, quest)
+      .then(() => {
+        console.log("Updated!");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   return (
-    <div className={classes.root}>
-      <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={value}
-        onChange={handleChange}
-        aria-label="Vertical tabs example"
-        className={classes.tabs}
-      >
-        <Tab label="Details" {...a11yProps(0)} />
-        <Tab label="Region" {...a11yProps(1)} />
-        <Tab label="Objectives" {...a11yProps(2)} />
-        <Tab label="Locations" {...a11yProps(3)} />
-        <Tab label="Entries" {...a11yProps(4)} />
-        <Tab label="Items" {...a11yProps(5)} />
-      </Tabs>
-      <TabPanel value={value} index={0}>
-        <QuestDetails quest={quest} updateDetails={onUpdateDetails}></QuestDetails>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <QuestRegion region={region}></QuestRegion>
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <QuestObjectives objectives={objectives}></QuestObjectives>
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        <QuestLocations locations={locations}></QuestLocations>
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        <QuestEntries entries={entries}></QuestEntries>
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-        <QuestItems items={items}></QuestItems>
-      </TabPanel>
-    </div>
+    <Paper elevation={0} className={classes.root}>
+      <Grid container>
+        <Grid item>
+          <Grid container>
+            <Grid item sm={3}>
+              <Tabs
+                orientation="vertical"
+                variant="scrollable"
+                value={value}
+                onChange={handleChange}
+                aria-label="Vertical tabs example"
+                className={classes.tabs}
+              >
+                <Tab label="Details" {...a11yProps(0)} />
+                <Tab label="Region" {...a11yProps(1)} />
+                <Tab label="Objectives" {...a11yProps(2)} />
+                <Tab label="Locations" {...a11yProps(3)} />
+                <Tab label="Entries" {...a11yProps(4)} />
+                <Tab label="Items" {...a11yProps(5)} />
+              </Tabs>
+            </Grid>
+            <Grid item sm={9}>
+              <TabPanel value={value} index={0}>
+                <QuestDetails
+                  quest={quest}
+                  updateDetails={onUpdateDetails}
+                ></QuestDetails>
+              </TabPanel>
+              <TabPanel value={value} index={1}>
+                <QuestRegion
+                  region={region}
+                  updateRegion={onUpdateRegion}
+                ></QuestRegion>
+              </TabPanel>
+              <TabPanel value={value} index={2}>
+                <QuestObjectives objectives={objectives}></QuestObjectives>
+              </TabPanel>
+              <TabPanel value={value} index={3}>
+                <QuestLocations locations={locations}></QuestLocations>
+              </TabPanel>
+              <TabPanel value={value} index={4}>
+                <QuestEntries entries={entries}></QuestEntries>
+              </TabPanel>
+              <TabPanel value={value} index={5}>
+                <QuestItems items={items}></QuestItems>
+              </TabPanel>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Grid container>
+            <Grid item sm={12}>
+              <Button onClick={updateQuest}>Update</Button>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Paper>
   );
 }
