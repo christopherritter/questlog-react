@@ -10,7 +10,7 @@ const QuestRegion = props => {
 }
 
 QuestRegion.propTypes = {
-
+  region: PropTypes.object,
 }
 
 export default QuestRegion

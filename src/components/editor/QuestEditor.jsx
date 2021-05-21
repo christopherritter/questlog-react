@@ -62,7 +62,9 @@ export default function QuestEditor(props) {
   const classes = useStyles();
 
   const initialQuestState = {
+    questId: "",
     title: "",
+    author: "",
     authorId: "",
     description: "",
     categories: [],
@@ -82,8 +84,19 @@ export default function QuestEditor(props) {
     return unsubscribe;
   }, [props.match.params.questId]);
 
+  const onUpdateDetails = (event) => {
+    const { name, value } = event.target;
+    setQuest({ ...quest, [name]: value });
+  };
 
-  const [region, setRegion] = useState({});
+  const initialRegionState = {
+    coordinates: [],
+    name: "",
+    zoom: 17,
+  };
+  const [region, setRegion] = useState(initialRegionState);
+
+
   const [objectives, setObjectives] = useState([]);
   const [locations, setLocations] = useState([]);
   const [entries, setEntries] = useState([]);
@@ -112,7 +125,7 @@ export default function QuestEditor(props) {
         <Tab label="Items" {...a11yProps(5)} />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <QuestDetails quest={quest}></QuestDetails>
+        <QuestDetails quest={quest} updateDetails={onUpdateDetails}></QuestDetails>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <QuestRegion region={region}></QuestRegion>
