@@ -6,7 +6,8 @@ import TextField from "@material-ui/core/TextField";
 
 const QuestRegion = props => {
   return (
-    <Grid>
+    <Grid container spacing={4}>
+      <Grid item sm={3}>
       <form noValidate>
         <TextField
           variant="outlined"
@@ -42,6 +43,10 @@ const QuestRegion = props => {
           onChange={props.updateRegion}
         />
       </form>
+      </Grid>
+      <Grid item sm={9}>
+        <h1>Quest Map</h1>
+      </Grid>
     </Grid>
   );
 }

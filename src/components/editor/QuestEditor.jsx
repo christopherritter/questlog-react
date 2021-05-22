@@ -50,11 +50,20 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
-    display: "flex",
   },
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`,
   },
+  // layout: {
+  //   width: "auto",
+  //   marginLeft: theme.spacing(2),
+  //   marginRight: theme.spacing(2),
+  //   [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
+  //     width: 600,
+  //     marginLeft: "auto",
+  //     marginRight: "auto",
+  //   },
+  // },
 }));
 
 export default function QuestEditor(props) {
@@ -123,61 +132,52 @@ export default function QuestEditor(props) {
   return (
     <Paper elevation={0} className={classes.root}>
       <Grid container>
-        <Grid item>
-          <Grid container>
-            <Grid item sm={3}>
-              <Tabs
-                orientation="vertical"
-                variant="scrollable"
-                value={value}
-                onChange={handleChange}
-                aria-label="Vertical tabs example"
-                className={classes.tabs}
-              >
-                <Tab label="Details" {...a11yProps(0)} />
-                <Tab label="Region" {...a11yProps(1)} />
-                <Tab label="Objectives" {...a11yProps(2)} />
-                <Tab label="Locations" {...a11yProps(3)} />
-                <Tab label="Entries" {...a11yProps(4)} />
-                <Tab label="Items" {...a11yProps(5)} />
-              </Tabs>
-            </Grid>
-            <Grid item sm={9}>
-              <TabPanel value={value} index={0}>
-                <QuestDetails
-                  quest={quest}
-                  updateDetails={onUpdateDetails}
-                ></QuestDetails>
-              </TabPanel>
-              <TabPanel value={value} index={1}>
-                <QuestRegion
-                  region={region}
-                  updateRegion={onUpdateRegion}
-                ></QuestRegion>
-              </TabPanel>
-              <TabPanel value={value} index={2}>
-                <QuestObjectives objectives={objectives}></QuestObjectives>
-              </TabPanel>
-              <TabPanel value={value} index={3}>
-                <QuestLocations locations={locations}></QuestLocations>
-              </TabPanel>
-              <TabPanel value={value} index={4}>
-                <QuestEntries entries={entries}></QuestEntries>
-              </TabPanel>
-              <TabPanel value={value} index={5}>
-                <QuestItems items={items}></QuestItems>
-              </TabPanel>
-            </Grid>
-          </Grid>
+        <Grid item sm={3}>
+          <Tabs
+            orientation="vertical"
+            variant="scrollable"
+            value={value}
+            onChange={handleChange}
+            aria-label="Vertical tabs example"
+            className={classes.tabs}
+          >
+            <Tab label="Details" {...a11yProps(0)} />
+            <Tab label="Region" {...a11yProps(1)} />
+            <Tab label="Objectives" {...a11yProps(2)} />
+            <Tab label="Locations" {...a11yProps(3)} />
+            <Tab label="Entries" {...a11yProps(4)} />
+            <Tab label="Items" {...a11yProps(5)} />
+          </Tabs>
         </Grid>
-        <Grid item>
-          <Grid container>
-            <Grid item sm={12}>
-              <Button onClick={publishQuest}>Publish</Button>
-            </Grid>
-          </Grid>
+        <Grid item sm={9}>
+          <TabPanel value={value} index={0}>
+            <QuestDetails
+              quest={quest}
+              updateDetails={onUpdateDetails}
+            ></QuestDetails>
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <QuestRegion
+              region={region}
+              updateRegion={onUpdateRegion}
+            ></QuestRegion>
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <QuestObjectives objectives={objectives}></QuestObjectives>
+          </TabPanel>
+          <TabPanel value={value} index={3}>
+            <QuestLocations locations={locations}></QuestLocations>
+          </TabPanel>
+          <TabPanel value={value} index={4}>
+            <QuestEntries entries={entries}></QuestEntries>
+          </TabPanel>
+          <TabPanel value={value} index={5}>
+            <QuestItems items={items}></QuestItems>
+          </TabPanel>
         </Grid>
       </Grid>
+
+      <Button onClick={publishQuest}>Publish</Button>
     </Paper>
   );
 }

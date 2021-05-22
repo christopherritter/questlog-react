@@ -39,16 +39,6 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
-  // layout: {
-  //   width: "auto",
-  //   marginLeft: theme.spacing(2),
-  //   marginRight: theme.spacing(2),
-  //   [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-  //     width: 600,
-  //     marginLeft: "auto",
-  //     marginRight: "auto",
-  //   },
-  // },
 }));
 
 const App = () => {
@@ -154,7 +144,7 @@ const App = () => {
           )}
         </Toolbar>
       </AppBar>
-      <main>
+      <main className={classes.root}>
         <Switch>
           <Route exact path="/" component={QuestsList} />
           <Route path="/quests" component={QuestsList} />
