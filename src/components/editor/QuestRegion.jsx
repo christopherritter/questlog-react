@@ -6,7 +6,10 @@ import TextField from "@material-ui/core/TextField";
 
 const QuestRegion = (props) => {
   const onUpdateCenter = (event) => {
-    props.updateCenter(event.coordinates);
+    props.updateCenter({
+      latitude: event.latitude,
+      longitude: event.longitude,
+    });
   };
 
   const QuestMap = React.cloneElement(props.map, {
@@ -20,21 +23,6 @@ const QuestRegion = (props) => {
           <TextField
             variant="outlined"
             margin="normal"
-            required
-            fullWidth
-            id="regionCoords"
-            label="Coordinates"
-            name="coordinates"
-            value={props.region.coordinates}
-            onChange={props.updateRegion}
-            InputProps={{
-              readOnly: true,
-            }}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
             fullWidth
             id="regionName"
             label="Name"
@@ -45,7 +33,32 @@ const QuestRegion = (props) => {
           <TextField
             variant="outlined"
             margin="normal"
-            required
+            fullWidth
+            id="regionLatitude"
+            label="Latitude"
+            name="latitude"
+            value={props.region.latitude}
+            onChange={props.updateRegion}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            id="regionLongitude"
+            label="Longitude"
+            name="longitude"
+            value={props.region.longitude}
+            onChange={props.updateRegion}
+            InputProps={{
+              readOnly: true,
+            }}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
             fullWidth
             id="regionZoom"
             label="Zoom"

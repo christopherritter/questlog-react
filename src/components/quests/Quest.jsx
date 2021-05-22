@@ -17,7 +17,8 @@ const Quest = (props) => {
     title: "",
   };
   const initialRegionState = {
-    coordinates: [],
+    latitude: 0,
+    longitude: 0,
     name: "North Park",
     zoom: 17,
   };

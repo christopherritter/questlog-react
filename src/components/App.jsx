@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import { Link as RouterLink, Switch, Route, useHistory } from "react-router-dom";
+import "mapbox-gl/dist/mapbox-gl.css";
+import {
+  Link as RouterLink,
+  Switch,
+  Route,
+  useHistory,
+} from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
 
 import PrivateRoute from "./utils/PrivateRoute.jsx";

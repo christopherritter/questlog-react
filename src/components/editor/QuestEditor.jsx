@@ -89,9 +89,10 @@ export default function QuestEditor(props) {
   };
 
   const initialRegionState = {
-    coordinates: [-84.233272, 39.552281],
+    latitude: 39.552281,
+    longitude: -84.233272,
     name: "",
-    zoom: 17,
+    zoom: 12.5,
   };
   const [region, setRegion] = useState(initialRegionState);
 
@@ -100,9 +101,9 @@ export default function QuestEditor(props) {
     setRegion({ ...region, [name]: value });
   };
 
-  const onUpdateCenter = (center) => {
-    setRegion({ ...region, coordinates: center });
-  }
+  const onUpdateCenter = ({latitude, longitude}) => {
+    setRegion({ ...region, latitude, longitude });
+  };
 
   const [objectives, setObjectives] = useState([]);
   const [locations, setLocations] = useState([]);
@@ -153,7 +154,15 @@ export default function QuestEditor(props) {
           </TabPanel>
           <TabPanel value={value} index={1}>
             <QuestRegion
-              map={<QuestMap center={region.coordinates}></QuestMap>}
+              map={
+                <QuestMap
+                  width={"500px"}
+                  height={"500px"}
+                  latitude={region.latitude}
+                  longitude={region.longitude}
+                  zoom={region.zoom}
+                ></QuestMap>
+              }
               region={region}
               updateRegion={onUpdateRegion}
               updateCenter={onUpdateCenter}
