@@ -8,6 +8,7 @@ import QuestObjectives from "./QuestObjectives.jsx";
 import QuestLocations from "./QuestLocations.jsx";
 import QuestEntries from "./QuestEntries.jsx";
 import QuestItems from "./QuestItems.jsx";
+import QuestMap from "../quests/QuestMap.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -54,16 +55,6 @@ const useStyles = makeStyles((theme) => ({
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`,
   },
-  // layout: {
-  //   width: "auto",
-  //   marginLeft: theme.spacing(2),
-  //   marginRight: theme.spacing(2),
-  //   [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-  //     width: 600,
-  //     marginLeft: "auto",
-  //     marginRight: "auto",
-  //   },
-  // },
 }));
 
 export default function QuestEditor(props) {
@@ -98,7 +89,7 @@ export default function QuestEditor(props) {
   };
 
   const initialRegionState = {
-    coordinates: [],
+    coordinates: [-84.233272, 39.552281],
     name: "",
     zoom: 17,
   };
@@ -108,6 +99,10 @@ export default function QuestEditor(props) {
     const { name, value } = event.target;
     setRegion({ ...region, [name]: value });
   };
+
+  const onUpdateCenter = (center) => {
+    setRegion({ ...region, coordinates: center });
+  }
 
   const [objectives, setObjectives] = useState([]);
   const [locations, setLocations] = useState([]);
@@ -158,8 +153,10 @@ export default function QuestEditor(props) {
           </TabPanel>
           <TabPanel value={value} index={1}>
             <QuestRegion
+              map={<QuestMap center={region.coordinates}></QuestMap>}
               region={region}
               updateRegion={onUpdateRegion}
+              updateCenter={onUpdateCenter}
             ></QuestRegion>
           </TabPanel>
           <TabPanel value={value} index={2}>

@@ -5,6 +5,13 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 
 const QuestRegion = props => {
+
+  const onUpdateCenter = (event) => {
+    props.updateCenter(event.coordinates);
+  };
+
+  const map = React.cloneElement(props.map, { updateCenter: onUpdateCenter });
+
   return (
     <Grid container spacing={4}>
       <Grid item sm={3}>
@@ -45,7 +52,7 @@ const QuestRegion = props => {
       </form>
       </Grid>
       <Grid item sm={9}>
-        <h1>Quest Map</h1>
+        { map }
       </Grid>
     </Grid>
   );

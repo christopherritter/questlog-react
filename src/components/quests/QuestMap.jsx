@@ -7,7 +7,7 @@ import Popup from "./QuestMapPopup.jsx";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
-const QuestMap = () => {
+const QuestMap = (props) => {
   const mapContainerRef = useRef(null);
   // offset puts the popup 15px above the feature
   const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }));
@@ -18,7 +18,7 @@ const QuestMap = () => {
       container: mapContainerRef.current,
       // See style options here: https://docs.mapbox.com/api/maps/#styles
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: [-104.9876, 39.7405],
+      center: props.center,
       zoom: 12.5,
     });
 
@@ -53,6 +53,7 @@ const QuestMap = () => {
       // update "random-points-data" source with new data
       // all layers that consume the "random-points-data" data source will be updated automatically
       map.getSource('random-points-data').setData(results);
+      props.updateCenter({ coordinates: [lng, lat]});
     });
 
     // add popup when user clicks a point
