@@ -28,6 +28,8 @@ const QuestMap = (props) => {
       accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
       latitude={props.latitude}
       longitude={props.longitude}
+      bearing={props.bearing}
+      pitch={props.pitch}
       zoom={props.zoom}
       onViewportChange={props.updateCenter}
       onClick={onClick}
