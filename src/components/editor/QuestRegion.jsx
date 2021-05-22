@@ -6,9 +6,14 @@ import TextField from "@material-ui/core/TextField";
 
 const QuestRegion = (props) => {
   const onUpdateCenter = (event) => {
+    console.log("onUpdateCenter")
+    console.log(event)
     props.updateCenter({
       latitude: event.latitude,
       longitude: event.longitude,
+      bearing: event.bearing,
+      pitch: event.pitch,
+      zoom: event.zoom,
     });
   };
 
@@ -24,24 +29,12 @@ const QuestRegion = (props) => {
             variant="outlined"
             margin="normal"
             fullWidth
-            id="regionName"
-            label="Name"
-            name="name"
-            value={props.region.name}
-            onChange={props.updateRegion}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            fullWidth
             id="regionLatitude"
             label="Latitude"
             name="latitude"
             value={props.region.latitude}
             onChange={props.updateRegion}
-            InputProps={{
-              readOnly: true,
-            }}
+            required
           />
           <TextField
             variant="outlined"
@@ -52,9 +45,27 @@ const QuestRegion = (props) => {
             name="longitude"
             value={props.region.longitude}
             onChange={props.updateRegion}
-            InputProps={{
-              readOnly: true,
-            }}
+            required
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            id="regionBearing"
+            label="Bearing"
+            name="bearing"
+            value={props.region.bearing}
+            onChange={props.updateRegion}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            id="regionPitch"
+            label="Pitch"
+            name="pitch"
+            value={props.region.pitch}
+            onChange={props.updateRegion}
           />
           <TextField
             variant="outlined"

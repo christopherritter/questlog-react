@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 export default function QuestEditor(props) {
   const classes = useStyles();
 
-  const initialQuestState = {
+  const [quest, setQuest] = useState({
     questId: "",
     title: "",
     author: "",
@@ -69,8 +69,7 @@ export default function QuestEditor(props) {
     categories: [],
     image: "",
     startingPoint: "",
-  };
-  const [quest, setQuest] = useState(initialQuestState);
+  });
 
   useEffect(() => {
     const unsubscribe = QuestDataService.getAll()
@@ -88,21 +87,21 @@ export default function QuestEditor(props) {
     setQuest({ ...quest, [name]: value });
   };
 
-  const initialRegionState = {
-    latitude: 39.552281,
-    longitude: -84.233272,
-    name: "",
-    zoom: 12.5,
-  };
-  const [region, setRegion] = useState(initialRegionState);
+  const [region, setRegion] = useState({
+    latitude: 39.82817,
+    longitude: -98.5795,
+    bearing: 0,
+    pitch: 0,
+    zoom: 17,
+  });
 
   const onUpdateRegion = (event) => {
     const { name, value } = event.target;
     setRegion({ ...region, [name]: value });
   };
 
-  const onUpdateCenter = ({latitude, longitude}) => {
-    setRegion({ ...region, latitude, longitude });
+  const onUpdateCenter = ({latitude, longitude, bearing, pitch, zoom }) => {
+    setRegion({ ...region, latitude, longitude, bearing, pitch, zoom });
   };
 
   const [objectives, setObjectives] = useState([]);
@@ -160,6 +159,8 @@ export default function QuestEditor(props) {
                   height={"400px"}
                   latitude={region.latitude}
                   longitude={region.longitude}
+                  bearing={region.bearing}
+                  pitch={region.pitch}
                   zoom={region.zoom}
                 ></QuestMap>
               }
