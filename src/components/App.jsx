@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import "mapbox-gl/dist/mapbox-gl.css";
 import {
   Link as RouterLink,
   Switch,

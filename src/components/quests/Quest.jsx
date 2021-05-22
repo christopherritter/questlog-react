@@ -17,10 +17,10 @@ const Quest = (props) => {
     title: "",
   };
   const initialRegionState = {
-    latitude: 0,
-    longitude: 0,
-    name: "North Park",
-    zoom: 17,
+    latitude: 39.82835,
+    longitude: -98.5816737,
+    name: "Geographic Center of the United States",
+    zoom: 12.5,
   };
   
   const [quest, setQuest] = useState(initialQuestState);

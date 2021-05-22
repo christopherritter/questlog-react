@@ -18,7 +18,7 @@ const QuestRegion = (props) => {
 
   return (
     <Grid container spacing={4}>
-      <Grid item sm={3}>
+      <Grid item md={4}>
         <form noValidate>
           <TextField
             variant="outlined"
@@ -68,7 +68,7 @@ const QuestRegion = (props) => {
           />
         </form>
       </Grid>
-      <Grid item sm={9}>
+      <Grid item md={8}>
         {QuestMap}
       </Grid>
     </Grid>

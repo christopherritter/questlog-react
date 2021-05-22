@@ -1,19 +1,28 @@
-import React, { useState } from 'react'
-import ReactMapGL from 'react-map-gl';
+import React from "react";
+import MapGL from "@urbica/react-map-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 const QuestMap = (props) => {
-  const [viewport, setViewport] = useState({
-    width: props.width,
-    height: props.height,
-    latitude: 37.7577,
-    longitude: -122.4376,
-    zoom: 8
-  });
+  const onClick = (event) => {
+    const { lngLat } = event;
+
+    const newViewport = {
+      latitude: lngLat.lat,
+      longitude: lngLat.lng,
+    };
+
+    console.log(newViewport)
+  };
 
   return (
-    <ReactMapGL
-      {...viewport}
-      onViewportChange={nextViewport => setViewport(nextViewport)}
+    <MapGL
+      style={{ width: props.width, height: props.height }}
+      mapStyle="mapbox://styles/mapbox/streets-v11"
+      accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+      latitude={props.latitude}
+      longitude={props.longitude}
+      zoom={props.zoom}
+      onClick={onClick}
     />
   );
 };

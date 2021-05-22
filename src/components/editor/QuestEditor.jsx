@@ -128,7 +128,7 @@ export default function QuestEditor(props) {
   return (
     <Paper elevation={0} className={classes.root}>
       <Grid container>
-        <Grid item sm={3}>
+        <Grid item md={2}>
           <Tabs
             orientation="vertical"
             variant="scrollable"
@@ -145,7 +145,7 @@ export default function QuestEditor(props) {
             <Tab label="Items" {...a11yProps(5)} />
           </Tabs>
         </Grid>
-        <Grid item sm={9}>
+        <Grid item md={10}>
           <TabPanel value={value} index={0}>
             <QuestDetails
               quest={quest}
@@ -156,8 +156,8 @@ export default function QuestEditor(props) {
             <QuestRegion
               map={
                 <QuestMap
-                  width={"500px"}
-                  height={"500px"}
+                  width={"100%"}
+                  height={"400px"}
                   latitude={region.latitude}
                   longitude={region.longitude}
                   zoom={region.zoom}
