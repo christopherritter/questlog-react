@@ -6,7 +6,7 @@ import TextField from "@material-ui/core/TextField";
 
 function QuestDetails(props) {
   return (
-    <Grid container spacing={4}>
+    <Grid container spacing={2}>
       <Grid item sm={12}>
         <form noValidate>
           <TextField

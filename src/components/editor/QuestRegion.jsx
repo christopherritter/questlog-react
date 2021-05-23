@@ -6,8 +6,6 @@ import TextField from "@material-ui/core/TextField";
 
 const QuestRegion = (props) => {
   const onUpdateCenter = (event) => {
-    console.log("onUpdateCenter")
-    console.log(event)
     props.updateCenter({
       latitude: event.latitude,
       longitude: event.longitude,

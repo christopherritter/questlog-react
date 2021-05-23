@@ -100,11 +100,16 @@ export default function QuestEditor(props) {
     setRegion({ ...region, [name]: value });
   };
 
-  const onUpdateCenter = ({latitude, longitude, bearing, pitch, zoom }) => {
-    setRegion({ ...region, latitude, longitude, bearing, pitch, zoom });
+  const onUpdateCenter = (newRegion) => {
+    setRegion({ ...region, newRegion });
   };
 
   const [objectives, setObjectives] = useState([]);
+
+  const onUpdateObjectives = (objective) => {
+    setObjectives(objectives => [...objectives, objective]);
+  };
+
   const [locations, setLocations] = useState([]);
   const [entries, setEntries] = useState([]);
   const [items, setItems] = useState([]);
@@ -170,7 +175,7 @@ export default function QuestEditor(props) {
             ></QuestRegion>
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <QuestObjectives objectives={objectives}></QuestObjectives>
+            <QuestObjectives objectives={objectives} updateObjectives={onUpdateObjectives}></QuestObjectives>
           </TabPanel>
           <TabPanel value={value} index={3}>
             <QuestLocations locations={locations}></QuestLocations>
