@@ -49,32 +49,43 @@ function QuestObjectives(props) {
 
   const addObjective = (e) => {
     e.preventDefault();
-    props.updateObjectives({
+    props.addObjective({
       id: "objective-" + id,
       text: objective.text,
       isPrimary: objective.isPrimary,
       isComplete: objective.isComplete,
     });
     setObjective(initialObjectiveState);
+    setSelectedIndex(-1);
   };
 
-  const [checked, setChecked] = React.useState([0]);
+  const updateObjective = (e) => {
+    e.preventDefault();
+    props.updateObjective({
+      id: objective.id,
+      text: objective.text,
+      isPrimary: objective.isPrimary,
+      isComplete: objective.isComplete,
+    });
+    setObjective(initialObjectiveState);
+    setSelectedIndex(-1);
+  };
 
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+  const [selectedIndex, setSelectedIndex] = React.useState(-1);
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
+  const handleListItemClick = (objective, index) => {
+    const selectedObjective = {
+      id: objective.id,
+      text: objective.text,
+      isPrimary: objective.isPrimary,
+      isComplete: objective.isComplete,
+    };
+    setSelectedIndex(index);
+    setObjective(selectedObjective);
   };
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} className={classes.root}>
       <Grid item md={4}>
         <form noValidate>
           <TextField
@@ -91,48 +102,48 @@ function QuestObjectives(props) {
 
           <FormControlLabel
             control={
-              <Checkbox checked={objective.isPrimary} onChange={onToggleObjective} name="isPrimary" />
+              <Checkbox
+                checked={objective.isPrimary}
+                onChange={onToggleObjective}
+                name="isPrimary"
+              />
             }
             label="Primary Objective"
           />
 
-          <Button color="primary" onClick={addObjective}>
-            Add Objective
-          </Button>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              {selectedIndex === -1 ? (
+                <Button color="primary" onClick={addObjective}>
+                  Add Objective
+                </Button>
+              ) : (
+                <Button color="primary" onClick={updateObjective}>
+                  Update Objective
+                </Button>
+              )}
+            </Grid>
+          </Grid>
         </form>
       </Grid>
       <Grid item md={8}>
-        <List className={classes.root}>
+        { props.objectives.length > 0 ? <List component="nav">
           {props.objectives.map((objective, index) => {
-            const labelId = `checkbox-list-label-${index}`;
-
             return (
               <ListItem
-                key={index}
-                role={undefined}
-                dense
                 button
-                onClick={handleToggle(index)}
+                key={objective.id}
+                selected={selectedIndex === index}
+                onClick={(event) => handleListItemClick(objective, index)}
               >
                 <ListItemIcon>
-                  <Checkbox
-                    edge="start"
-                    checked={checked.indexOf(index) !== -1}
-                    tabIndex={-1}
-                    disableRipple
-                    inputProps={{ "aria-labelledby": labelId }}
-                  />
+                  <CommentIcon />
                 </ListItemIcon>
-                <ListItemText id={labelId} primary={objective.text} />
-                <ListItemSecondaryAction>
-                  <IconButton edge="end" aria-label="comments">
-                    <CommentIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
+                <ListItemText primary={objective.text} />
               </ListItem>
             );
           })}
-        </List>
+        </List> : <div>Loading...</div>}
       </Grid>
     </Grid>
   );
