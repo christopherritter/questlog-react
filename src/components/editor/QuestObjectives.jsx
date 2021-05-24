@@ -71,6 +71,12 @@ function QuestObjectives(props) {
     setSelectedIndex(-1);
   };
 
+  const removeObjective = (e) => {
+    e.preventDefault();
+    props.removeObjective(objective);
+    setSelectedIndex(-1);
+  };
+
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
 
   const handleListItemClick = (objective, index) => {
@@ -118,9 +124,14 @@ function QuestObjectives(props) {
                   Add Objective
                 </Button>
               ) : (
-                <Button color="primary" onClick={updateObjective}>
-                  Update Objective
-                </Button>
+                <>
+                  <Button color="primary" onClick={updateObjective}>
+                    Update Objective
+                  </Button>
+                  <Button color="primary" onClick={removeObjective}>
+                    Remove Objective
+                  </Button>
+                </>
               )}
             </Grid>
           </Grid>
@@ -128,21 +139,22 @@ function QuestObjectives(props) {
       </Grid>
       <Grid item md={8}>
         <List component="nav">
-          {props.objectives && props.objectives.map((objective, index) => {
-            return (
-              <ListItem
-                button
-                key={objective.id}
-                selected={selectedIndex === index}
-                onClick={(event) => handleListItemClick(objective, index)}
-              >
-                <ListItemIcon>
-                  <CommentIcon />
-                </ListItemIcon>
-                <ListItemText primary={objective.text} />
-              </ListItem>
-            );
-          })}
+          {props.objectives &&
+            props.objectives.map((objective, index) => {
+              return (
+                <ListItem
+                  button
+                  key={objective.id}
+                  selected={selectedIndex === index}
+                  onClick={(event) => handleListItemClick(objective, index)}
+                >
+                  <ListItemIcon>
+                    <CommentIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={objective.text} />
+                </ListItem>
+              );
+            })}
         </List>
       </Grid>
     </Grid>
