@@ -127,8 +127,8 @@ function QuestObjectives(props) {
         </form>
       </Grid>
       <Grid item md={8}>
-        { props.objectives.length > 0 ? <List component="nav">
-          {props.objectives.map((objective, index) => {
+        <List component="nav">
+          {props.objectives && props.objectives.map((objective, index) => {
             return (
               <ListItem
                 button
@@ -143,7 +143,7 @@ function QuestObjectives(props) {
               </ListItem>
             );
           })}
-        </List> : <div>Loading...</div>}
+        </List>
       </Grid>
     </Grid>
   );
