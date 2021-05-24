@@ -23,8 +23,15 @@ const useStyles = makeStyles((theme) => ({
 
 function QuestObjectives(props) {
   const classes = useStyles();
+  var id = 0;
+
+  if (props.objectives.length > 0) {
+    // need to detect max id number
+    id = props.objectives.length;
+  }
 
   const initialObjectiveState = {
+    id: "objective-" + id,
     text: "",
     isPrimary: false,
     isComplete: false,
@@ -43,6 +50,7 @@ function QuestObjectives(props) {
   const addObjective = (e) => {
     e.preventDefault();
     props.updateObjectives({
+      id: "objective-" + id,
       text: objective.text,
       isPrimary: objective.isPrimary,
       isComplete: objective.isComplete,
