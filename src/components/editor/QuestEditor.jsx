@@ -142,11 +142,6 @@ export default function QuestEditor(props) {
     setQuest({ ...quest, objectives: updatedObjectives});
   };
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-  const [value, setValue] = useState(0);
-
   const publishQuest = () => {
     QuestDataService.update(quest.questId, quest)
       .then(() => {
@@ -157,6 +152,11 @@ export default function QuestEditor(props) {
       });
   };
 
+  const viewTab = (event, newTab) => {
+    setTab(newTab);
+  };
+  const [tab, setTab] = useState(0);
+
   return (
     <Paper elevation={0} className={classes.root}>
       <Grid container>
@@ -164,8 +164,8 @@ export default function QuestEditor(props) {
           <Tabs
             orientation="vertical"
             variant="scrollable"
-            value={value}
-            onChange={handleChange}
+            value={tab}
+            onChange={viewTab}
             aria-label="Vertical tabs example"
             className={classes.tabs}
           >
@@ -178,13 +178,13 @@ export default function QuestEditor(props) {
           </Tabs>
         </Grid>
         <Grid item md={10}>
-          <TabPanel value={value} index={0}>
+          <TabPanel value={tab} index={0}>
             <QuestDetails
               quest={quest}
               updateDetails={onUpdateDetails}
             ></QuestDetails>
           </TabPanel>
-          <TabPanel value={value} index={1}>
+          <TabPanel value={tab} index={1}>
             <QuestRegion
               map={
                 <QuestMap
@@ -202,7 +202,7 @@ export default function QuestEditor(props) {
               updateCenter={onUpdateCenter}
             ></QuestRegion>
           </TabPanel>
-          <TabPanel value={value} index={2}>
+          <TabPanel value={tab} index={2}>
             <QuestObjectives
               objectives={quest.objectives}
               addObjective={onAddObjective}
@@ -210,13 +210,13 @@ export default function QuestEditor(props) {
               removeObjective={onRemoveObjective}
             ></QuestObjectives>
           </TabPanel>
-          <TabPanel value={value} index={3}>
+          <TabPanel value={tab} index={3}>
             <QuestLocations locations={quest.locations}></QuestLocations>
           </TabPanel>
-          <TabPanel value={value} index={4}>
+          <TabPanel value={tab} index={4}>
             <QuestEntries entries={quest.entries}></QuestEntries>
           </TabPanel>
-          <TabPanel value={value} index={5}>
+          <TabPanel value={tab} index={5}>
             <QuestItems items={quest.items}></QuestItems>
           </TabPanel>
         </Grid>
