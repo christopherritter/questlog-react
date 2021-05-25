@@ -68,6 +68,14 @@ export default function QuestEditor(props) {
     description: "",
     categories: [],
     image: "",
+    region: {
+      latitude: 39.82817,
+      longitude: -98.5795,
+      bearing: 0,
+      pitch: 0,
+      zoom: 17,
+    },
+    objectives: [],
     startingPoint: "",
   });
 
@@ -87,21 +95,18 @@ export default function QuestEditor(props) {
     setQuest({ ...quest, [name]: value });
   };
 
-  const [region, setRegion] = useState({
-    latitude: 39.82817,
-    longitude: -98.5795,
-    bearing: 0,
-    pitch: 0,
-    zoom: 17,
-  });
-
   const onUpdateRegion = (event) => {
     const { name, value } = event.target;
-    setRegion({ ...region, [name]: value });
+    setQuest({
+      ...quest,
+      region: {
+        [name]: value,
+      },
+    });
   };
 
   const onUpdateCenter = (newRegion) => {
-    setRegion({ ...region, newRegion });
+    setQuest({ ...quest, region: newRegion });
   };
 
   const [objectives, setObjectives] = useState([]);
@@ -142,7 +147,7 @@ export default function QuestEditor(props) {
   const [value, setValue] = useState(0);
 
   const publishQuest = () => {
-    QuestDataService.update(quest.questId, { quest, region, objectives })
+    QuestDataService.update(quest.questId, { quest, objectives })
       .then(() => {
         console.log("Updated!");
       })
@@ -184,14 +189,14 @@ export default function QuestEditor(props) {
                 <QuestMap
                   width={"100%"}
                   height={"400px"}
-                  latitude={region.latitude}
-                  longitude={region.longitude}
-                  bearing={region.bearing}
-                  pitch={region.pitch}
-                  zoom={region.zoom}
+                  latitude={quest.region.latitude}
+                  longitude={quest.region.longitude}
+                  bearing={quest.region.bearing}
+                  pitch={quest.region.pitch}
+                  zoom={quest.region.zoom}
                 ></QuestMap>
               }
-              region={region}
+              region={quest.region}
               updateRegion={onUpdateRegion}
               updateCenter={onUpdateCenter}
             ></QuestRegion>

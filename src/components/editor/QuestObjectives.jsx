@@ -26,8 +26,9 @@ function QuestObjectives(props) {
   var id = 0;
 
   if (props.objectives.length > 0) {
-    var idList =  props.objectives.map((obj) => {
-      var idNumber, matches = obj.id.match(/\d+$/);
+    var idList = props.objectives.map((obj) => {
+      var idNumber,
+        matches = obj.id.match(/\d+$/);
 
       if (matches) {
         idNumber = matches[0];
@@ -35,7 +36,7 @@ function QuestObjectives(props) {
 
       return idNumber;
     });
-    
+
     id = Math.max(...idList) + 1;
   }
 
@@ -83,6 +84,7 @@ function QuestObjectives(props) {
   const removeObjective = (e) => {
     e.preventDefault();
     props.removeObjective(objective);
+    setObjective(initialObjectiveState);
     setSelectedIndex(-1);
   };
 
@@ -101,7 +103,20 @@ function QuestObjectives(props) {
 
   return (
     <Grid container spacing={2} className={classes.root}>
-      <Grid item md={4}>
+      <Grid item md={4} sm={12}>
+        <Grid container spacing={2}>
+          <Grid item md={8}>
+            <h2>Objectives</h2>
+          </Grid>
+          <Grid item md={4}>
+            <Button color="primary" onClick={() => {
+              setObjective(initialObjectiveState);
+              setSelectedIndex(-1);
+            }}>
+              Create New
+            </Button>
+          </Grid>
+        </Grid>
         <form noValidate>
           <TextField
             variant="outlined"
@@ -135,10 +150,10 @@ function QuestObjectives(props) {
               ) : (
                 <>
                   <Button color="primary" onClick={updateObjective}>
-                    Update Objective
+                    Update
                   </Button>
                   <Button color="primary" onClick={removeObjective}>
-                    Remove Objective
+                    Remove
                   </Button>
                 </>
               )}
@@ -146,7 +161,7 @@ function QuestObjectives(props) {
           </Grid>
         </form>
       </Grid>
-      <Grid item md={8}>
+      <Grid item md={8} sm={12}>
         <List component="nav">
           {props.objectives &&
             props.objectives.map((objective, index) => {
