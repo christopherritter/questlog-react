@@ -114,9 +114,9 @@ export default function QuestEditor(props) {
 
   const onAddObjective = (objective) => {
     if (quest.objectives) {
-      setQuest({ ...quest, objectives: [...quest.objectives, objective]});
+      setQuest({ ...quest, objectives: [...quest.objectives, objective] });
     } else {
-      setQuest({ ...quest, objectives: [objective]});
+      setQuest({ ...quest, objectives: [objective] });
     }
   };
 
@@ -132,14 +132,52 @@ export default function QuestEditor(props) {
     updatedObjective.isComplete = objective.isComplete;
     updatedObjectives[selectedObjective] = updatedObjective;
 
-    setQuest({ ...quest, objectives: updatedObjectives});
+    setQuest({ ...quest, objectives: updatedObjectives });
   };
 
   const onRemoveObjective = (objective) => {
     const updatedObjectives = quest.objectives.filter(
       (obj) => obj.id !== objective.id
     );
-    setQuest({ ...quest, objectives: updatedObjectives});
+    setQuest({ ...quest, objectives: updatedObjectives });
+  };
+
+  const onAddLocation = (location) => {
+    if (quest.locations) {
+      setQuest({ ...quest, locations: [...quest.locations, location] });
+    } else {
+      setQuest({ ...quest, locations: [location] });
+    }
+  };
+
+  const onUpdateLocation = (location) => {
+    const selectedLocation = quest.locations.findIndex(function (loc) {
+      return location.id === loc.id;
+    });
+    let updatedLocations = [...quest.locations];
+    let updatedLocation = { ...quest.locations[selectedLocation] };
+
+    updatedLocation.name = location.name;
+    updatedLocation.latitude = location.latitude;
+    updatedLocation.longitude = location.longitude;
+    updatedLocation.bearing = location.bearing;
+    updatedLocation.pitch = location.pitch;
+    updatedLocation.zoom = location.zoom;
+    updatedLocation.image = location.image;
+    updatedLocation.marker = location.marker;
+    updatedLocation.order = location.order;
+    updatedLocation.isLandmark = location.isLandmark;
+    updatedLocation.isStartingPoint = location.isStartingPoint;
+    updatedLocations[selectedLocation] = updatedLocation;
+
+    setQuest({ ...quest, locations: updatedLocations });
+  };
+
+  const onRemoveLocation = (location) => {
+    const updatedLocations = quest.locations.filter(
+      (loc) => loc.id !== location.id
+    );
+    setQuest({ ...quest, locations: updatedLocations });
   };
 
   const publishQuest = () => {
@@ -211,7 +249,12 @@ export default function QuestEditor(props) {
             ></QuestObjectives>
           </TabPanel>
           <TabPanel value={tab} index={3}>
-            <QuestLocations locations={quest.locations}></QuestLocations>
+            <QuestLocations
+              locations={quest.locations}
+              addLocation={onAddLocation}
+              updateLocation={onUpdateLocation}
+              removeLocation={onRemoveLocation}
+            ></QuestLocations>
           </TabPanel>
           <TabPanel value={tab} index={4}>
             <QuestEntries entries={quest.entries}></QuestEntries>
