@@ -76,6 +76,9 @@ export default function QuestEditor(props) {
       zoom: 17,
     },
     objectives: [],
+    locations: [],
+    entries: [],
+    items: [],
     startingPoint: "",
   });
 
@@ -109,8 +112,6 @@ export default function QuestEditor(props) {
     setQuest({ ...quest, region: newRegion });
   };
 
-  // const [objectives, setObjectives] = useState([]);
-
   const onAddObjective = (objective) => {
     if (quest.objectives) {
       setQuest({ ...quest, objectives: [...quest.objectives, objective]});
@@ -140,10 +141,6 @@ export default function QuestEditor(props) {
     );
     setQuest({ ...quest, objectives: updatedObjectives});
   };
-
-  const [locations, setLocations] = useState([]);
-  const [entries, setEntries] = useState([]);
-  const [items, setItems] = useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -214,13 +211,13 @@ export default function QuestEditor(props) {
             ></QuestObjectives>
           </TabPanel>
           <TabPanel value={value} index={3}>
-            <QuestLocations locations={locations}></QuestLocations>
+            <QuestLocations locations={quest.locations}></QuestLocations>
           </TabPanel>
           <TabPanel value={value} index={4}>
-            <QuestEntries entries={entries}></QuestEntries>
+            <QuestEntries entries={quest.entries}></QuestEntries>
           </TabPanel>
           <TabPanel value={value} index={5}>
-            <QuestItems items={items}></QuestItems>
+            <QuestItems items={quest.items}></QuestItems>
           </TabPanel>
         </Grid>
       </Grid>
