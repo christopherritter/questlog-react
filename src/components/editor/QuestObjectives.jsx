@@ -27,7 +27,18 @@ function QuestObjectives(props) {
 
   if (props.objectives.length > 0) {
     // need to detect max id number
-    id = props.objectives.length;
+    var idList =  props.objectives.map((obj) => {
+      var idNumber, matches = obj.id.match(/\d+$/);
+
+      if (matches) {
+        idNumber = matches[0];
+      }
+
+      return idNumber;
+    });
+
+    console.log(Math.max(...idList) + 1);
+    id = Math.max(...idList) + 1;
   }
 
   const initialObjectiveState = {
