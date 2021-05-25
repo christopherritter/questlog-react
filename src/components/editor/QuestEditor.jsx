@@ -142,7 +142,7 @@ export default function QuestEditor(props) {
   const [value, setValue] = useState(0);
 
   const publishQuest = () => {
-    QuestDataService.update(quest.questId, { quest, region })
+    QuestDataService.update(quest.questId, { quest, region, objectives })
       .then(() => {
         console.log("Updated!");
       })

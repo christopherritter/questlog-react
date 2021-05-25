@@ -10,8 +10,8 @@ const create = (data) => {
   return db.add(data);
 };
 
-const update = (id, { quest, region }) => {
-  const newQuest = { region, ...quest };
+const update = (id, { quest, region, objectives }) => {
+  const newQuest = { ...quest, region, objectives };
   return db.doc(id).update(newQuest);
 };
 

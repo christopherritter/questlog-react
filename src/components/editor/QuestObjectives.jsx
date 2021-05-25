@@ -26,7 +26,6 @@ function QuestObjectives(props) {
   var id = 0;
 
   if (props.objectives.length > 0) {
-    // need to detect max id number
     var idList =  props.objectives.map((obj) => {
       var idNumber, matches = obj.id.match(/\d+$/);
 
@@ -36,8 +35,7 @@ function QuestObjectives(props) {
 
       return idNumber;
     });
-
-    console.log(Math.max(...idList) + 1);
+    
     id = Math.max(...idList) + 1;
   }
 
