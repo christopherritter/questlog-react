@@ -25,7 +25,7 @@ function QuestObjectives(props) {
   const classes = useStyles();
   var id = 0;
 
-  if (props.objectives.length > 0) {
+  if (props.objectives) {
     var idList = props.objectives.map((obj) => {
       var idNumber,
         matches = obj.id.match(/\d+$/);

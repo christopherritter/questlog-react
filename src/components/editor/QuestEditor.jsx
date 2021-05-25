@@ -109,32 +109,36 @@ export default function QuestEditor(props) {
     setQuest({ ...quest, region: newRegion });
   };
 
-  const [objectives, setObjectives] = useState([]);
+  // const [objectives, setObjectives] = useState([]);
 
   const onAddObjective = (objective) => {
-    setObjectives((objectives) => [...objectives, objective]);
+    if (quest.objectives) {
+      setQuest({ ...quest, objectives: [...quest.objectives, objective]});
+    } else {
+      setQuest({ ...quest, objectives: [objective]});
+    }
   };
 
   const onUpdateObjective = (objective) => {
-    const selectedObjective = objectives.findIndex(function (obj) {
+    const selectedObjective = quest.objectives.findIndex(function (obj) {
       return objective.id === obj.id;
     });
-    let updatedObjectives = [...objectives];
-    let updatedObjective = { ...objectives[selectedObjective] };
+    let updatedObjectives = [...quest.objectives];
+    let updatedObjective = { ...quest.objectives[selectedObjective] };
 
     updatedObjective.text = objective.text;
     updatedObjective.isPrimary = objective.isPrimary;
     updatedObjective.isComplete = objective.isComplete;
     updatedObjectives[selectedObjective] = updatedObjective;
 
-    setObjectives(updatedObjectives);
+    setQuest({ ...quest, objectives: updatedObjectives});
   };
 
   const onRemoveObjective = (objective) => {
-    const updatedObjectives = objectives.filter(
+    const updatedObjectives = quest.objectives.filter(
       (obj) => obj.id !== objective.id
     );
-    setObjectives(updatedObjectives);
+    setQuest({ ...quest, objectives: updatedObjectives});
   };
 
   const [locations, setLocations] = useState([]);
@@ -147,7 +151,7 @@ export default function QuestEditor(props) {
   const [value, setValue] = useState(0);
 
   const publishQuest = () => {
-    QuestDataService.update(quest.questId, { quest, objectives })
+    QuestDataService.update(quest.questId, quest)
       .then(() => {
         console.log("Updated!");
       })
@@ -203,7 +207,7 @@ export default function QuestEditor(props) {
           </TabPanel>
           <TabPanel value={value} index={2}>
             <QuestObjectives
-              objectives={objectives}
+              objectives={quest.objectives}
               addObjective={onAddObjective}
               updateObjective={onUpdateObjective}
               removeObjective={onRemoveObjective}
