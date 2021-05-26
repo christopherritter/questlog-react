@@ -13,7 +13,7 @@ const QuestMap = (props) => {
       longitude: lngLat.lng,
     };
 
-    console.log(newViewport)
+    props.mapClick(newViewport);
   };
 
   const onDragEnd = (event) => {

@@ -15,8 +15,13 @@ const QuestRegion = (props) => {
     });
   };
 
+  const onMapClick = (event) => {
+    console.log(event)
+  }
+
   const QuestMap = React.cloneElement(props.map, {
     updateCenter: onUpdateCenter,
+    onClick: onMapClick,
   });
 
   return (
@@ -78,7 +83,7 @@ const QuestRegion = (props) => {
         </form>
       </Grid>
       <Grid item md={8}>
-        {QuestMap}
+        { QuestMap }
       </Grid>
     </Grid>
   );

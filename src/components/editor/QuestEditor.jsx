@@ -250,6 +250,17 @@ export default function QuestEditor(props) {
           </TabPanel>
           <TabPanel value={tab} index={3}>
             <QuestLocations
+              map={
+                <QuestMap
+                  width={"100%"}
+                  height={"400px"}
+                  latitude={quest.region.latitude}
+                  longitude={quest.region.longitude}
+                  bearing={quest.region.bearing}
+                  pitch={quest.region.pitch}
+                  zoom={quest.region.zoom}
+                ></QuestMap>
+              }
               locations={quest.locations}
               addLocation={onAddLocation}
               updateLocation={onUpdateLocation}

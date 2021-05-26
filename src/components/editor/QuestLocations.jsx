@@ -62,6 +62,7 @@ function QuestLocations(props) {
     const { name, value } = event.target;
     setLocation({ ...location, [name]: value });
   };
+
   const onToggleLocation = (event) => {
     const { name, checked } = event.target;
     setLocation({ ...location, [name]: checked });
@@ -122,35 +123,54 @@ function QuestLocations(props) {
 
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
 
+  const onUpdateCenter = (event) => {
+    props.updateCenter({
+      latitude: event.latitude,
+      longitude: event.longitude,
+      bearing: event.bearing,
+      pitch: event.pitch,
+      zoom: event.zoom,
+    });
+  };
+
+  const onMapClick = (e) => {
+    console.log("On Map Click:")
+    console.log(e.latitude, e.longitude)
+    setLocation({ ...location, latitude: e.latitude, longitude: e.longitude });
+  };
+
+  const QuestMap = React.cloneElement(props.map, {
+    updateCenter: onUpdateCenter,
+    mapClick: onMapClick,
+  });
+
   const renderView = (view) => {
-    switch(view) {
-      case 'list':
+    switch (view) {
+      case "list":
         return (
           <List component="nav">
-              {props.locations &&
-                props.locations.map((location, index) => {
-                  return (
-                    <ListItem
-                      button
-                      key={location.id}
-                      selected={selectedIndex === index}
-                      onClick={(event) => handleListItemClick(location, index)}
-                    >
-                      <ListItemIcon>
-                        <LocationOnIcon />
-                      </ListItemIcon>
-                      <ListItemText primary={location.name} />
-                    </ListItem>
-                  );
-                })}
-            </List>
+            {props.locations &&
+              props.locations.map((location, index) => {
+                return (
+                  <ListItem
+                    button
+                    key={location.id}
+                    selected={selectedIndex === index}
+                    onClick={(event) => handleListItemClick(location, index)}
+                  >
+                    <ListItemIcon>
+                      <LocationOnIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={location.name} />
+                  </ListItem>
+                );
+              })}
+          </List>
         );
       default:
-        return (
-          <h1>Map</h1>
-        );
+        return QuestMap;
     }
-  }
+  };
 
   const handleListItemClick = (location, index) => {
     const selectedLocation = {
@@ -201,6 +221,7 @@ function QuestLocations(props) {
                 id="locationText"
                 label="Location Name"
                 name="name"
+                type="text"
                 value={location.name}
                 onChange={onChangeLocation}
               />
@@ -214,6 +235,7 @@ function QuestLocations(props) {
                 id="locationOrder"
                 label="Order"
                 name="order"
+                type="number"
                 value={location.order}
                 onChange={onChangeLocation}
               />
@@ -257,6 +279,7 @@ function QuestLocations(props) {
                 id="locationLatitude"
                 label="Latitude"
                 name="latitude"
+                type="number"
                 value={location.latitude}
                 onChange={onChangeLocation}
               />
@@ -270,6 +293,7 @@ function QuestLocations(props) {
                 id="locationLongitude"
                 label="Longitude"
                 name="longitude"
+                type="number"
                 value={location.longitude}
                 onChange={onChangeLocation}
               />
@@ -286,6 +310,7 @@ function QuestLocations(props) {
                 id="locationBearing"
                 label="Bearing"
                 name="bearing"
+                type="number"
                 value={location.bearing}
                 onChange={onChangeLocation}
               />
@@ -299,6 +324,7 @@ function QuestLocations(props) {
                 id="locationPitch"
                 label="Pitch"
                 name="pitch"
+                type="number"
                 value={location.pitch}
                 onChange={onChangeLocation}
               />
@@ -312,6 +338,7 @@ function QuestLocations(props) {
                 id="locationZoom"
                 label="Zoom"
                 name="zoom"
+                type="number"
                 value={location.zoom}
                 onChange={onChangeLocation}
               />
@@ -326,6 +353,7 @@ function QuestLocations(props) {
             id="locationImage"
             label="Image"
             name="image"
+            type="url"
             value={location.image}
             onChange={onChangeLocation}
           />
@@ -338,6 +366,7 @@ function QuestLocations(props) {
             id="locationMarker"
             label="Marker"
             name="marker"
+            type="text"
             value={location.marker}
             onChange={onChangeLocation}
           />
@@ -382,7 +411,7 @@ function QuestLocations(props) {
         </Grid>
         <Grid container spacing={2}>
           <Grid item sm={12}>
-            { renderView(view) }
+            {renderView(view)}
           </Grid>
         </Grid>
       </Grid>
