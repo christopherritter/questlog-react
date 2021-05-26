@@ -11,6 +11,10 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import ListAltIcon from "@material-ui/icons/ListAlt";
+import MapIcon from "@material-ui/icons/Map";
+import ToggleButton from "@material-ui/lab/ToggleButton";
+import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -110,7 +114,43 @@ function QuestLocations(props) {
     setSelectedIndex(-1);
   };
 
+  const [view, setView] = React.useState("list");
+
+  const handleView = (event, newView) => {
+    setView(newView);
+  };
+
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
+
+  const renderView = (view) => {
+    switch(view) {
+      case 'list':
+        return (
+          <List component="nav">
+              {props.locations &&
+                props.locations.map((location, index) => {
+                  return (
+                    <ListItem
+                      button
+                      key={location.id}
+                      selected={selectedIndex === index}
+                      onClick={(event) => handleListItemClick(location, index)}
+                    >
+                      <ListItemIcon>
+                        <LocationOnIcon />
+                      </ListItemIcon>
+                      <ListItemText primary={location.name} />
+                    </ListItem>
+                  );
+                })}
+            </List>
+        );
+      default:
+        return (
+          <h1>Map</h1>
+        );
+    }
+  }
 
   const handleListItemClick = (location, index) => {
     const selectedLocation = {
@@ -323,24 +363,28 @@ function QuestLocations(props) {
         </form>
       </Grid>
       <Grid item md={8} sm={12}>
-        <List component="nav">
-          {props.locations &&
-            props.locations.map((location, index) => {
-              return (
-                <ListItem
-                  button
-                  key={location.id}
-                  selected={selectedIndex === index}
-                  onClick={(event) => handleListItemClick(location, index)}
-                >
-                  <ListItemIcon>
-                    <LocationOnIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={location.name} />
-                </ListItem>
-              );
-            })}
-        </List>
+        <Grid container spacing={2}>
+          <Grid item sm={12}>
+            <ToggleButtonGroup
+              value={view}
+              exclusive
+              onChange={handleView}
+              aria-label="editor view"
+            >
+              <ToggleButton value="list" aria-label="list view">
+                <ListAltIcon />
+              </ToggleButton>
+              <ToggleButton value="map" aria-label="map view">
+                <MapIcon />
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </Grid>
+        </Grid>
+        <Grid container spacing={2}>
+          <Grid item sm={12}>
+            { renderView(view) }
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );
