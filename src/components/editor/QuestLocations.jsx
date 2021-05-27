@@ -56,6 +56,7 @@ function QuestLocations(props) {
     isLandmark: false,
     isStartingPoint: false,
   };
+
   const [location, setLocation] = useState(initialLocationState);
 
   const onChangeLocation = (event) => {
@@ -123,24 +124,45 @@ function QuestLocations(props) {
 
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
 
-  const onUpdateCenter = (event) => {
-    props.updateCenter({
-      latitude: event.latitude,
-      longitude: event.longitude,
+  const [viewport, setViewport] = useState({
+    latitude: 39.82817,
+    longitude: -98.5795,
+    bearing: 0,
+    pitch: 0,
+    zoom: 17,
+  });
+
+  const mapClick = (event) => {
+    console.log("Map click!")
+    console.log(event)
+    const { lngLat } = event;
+    const updatedLocation = {
+      ...location,
+      latitude: lngLat.lat,
+      longitude: lngLat.lng,
+    }
+    setLocation(updatedLocation);
+  };
+
+  const changeViewport = (event) => {
+    const updatedLocation = {
+      ...location,
       bearing: event.bearing,
       pitch: event.pitch,
       zoom: event.zoom,
-    });
-  };
-
-  const onMapClick = (event) => {
-    const { lngLat } = event;
-    setLocation({ ...location, latitude: lngLat.lat, longitude: lngLat.lng  });
+    }
+    setLocation(updatedLocation);
+    setViewport(event);
   };
 
   const QuestMap = React.cloneElement(props.map, {
-    updateCenter: onUpdateCenter,
-    mapClick: onMapClick,
+    latitude: viewport.latitude,
+    longitude: viewport.longitude,
+    bearing: viewport.bearing,
+    pitch: viewport.pitch,
+    zoom: viewport.zoom,
+    onViewportChange: changeViewport,
+    onClick: mapClick,
   });
 
   const renderView = (view) => {

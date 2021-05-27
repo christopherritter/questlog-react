@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
+import MapGL from "@urbica/react-map-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
+
 import QuestDataService from "../../services/QuestService";
 import QuestDetails from "./QuestDetails.jsx";
 import QuestRegion from "./QuestRegion.jsx";
@@ -8,7 +11,6 @@ import QuestObjectives from "./QuestObjectives.jsx";
 import QuestLocations from "./QuestLocations.jsx";
 import QuestEntries from "./QuestEntries.jsx";
 import QuestItems from "./QuestItems.jsx";
-import QuestMap from "../quests/QuestMap.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -225,15 +227,12 @@ export default function QuestEditor(props) {
           <TabPanel value={tab} index={1}>
             <QuestRegion
               map={
-                <QuestMap
-                  width={"100%"}
-                  height={"400px"}
-                  latitude={quest.region.latitude}
-                  longitude={quest.region.longitude}
-                  bearing={quest.region.bearing}
-                  pitch={quest.region.pitch}
-                  zoom={quest.region.zoom}
-                ></QuestMap>
+                <MapGL
+                  style={{ width: "100%", height: "400px" }}
+                  mapStyle="mapbox://styles/mapbox/streets-v11"
+                  accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+                  updateCenter={onUpdateCenter}
+                />
               }
               region={quest.region}
               updateRegion={onUpdateRegion}
@@ -251,17 +250,14 @@ export default function QuestEditor(props) {
           <TabPanel value={tab} index={3}>
             <QuestLocations
               map={
-                <QuestMap
-                  width={"100%"}
-                  height={"400px"}
-                  latitude={quest.region.latitude}
-                  longitude={quest.region.longitude}
-                  bearing={quest.region.bearing}
-                  pitch={quest.region.pitch}
-                  zoom={quest.region.zoom}
-                ></QuestMap>
+                <MapGL
+                  style={{ width: "100%", height: "400px" }}
+                  mapStyle="mapbox://styles/mapbox/streets-v11"
+                  accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+                />
               }
               locations={quest.locations}
+              updateCenter={onUpdateCenter}
               addLocation={onAddLocation}
               updateLocation={onUpdateLocation}
               removeLocation={onRemoveLocation}

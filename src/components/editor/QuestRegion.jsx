@@ -1,28 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 
 const QuestRegion = (props) => {
-  const onUpdateCenter = (event) => {
-    props.updateCenter({
-      latitude: event.latitude,
-      longitude: event.longitude,
-      bearing: event.bearing,
-      pitch: event.pitch,
-      zoom: event.zoom,
-    });
-  };
+  const [viewport, setViewport] = useState({
+    latitude: 39.82817,
+    longitude: -98.5795,
+    bearing: 0,
+    pitch: 0,
+    zoom: 17,
+  });
 
-  const onMapClick = (e) => {
-    e.stopPropagation();
-    console.log(e);
+  const updateCenter = (event) => {
+    props.updateCenter(event);
   };
 
   const QuestMap = React.cloneElement(props.map, {
-    updateCenter: onUpdateCenter,
-    mapClick: onMapClick,
+    latitude: props.region.latitude,
+    longitude: props.region.longitude,
+    bearing: props.region.bearing,
+    pitch: props.region.pitch,
+    zoom: props.region.zoom,
+    onViewportChange: updateCenter,
+
   });
 
   return (

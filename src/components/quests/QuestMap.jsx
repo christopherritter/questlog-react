@@ -6,14 +6,14 @@ const QuestMap = (props) => {
   const mapRef = useRef();
 
   const onClick = (event) => {
-    const { lngLat } = event;
+    // const { lngLat } = event;
 
-    const mapCoords = {
-      latitude: lngLat.lat,
-      longitude: lngLat.lng,
-    };
+    // const mapCoords = {
+    //   latitude: lngLat.lat,
+    //   longitude: lngLat.lng,
+    // };
 
-    console.log(event)
+    // console.log(event)
     props.mapClick(event);
   };
 
