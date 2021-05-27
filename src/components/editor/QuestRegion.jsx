@@ -15,13 +15,14 @@ const QuestRegion = (props) => {
     });
   };
 
-  const onMapClick = (event) => {
-    console.log(event)
-  }
+  const onMapClick = (e) => {
+    e.stopPropagation();
+    console.log(e);
+  };
 
   const QuestMap = React.cloneElement(props.map, {
     updateCenter: onUpdateCenter,
-    onClick: onMapClick,
+    mapClick: onMapClick,
   });
 
   return (
@@ -35,6 +36,7 @@ const QuestRegion = (props) => {
             id="regionLatitude"
             label="Latitude"
             name="latitude"
+            type="number"
             value={props.region.latitude}
             onChange={props.updateRegion}
             required
@@ -46,6 +48,7 @@ const QuestRegion = (props) => {
             id="regionLongitude"
             label="Longitude"
             name="longitude"
+            type="number"
             value={props.region.longitude}
             onChange={props.updateRegion}
             required
@@ -57,6 +60,7 @@ const QuestRegion = (props) => {
             id="regionBearing"
             label="Bearing"
             name="bearing"
+            type="number"
             value={props.region.bearing}
             onChange={props.updateRegion}
           />
@@ -67,6 +71,7 @@ const QuestRegion = (props) => {
             id="regionPitch"
             label="Pitch"
             name="pitch"
+            type="number"
             value={props.region.pitch}
             onChange={props.updateRegion}
           />
@@ -77,6 +82,7 @@ const QuestRegion = (props) => {
             id="regionZoom"
             label="Zoom"
             name="zoom"
+            type="number"
             value={props.region.zoom}
             onChange={props.updateRegion}
           />

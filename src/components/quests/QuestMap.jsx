@@ -8,12 +8,13 @@ const QuestMap = (props) => {
   const onClick = (event) => {
     const { lngLat } = event;
 
-    const newViewport = {
+    const mapCoords = {
       latitude: lngLat.lat,
       longitude: lngLat.lng,
     };
 
-    props.mapClick(newViewport);
+    console.log(event)
+    props.mapClick(event);
   };
 
   const onDragEnd = (event) => {

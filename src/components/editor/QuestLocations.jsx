@@ -133,10 +133,9 @@ function QuestLocations(props) {
     });
   };
 
-  const onMapClick = (e) => {
-    console.log("On Map Click:")
-    console.log(e.latitude, e.longitude)
-    setLocation({ ...location, latitude: e.latitude, longitude: e.longitude });
+  const onMapClick = (event) => {
+    const { lngLat } = event;
+    setLocation({ ...location, latitude: lngLat.lat, longitude: lngLat.lng  });
   };
 
   const QuestMap = React.cloneElement(props.map, {
