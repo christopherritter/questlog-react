@@ -69,6 +69,12 @@ function QuestLocations(props) {
 
   const [location, locationRef, setLocation] = useRefState(initialLocationState);
 
+  useEffect(() => {
+    if (props.location) {
+      setLocation(props.location);
+    }
+  }, [props.location, setLocation]);
+
   const onChangeLocation = (event) => {
     const { name, value } = event.target;
     setLocation({ ...location, [name]: value });
@@ -115,6 +121,7 @@ function QuestLocations(props) {
       isLandmark: location.isLandmark,
       isStartingPoint: location.isStartingPoint,
     });
+    props.clearLocation();
     setLocation(initialLocationState);
     setSelectedIndex(-1);
   };
@@ -132,7 +139,22 @@ function QuestLocations(props) {
     setView(newView);
   };
 
+  const changeViewport = (event) => {
+    const updatedLocation = {
+      ...location,
+      bearing: event.bearing,
+      pitch: event.pitch,
+      zoom: event.zoom,
+    }
+    setLocation(updatedLocation);
+    setViewport(event);
+  };
+
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
+
+  useEffect(() => {
+    setSelectedIndex(props.locationIndex);
+  }, [props.locationIndex]);
 
   const [viewport, setViewport] = useState(props.region);
 
@@ -144,17 +166,6 @@ function QuestLocations(props) {
       longitude: lngLat.lng
     }
     setLocation(updatedLocation);
-  };
-
-  const changeViewport = (event) => {
-    const updatedLocation = {
-      ...location,
-      bearing: event.bearing,
-      pitch: event.pitch,
-      zoom: event.zoom,
-    }
-    setLocation(updatedLocation);
-    setViewport(event);
   };
 
   const QuestMap = React.cloneElement(props.map, {
@@ -196,20 +207,7 @@ function QuestLocations(props) {
   };
 
   const handleListItemClick = (location, index) => {
-    const selectedLocation = {
-      id: location.id,
-      name: location.name,
-      latitude: location.latitude,
-      longitude: location.longitude,
-      bearing: location.bearing,
-      pitch: location.pitch,
-      zoom: location.zoom,
-      image: location.image,
-      marker: location.marker,
-      order: location.order,
-      isLandmark: location.isLandmark,
-      isStartingPoint: location.isStartingPoint,
-    };
+    const selectedLocation = { ...location };
     setSelectedIndex(index);
     setLocation(selectedLocation);
   };
@@ -225,6 +223,7 @@ function QuestLocations(props) {
             <Button
               color="primary"
               onClick={() => {
+                props.clearLocation();
                 setLocation(initialLocationState);
                 setSelectedIndex(-1);
               }}

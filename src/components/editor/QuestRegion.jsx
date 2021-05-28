@@ -24,7 +24,6 @@ const QuestRegion = (props) => {
     pitch: props.region.pitch,
     zoom: props.region.zoom,
     onViewportChange: updateCenter,
-
   });
 
   return (

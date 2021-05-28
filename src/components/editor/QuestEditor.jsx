@@ -68,6 +68,15 @@ function a11yProps(index) {
   };
 }
 
+function findWithAttr(array, attr, value) {
+  for(var i = 0; i < array.length; i += 1) {
+      if(array[i][attr] === value) {
+          return i;
+      }
+  }
+  return -1;
+}
+
 export default function QuestEditor(props) {
   const classes = useStyles();
 
@@ -153,6 +162,10 @@ export default function QuestEditor(props) {
     setQuest({ ...quest, objectives: updatedObjectives });
   };
 
+  const [locationIndex, setLocationIndex] = useState(-1);
+
+  const [location, setLocation] = useState();
+
   const onAddLocation = (location) => {
     if (quest.locations) {
       setQuest({ ...quest, locations: [...quest.locations, location] });
@@ -189,6 +202,20 @@ export default function QuestEditor(props) {
       (loc) => loc.id !== location.id
     );
     setQuest({ ...quest, locations: updatedLocations });
+    setLocationIndex(-1);
+    setLocation(null);
+  };
+
+  const onClearLocation = () => {
+    setLocationIndex(-1);
+    setLocation(null);
+  };
+
+  const onMapPointClick = (event) => {
+    const { id } = event.features[0].properties;
+    const index = findWithAttr(quest.locations, 'id', id);
+    setLocationIndex(index);
+    setLocation(quest.locations[index]);
   };
 
   const publishQuest = () => {
@@ -209,16 +236,26 @@ export default function QuestEditor(props) {
 
   const geojson = {
     type: "FeatureCollection",
-    features: quest.locations ? quest.locations.map((location) => {
-      var feature = {
-        type: "Feature",
-        geometry: {
-          type: "Point",
-          coordinates: [location.longitude, location.latitude],
-        },
-      };
-      return feature;
-    }) : [],
+    features: quest.locations
+      ? quest.locations.map((location) => {
+          var feature = {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [location.longitude, location.latitude],
+            },
+            properties: {
+              id: location.id,
+              name: location.name,
+              bearing: location.bearing,
+              pitch: location.pitch,
+              zoom: location.zoom,
+              marker: location.marker,
+            },
+          };
+          return feature;
+        })
+      : [],
   };
 
   return (
@@ -279,15 +316,22 @@ export default function QuestEditor(props) {
                   mapStyle="mapbox://styles/mapbox/streets-v11"
                   accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
                 >
-                  <Source id="my-data" type="geojson" data={geojson} />
-                  <Layer source="my-data" {...layerStyle} />
+                  <Source id="locationsData" type="geojson" data={geojson} />
+                  <Layer
+                    source="locationsData"
+                    onClick={onMapPointClick}
+                    {...layerStyle}
+                  />
                 </MapGL>
               }
               region={quest.region}
               locations={quest.locations}
+              locationIndex={locationIndex}
+              location={location}
               addLocation={onAddLocation}
               updateLocation={onUpdateLocation}
               removeLocation={onRemoveLocation}
+              clearLocation={onClearLocation}
             ></QuestLocations>
           </TabPanel>
           <TabPanel value={tab} index={4}>
