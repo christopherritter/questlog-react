@@ -133,7 +133,7 @@ function QuestLocations(props) {
     setSelectedIndex(-1);
   };
 
-  const [view, setView] = React.useState("map");
+  const [view, setView] = React.useState("list");
 
   const handleView = (event, newView) => {
     setView(newView);
@@ -240,7 +240,7 @@ function QuestLocations(props) {
                 margin="normal"
                 required
                 fullWidth
-                id="locationText"
+                id="locationName"
                 label="Location Name"
                 name="name"
                 type="text"
@@ -283,7 +283,7 @@ function QuestLocations(props) {
                   <Checkbox
                     checked={location.isStartingPoint}
                     onChange={onToggleLocation}
-                    name="isStartingPoing"
+                    name="isStartingPoint"
                   />
                 }
                 label="Starting Point"
@@ -409,11 +409,11 @@ function QuestLocations(props) {
               onChange={handleView}
               aria-label="editor view"
             >
-              <ToggleButton value="map" aria-label="map view">
-                <MapIcon />
-              </ToggleButton>
               <ToggleButton value="list" aria-label="list view">
                 <ListAltIcon />
+              </ToggleButton>
+              <ToggleButton value="map" aria-label="map view">
+                <MapIcon />
               </ToggleButton>
             </ToggleButtonGroup>
           </Grid>

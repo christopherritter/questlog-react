@@ -69,10 +69,10 @@ function a11yProps(index) {
 }
 
 function findWithAttr(array, attr, value) {
-  for(var i = 0; i < array.length; i += 1) {
-      if(array[i][attr] === value) {
-          return i;
-      }
+  for (var i = 0; i < array.length; i += 1) {
+    if (array[i][attr] === value) {
+      return i;
+    }
   }
   return -1;
 }
@@ -211,11 +211,47 @@ export default function QuestEditor(props) {
     setLocation(null);
   };
 
-  const onMapPointClick = (event) => {
-    const { id } = event.features[0].properties;
-    const index = findWithAttr(quest.locations, 'id', id);
-    setLocationIndex(index);
-    setLocation(quest.locations[index]);
+  // Entries
+  // Short text entries that are displayed at a location
+  // Usually provide readers with a set of actions to choose from
+
+  const [entryIndex, setEntryIndex] = useState(-1);
+
+  const [entry, setEntry] = useState();
+
+  const onAddEntry = (entry) => {
+    if (quest.entries) {
+      setQuest({ ...quest, entries: [...quest.entries, entry] });
+    } else {
+      setQuest({ ...quest, entries: [entry] });
+    }
+  };
+
+  const onUpdateEntry = (entry) => {
+    const selectedEntry = quest.entries.findIndex(function (ent) {
+      return entry.id === ent.id;
+    });
+    let updatedEntries = [...quest.entries];
+    let updatedEntry = { ...quest.entries[selectedEntry] };
+
+    updatedEntry = { ...entry }
+    updatedEntries[selectedEntry] = updatedEntry;
+
+    setQuest({ ...quest, entries: updatedEntries });
+  };
+
+  const onRemoveEntry = (entry) => {
+    const updatedEntries = quest.entries.filter(
+      (ent) => ent.id !== entry.id
+    );
+    setQuest({ ...quest, entries: updatedEntries });
+    setEntryIndex(-1);
+    setEntry(null);
+  };
+
+  const onClearEntry = () => {
+    setEntryIndex(-1);
+    setEntry(null);
   };
 
   const publishQuest = () => {
@@ -233,6 +269,13 @@ export default function QuestEditor(props) {
   };
 
   const [tab, setTab] = useState(0);
+
+  const onMapPointClick = (event) => {
+    const { id } = event.features[0].properties;
+    const index = findWithAttr(quest.locations, "id", id);
+    setLocationIndex(index);
+    setLocation(quest.locations[index]);
+  };
 
   const geojson = {
     type: "FeatureCollection",
@@ -267,7 +310,7 @@ export default function QuestEditor(props) {
             variant="scrollable"
             value={tab}
             onChange={viewTab}
-            aria-label="Vertical tabs example"
+            aria-label="Quest Editor Tabs"
             className={classes.tabs}
           >
             <Tab label="Details" {...a11yProps(0)} />
@@ -335,7 +378,33 @@ export default function QuestEditor(props) {
             ></QuestLocations>
           </TabPanel>
           <TabPanel value={tab} index={4}>
-            <QuestEntries entries={quest.entries}></QuestEntries>
+            <QuestEntries
+              map={
+                <MapGL
+                  style={{ width: "100%", height: "400px" }}
+                  mapStyle="mapbox://styles/mapbox/streets-v11"
+                  accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+                >
+                  <Source id="locationsData" type="geojson" data={geojson} />
+                  <Layer
+                    source="locationsData"
+                    onClick={onMapPointClick}
+                    {...layerStyle}
+                  />
+                </MapGL>
+              }
+              region={quest.region}
+              locations={quest.locations}
+              locationIndex={locationIndex}
+              location={location}
+              entries={quest.entries}
+              entryIndex={entryIndex}
+              entry={entry}
+              addEntry={onAddEntry}
+              updateEntry={onUpdateEntry}
+              removeEntry={onRemoveEntry}
+              clearEntry={onClearEntry}
+            ></QuestEntries>
           </TabPanel>
           <TabPanel value={tab} index={5}>
             <QuestItems items={quest.items}></QuestItems>
