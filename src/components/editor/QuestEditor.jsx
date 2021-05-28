@@ -256,8 +256,8 @@ export default function QuestEditor(props) {
                   accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
                 />
               }
+              region={quest.region}
               locations={quest.locations}
-              updateCenter={onUpdateCenter}
               addLocation={onAddLocation}
               updateLocation={onUpdateLocation}
               removeLocation={onRemoveLocation}

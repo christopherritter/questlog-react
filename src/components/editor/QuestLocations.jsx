@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -27,7 +27,7 @@ function QuestLocations(props) {
   const classes = useStyles();
   var id = 0;
 
-  if (props.locations) {
+  if (props.locations && props.locations.length > 0) {
     var idList = props.locations.map((obj) => {
       var idNumber,
         matches = obj.id.match(/\d+$/);
@@ -42,22 +42,32 @@ function QuestLocations(props) {
     id = Math.max(...idList) + 1;
   }
 
+  const useRefState = initialValue => {
+    const [state, setState] = useState(initialValue)
+    const stateRef = useRef(state)
+    useEffect(
+      () => { stateRef.current = state },
+      [state]
+    )
+    return [state, stateRef, setState]
+  }
+
   const initialLocationState = {
     id: "location-" + id,
     name: "",
+    order: 0,
     latitude: 0,
     longitude: 0,
-    bearing: 0,
-    pitch: 0,
-    zoom: 0,
+    bearing: props.region.bearing,
+    pitch: props.region.pitch,
+    zoom: props.region.zoom,
     image: "",
     marker: "",
-    order: 0,
     isLandmark: false,
     isStartingPoint: false,
   };
 
-  const [location, setLocation] = useState(initialLocationState);
+  const [location, locationRef, setLocation] = useRefState(initialLocationState);
 
   const onChangeLocation = (event) => {
     const { name, value } = event.target;
@@ -124,22 +134,14 @@ function QuestLocations(props) {
 
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
 
-  const [viewport, setViewport] = useState({
-    latitude: 39.82817,
-    longitude: -98.5795,
-    bearing: 0,
-    pitch: 0,
-    zoom: 17,
-  });
+  const [viewport, setViewport] = useState(props.region);
 
   const mapClick = (event) => {
-    console.log("Map click!")
-    console.log(event)
     const { lngLat } = event;
     const updatedLocation = {
-      ...location,
+      ...locationRef.current,
       latitude: lngLat.lat,
-      longitude: lngLat.lng,
+      longitude: lngLat.lng
     }
     setLocation(updatedLocation);
   };
