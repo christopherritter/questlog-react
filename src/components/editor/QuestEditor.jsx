@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-import MapGL from "@urbica/react-map-gl";
+import MapGL, { Source, Layer } from "@urbica/react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import QuestDataService from "../../services/QuestService";
@@ -19,6 +19,25 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
+
+const layerStyle = {
+  id: "point",
+  type: "circle",
+  paint: {
+    "circle-radius": 10,
+    "circle-color": "#007cbf",
+  },
+};
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+  },
+  tabs: {
+    borderRight: `1px solid ${theme.palette.divider}`,
+  },
+}));
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -48,16 +67,6 @@ function a11yProps(index) {
     "aria-controls": `vertical-tabpanel-${index}`,
   };
 }
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-  },
-  tabs: {
-    borderRight: `1px solid ${theme.palette.divider}`,
-  },
-}));
 
 export default function QuestEditor(props) {
   const classes = useStyles();
@@ -195,7 +204,22 @@ export default function QuestEditor(props) {
   const viewTab = (event, newTab) => {
     setTab(newTab);
   };
+
   const [tab, setTab] = useState(0);
+
+  const geojson = {
+    type: "FeatureCollection",
+    features: quest.locations.map((location) => {
+      var feature = {
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [location.longitude, location.latitude],
+        },
+      };
+      return feature;
+    }),
+  };
 
   return (
     <Paper elevation={0} className={classes.root}>
@@ -254,7 +278,10 @@ export default function QuestEditor(props) {
                   style={{ width: "100%", height: "400px" }}
                   mapStyle="mapbox://styles/mapbox/streets-v11"
                   accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
-                />
+                >
+                  <Source id="my-data" type="geojson" data={geojson} />
+                  <Layer source="my-data" {...layerStyle} />
+                </MapGL>
               }
               region={quest.region}
               locations={quest.locations}
