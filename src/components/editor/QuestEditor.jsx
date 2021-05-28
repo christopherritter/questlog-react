@@ -209,7 +209,7 @@ export default function QuestEditor(props) {
 
   const geojson = {
     type: "FeatureCollection",
-    features: quest.locations.map((location) => {
+    features: quest.locations ? quest.locations.map((location) => {
       var feature = {
         type: "Feature",
         geometry: {
@@ -218,7 +218,7 @@ export default function QuestEditor(props) {
         },
       };
       return feature;
-    }),
+    }) : [],
   };
 
   return (

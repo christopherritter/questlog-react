@@ -126,7 +126,7 @@ function QuestLocations(props) {
     setSelectedIndex(-1);
   };
 
-  const [view, setView] = React.useState("list");
+  const [view, setView] = React.useState("map");
 
   const handleView = (event, newView) => {
     setView(newView);
@@ -275,7 +275,7 @@ function QuestLocations(props) {
                     name="isLandmark"
                   />
                 }
-                label="Primary Location"
+                label="Landmark"
               />
             </Grid>
             <Grid item sm={6}>
@@ -373,19 +373,6 @@ function QuestLocations(props) {
             margin="normal"
             required
             fullWidth
-            id="locationImage"
-            label="Image"
-            name="image"
-            type="url"
-            value={location.image}
-            onChange={onChangeLocation}
-          />
-
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
             id="locationMarker"
             label="Marker"
             name="marker"
@@ -423,11 +410,11 @@ function QuestLocations(props) {
               onChange={handleView}
               aria-label="editor view"
             >
-              <ToggleButton value="list" aria-label="list view">
-                <ListAltIcon />
-              </ToggleButton>
               <ToggleButton value="map" aria-label="map view">
                 <MapIcon />
+              </ToggleButton>
+              <ToggleButton value="list" aria-label="list view">
+                <ListAltIcon />
               </ToggleButton>
             </ToggleButtonGroup>
           </Grid>
