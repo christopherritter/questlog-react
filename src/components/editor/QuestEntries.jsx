@@ -6,7 +6,9 @@ import TextField from "@material-ui/core/TextField";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import Typography from "@material-ui/core/Typography";
+import Input from "@material-ui/core/Input";
+import MenuItem from "@material-ui/core/MenuItem";
+import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
@@ -81,6 +83,20 @@ function QuestEntries(props) {
   const onChangeEntry = (event) => {
     const { name, value } = event.target;
     setEntry({ ...entry, [name]: value });
+  };
+
+  const onChangeObjectives = (event) => {
+    const currentValue = event.target.value[0];
+    const objectives = [...entry.objectives ];
+    const index = objectives.indexOf(currentValue);
+
+    if (index === -1) {
+      objectives.push(currentValue)
+    } else {
+      objectives.splice(index, 1);
+    }
+
+    setEntry({...entry, objectives: objectives });
   };
 
   const onSelectLocation = (event) => {
@@ -161,7 +177,9 @@ function QuestEntries(props) {
                         button
                         key={entry.id}
                         selected={selectedIndex === entry.id}
-                        onClick={(event) => handleListItemClick(entry, entry.id)}
+                        onClick={(event) =>
+                          handleListItemClick(entry, entry.id)
+                        }
                       >
                         <ListItemIcon>
                           <MenuBookIcon />
@@ -294,6 +312,27 @@ function QuestEntries(props) {
             value={entry.text}
             onChange={onChangeEntry}
           />
+          
+          <FormControl variant="outlined" fullWidth className={classes.formControl}>
+            <InputLabel id="objectives-multi-select-label">Objectives</InputLabel>
+            <Select
+              labelId="objectives-multi-select-label"
+              id="objectives-multi-select"
+              multiple
+              value={entry.objectives}
+              onChange={onChangeObjectives}
+              input={<Input />}
+              renderValue={(selected) => selected.join(', ')}
+   
+            >
+              {props.objectives.map((objective) => (
+                <MenuItem key={objective.id} value={objective.id}>
+                  <Checkbox checked={entry.objectives.indexOf(objective.id) > -1} />
+                  <ListItemText primary={objective.text} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
           <Grid container spacing={2}>
             <Grid item xs={12}>

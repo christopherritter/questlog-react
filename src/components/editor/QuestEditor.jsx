@@ -394,6 +394,7 @@ export default function QuestEditor(props) {
                 </MapGL>
               }
               region={quest.region}
+              objectives={quest.objectives}
               locations={quest.locations}
               locationIndex={locationIndex}
               location={location}
