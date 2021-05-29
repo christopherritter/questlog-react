@@ -6,6 +6,7 @@ import TextField from "@material-ui/core/TextField";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
@@ -124,6 +125,12 @@ function QuestEntries(props) {
     setSelectedIndex(props.entryIndex);
   }, [props.entryIndex]);
 
+  const handleListItemClick = (entry, index) => {
+    const selectedEntry = { ...entry };
+    setSelectedIndex(index);
+    setEntry(selectedEntry);
+  };
+
   const [viewport, setViewport] = useState(props.region);
 
   const mapClick = (event) => {
@@ -138,44 +145,37 @@ function QuestEntries(props) {
 
   const EntryList = () => {
     return (
-      <>
+      <List component="nav" subheader={<li />}>
         {props.locations &&
-          props.locations.map((location) => {
-            return (
-              <List
-                key={location.id}
-                component="nav"
-                aria-labelledby="nested-list-subheader"
-                subheader={
-                  <ListSubheader component="div" id="nested-list-subheader">
-                    { location.name }
-                  </ListSubheader>
-                }
-              >
+          props.locations.map((location) => (
+            <li key={location.id}>
+              <ul>
+                <ListSubheader>{location.name}</ListSubheader>
                 {props.entries &&
                   props.entries
                     .filter((entry) => {
                       return entry.locationId === location.id;
                     })
-                    .map((entry, index) => {
-                      return (
-                        <ListItem
-                          button
-                          key={entry.id}
-                          selected={selectedIndex === index}
-                          onClick={(event) => handleListItemClick(entry, index)}
-                        >
-                          <ListItemIcon>
-                            <MenuBookIcon />
-                          </ListItemIcon>
-                          <ListItemText primary={entry.title} />
-                        </ListItem>
-                      );
-                    })}
-              </List>
-            );
-          })}
-      </>
+                    .map((entry, index) => (
+                      <ListItem
+                        button
+                        key={entry.id}
+                        selected={selectedIndex === entry.id}
+                        onClick={(event) => handleListItemClick(entry, entry.id)}
+                      >
+                        <ListItemIcon>
+                          <MenuBookIcon />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={entry.title}
+                          secondary={entry.text}
+                        />
+                      </ListItem>
+                    ))}
+              </ul>
+            </li>
+          ))}
+      </List>
     );
   };
 
@@ -197,12 +197,6 @@ function QuestEntries(props) {
       default:
         return QuestMap;
     }
-  };
-
-  const handleListItemClick = (entry, index) => {
-    const selectedEntry = { ...entry };
-    setSelectedIndex(index);
-    setEntry(selectedEntry);
   };
 
   return (
