@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
   inline: {
-    display: 'inline',
+    display: "inline",
   },
 }));
 
@@ -64,8 +64,8 @@ function QuestItems(props) {
 
   const initialItemState = {
     id: "item-" + id,
-    title: "",
-    text: "",
+    name: "",
+    description: "",
     locationId: "",
     order: 0,
     actions: [],
@@ -207,12 +207,14 @@ function QuestItems(props) {
                         button
                         key={item.id}
                         selected={selectedIndex === item.id}
-                        onClick={(event) =>
-                          handleListItemClick(item, item.id)
-                        }
+                        onClick={(event) => handleListItemClick(item, item.id)}
                       >
                         <ListItemText
-                          primary={item.title}
+                          primary={
+                            <Typography variant="h6" gutterBottom>
+                              { item.name }
+                            </Typography>
+                          }
                           secondary={
                             <Typography
                               style={{ whiteSpace: "pre-line" }}
@@ -220,7 +222,7 @@ function QuestItems(props) {
                               className={classes.inline}
                               color="textPrimary"
                             >
-                              {item.text}
+                              {item.description}
                             </Typography>
                           }
                         />
@@ -283,11 +285,11 @@ function QuestItems(props) {
                 margin="normal"
                 required
                 fullWidth
-                id="itemTitle"
-                label="Item Title"
-                name="title"
+                id="itemName"
+                label="Item Name"
+                name="name"
                 type="text"
-                value={item.title}
+                value={item.name}
                 onChange={onChangeItem}
               />
             </Grid>
@@ -341,13 +343,13 @@ function QuestItems(props) {
             margin="normal"
             required
             fullWidth
-            id="itemText"
-            label="Item"
-            name="text"
+            id="itemDescription"
+            label="Description"
+            name="description"
             type="text"
             multiline
             rows={8}
-            value={item.text}
+            value={item.description}
             onChange={onChangeItem}
           />
 
@@ -371,9 +373,7 @@ function QuestItems(props) {
               {props.objectives.map((objective) => (
                 <MenuItem key={objective.id} value={objective.id}>
                   <Checkbox
-                    checked={
-                      item.objectives.indexOf(objective.id) > -1
-                    }
+                    checked={item.objectives.indexOf(objective.id) > -1}
                   />
                   <ListItemText primary={objective.text} />
                 </MenuItem>
@@ -401,9 +401,7 @@ function QuestItems(props) {
               {props.objectives.map((objective) => (
                 <MenuItem key={objective.id} value={objective.id}>
                   <Checkbox
-                    checked={
-                      item.requirements.indexOf(objective.id) > -1
-                    }
+                    checked={item.requirements.indexOf(objective.id) > -1}
                   />
                   <ListItemText primary={objective.text} />
                 </MenuItem>
@@ -431,9 +429,7 @@ function QuestItems(props) {
               {props.objectives.map((objective) => (
                 <MenuItem key={objective.id} value={objective.id}>
                   <Checkbox
-                    checked={
-                      item.expirations.indexOf(objective.id) > -1
-                    }
+                    checked={item.expirations.indexOf(objective.id) > -1}
                   />
                   <ListItemText primary={objective.text} />
                 </MenuItem>

@@ -176,7 +176,11 @@ function QuestObjectives(props) {
                   <ListItemIcon>
                     <CommentIcon />
                   </ListItemIcon>
-                  <ListItemText primary={objective.text} />
+                  <ListItemText primary={
+                    <Typography variant="subtitle1">
+                      { objective.text }
+                    </Typography>
+                  } />
                 </ListItem>
               );
             })}

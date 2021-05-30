@@ -196,7 +196,11 @@ function QuestLocations(props) {
                     <ListItemIcon>
                       <LocationOnIcon />
                     </ListItemIcon>
-                    <ListItemText primary={location.name} />
+                    <ListItemText primary={
+                      <Typography variant="subtitle1">
+                        { location.name }
+                      </Typography>
+                    } />
                   </ListItem>
                 );
               })}

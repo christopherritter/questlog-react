@@ -212,7 +212,11 @@ function QuestEntries(props) {
                         }
                       >
                         <ListItemText
-                          primary={entry.title}
+                          primary={
+                            <Typography variant="h6" gutterBottom>
+                              { entry.title }
+                            </Typography>
+                          }
                           secondary={
                             <Typography
                               style={{ whiteSpace: "pre-line" }}
