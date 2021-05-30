@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
   inline: {
-    display: 'inline',
+    display: "inline",
   },
 }));
 
@@ -214,7 +214,7 @@ function QuestEntries(props) {
                         <ListItemText
                           primary={
                             <Typography variant="h6" gutterBottom>
-                              { entry.title }
+                              {entry.title}
                             </Typography>
                           }
                           secondary={
@@ -258,232 +258,245 @@ function QuestEntries(props) {
   };
 
   return (
-    <Grid container spacing={2} className={classes.root}>
-      <Grid item md={4} sm={12}>
-        <Grid container spacing={2}>
-          <Grid item md={6}>
-            <Typography variant="h4" gutterBottom>
-              Entries
-            </Typography>
-          </Grid>
-          <Grid item md={6}>
-            <Button
-              color="primary"
-              onClick={() => {
-                props.clearEntry();
-                setEntry(initialEntryState);
-                setSelectedIndex(-1);
-              }}
-            >
-              Create New
-            </Button>
-          </Grid>
-        </Grid>
-        <form noValidate>
+    <>
+      <Grid container spacing={2} className={classes.root}>
+        <Grid item md={4} sm={12}>
           <Grid container spacing={2}>
-            <Grid item sm={8}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="entryTitle"
-                label="Entry Title"
-                name="title"
-                type="text"
-                value={entry.title}
-                onChange={onChangeEntry}
-              />
+            <Grid item md={6}>
+              <Typography variant="h4" gutterBottom>
+                Entries
+              </Typography>
             </Grid>
-            <Grid item sm={4}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="entryOrder"
-                label="Order"
-                name="order"
-                type="number"
-                value={entry.order}
-                onChange={onChangeEntry}
-              />
+            <Grid item md={6}>
+              <Button
+                color="primary"
+                onClick={() => {
+                  props.clearEntry();
+                  setEntry(initialEntryState);
+                  setSelectedIndex(-1);
+                }}
+              >
+                Create New
+              </Button>
             </Grid>
           </Grid>
+          <form noValidate>
+            <Grid container spacing={2}>
+              <Grid item sm={8}>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="entryTitle"
+                  label="Entry Title"
+                  name="title"
+                  type="text"
+                  value={entry.title}
+                  onChange={onChangeEntry}
+                />
+              </Grid>
+              <Grid item sm={4}>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="entryOrder"
+                  label="Order"
+                  name="order"
+                  type="number"
+                  value={entry.order}
+                  onChange={onChangeEntry}
+                />
+              </Grid>
+            </Grid>
 
-          <FormControl
-            variant="outlined"
-            required
-            fullWidth
-            className={classes.formControl}
-          >
-            <InputLabel htmlFor="entryLocation">Location</InputLabel>
-            <Select
-              native
-              value={entry.locationId}
-              onChange={onSelectLocation}
-              label="Location"
-              inputProps={{
-                name: "locationId",
-                id: "entryLocation",
-              }}
+            <FormControl
+              variant="outlined"
+              required
+              fullWidth
+              className={classes.formControl}
             >
-              <option value={undefined}></option>
-              {props.locations &&
-                props.locations.map((location) => {
-                  return (
-                    <option value={location.id} key={location.id}>
-                      {location.name}
-                    </option>
-                  );
-                })}
-            </Select>
-          </FormControl>
+              <InputLabel htmlFor="entryLocation">Location</InputLabel>
+              <Select
+                native
+                value={entry.locationId}
+                onChange={onSelectLocation}
+                label="Location"
+                inputProps={{
+                  name: "locationId",
+                  id: "entryLocation",
+                }}
+              >
+                <option value={undefined}></option>
+                {props.locations &&
+                  props.locations.map((location) => {
+                    return (
+                      <option value={location.id} key={location.id}>
+                        {location.name}
+                      </option>
+                    );
+                  })}
+              </Select>
+            </FormControl>
 
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="entryText"
-            label="Entry"
-            name="text"
-            type="text"
-            multiline
-            rows={8}
-            value={entry.text}
-            onChange={onChangeEntry}
-          />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="entryText"
+              label="Entry"
+              name="text"
+              type="text"
+              multiline
+              rows={8}
+              value={entry.text}
+              onChange={onChangeEntry}
+            />
 
-          <FormControl
-            variant="outlined"
-            fullWidth
-            className={classes.formControl}
-          >
-            <InputLabel id="objectives-multi-select-label">
-              Objectives
-            </InputLabel>
-            <Select
-              labelId="objectives-multi-select-label"
-              id="objectives-multi-select"
-              multiple
-              value={entry.objectives}
-              onChange={onChangeObjectives}
-              input={<Input />}
-              renderValue={(selected) => selected.join(", ")}
+            <FormControl
+              variant="outlined"
+              fullWidth
+              className={classes.formControl}
             >
-              {props.objectives.map((objective) => (
-                <MenuItem key={objective.id} value={objective.id}>
-                  <Checkbox
-                    checked={entry.objectives.indexOf(objective.id) > -1}
-                  />
-                  <ListItemText primary={objective.text} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              <InputLabel id="objectives-multi-select-label">
+                Objectives
+              </InputLabel>
+              <Select
+                labelId="objectives-multi-select-label"
+                id="objectives-multi-select"
+                multiple
+                value={entry.objectives}
+                onChange={onChangeObjectives}
+                input={<Input />}
+                renderValue={(selected) => selected.join(", ")}
+              >
+                {props.objectives.map((objective) => (
+                  <MenuItem key={objective.id} value={objective.id}>
+                    <Checkbox
+                      checked={entry.objectives.indexOf(objective.id) > -1}
+                    />
+                    <ListItemText primary={objective.text} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-          <FormControl
-            variant="outlined"
-            fullWidth
-            className={classes.formControl}
-          >
-            <InputLabel id="requirements-multi-select-label">
-              Requirements
-            </InputLabel>
-            <Select
-              labelId="requirements-multi-select-label"
-              id="requirements-multi-select"
-              multiple
-              value={entry.requirements}
-              onChange={onChangeRequirements}
-              input={<Input />}
-              renderValue={(selected) => selected.join(", ")}
+            <FormControl
+              variant="outlined"
+              fullWidth
+              className={classes.formControl}
             >
-              {props.objectives.map((objective) => (
-                <MenuItem key={objective.id} value={objective.id}>
-                  <Checkbox
-                    checked={entry.requirements.indexOf(objective.id) > -1}
-                  />
-                  <ListItemText primary={objective.text} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              <InputLabel id="requirements-multi-select-label">
+                Requirements
+              </InputLabel>
+              <Select
+                labelId="requirements-multi-select-label"
+                id="requirements-multi-select"
+                multiple
+                value={entry.requirements}
+                onChange={onChangeRequirements}
+                input={<Input />}
+                renderValue={(selected) => selected.join(", ")}
+              >
+                {props.objectives.map((objective) => (
+                  <MenuItem key={objective.id} value={objective.id}>
+                    <Checkbox
+                      checked={entry.requirements.indexOf(objective.id) > -1}
+                    />
+                    <ListItemText primary={objective.text} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-          <FormControl
-            variant="outlined"
-            fullWidth
-            className={classes.formControl}
-          >
-            <InputLabel id="expirations-multi-select-label">
-              Expirations
-            </InputLabel>
-            <Select
-              labelId="expirations-multi-select-label"
-              id="expirations-multi-select"
-              multiple
-              value={entry.expirations}
-              onChange={onChangeExpirations}
-              input={<Input />}
-              renderValue={(selected) => selected.join(", ")}
+            <FormControl
+              variant="outlined"
+              fullWidth
+              className={classes.formControl}
             >
-              {props.objectives.map((objective) => (
-                <MenuItem key={objective.id} value={objective.id}>
-                  <Checkbox
-                    checked={entry.expirations.indexOf(objective.id) > -1}
-                  />
-                  <ListItemText primary={objective.text} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              <InputLabel id="expirations-multi-select-label">
+                Expirations
+              </InputLabel>
+              <Select
+                labelId="expirations-multi-select-label"
+                id="expirations-multi-select"
+                multiple
+                value={entry.expirations}
+                onChange={onChangeExpirations}
+                input={<Input />}
+                renderValue={(selected) => selected.join(", ")}
+              >
+                {props.objectives.map((objective) => (
+                  <MenuItem key={objective.id} value={objective.id}>
+                    <Checkbox
+                      checked={entry.expirations.indexOf(objective.id) > -1}
+                    />
+                    <ListItemText primary={objective.text} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                {selectedIndex === -1 ? (
+                  <Button color="primary" onClick={addEntry}>
+                    Add Entry
+                  </Button>
+                ) : (
+                  <>
+                    <Button color="primary" onClick={updateEntry}>
+                      Update
+                    </Button>
+                    <Button color="primary" onClick={removeEntry}>
+                      Remove
+                    </Button>
+                  </>
+                )}
+              </Grid>
+            </Grid>
+          </form>
+        </Grid>
+        <Grid item md={8} sm={12}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              {selectedIndex === -1 ? (
-                <Button color="primary" onClick={addEntry}>
-                  Add Entry
-                </Button>
-              ) : (
-                <>
-                  <Button color="primary" onClick={updateEntry}>
-                    Update
-                  </Button>
-                  <Button color="primary" onClick={removeEntry}>
-                    Remove
-                  </Button>
-                </>
-              )}
+            <Grid item sm={12}>
+              <ToggleButtonGroup
+                value={view}
+                exclusive
+                onChange={handleView}
+                aria-label="editor view"
+              >
+                <ToggleButton value="list" aria-label="list view">
+                  <ListAltIcon />
+                </ToggleButton>
+                <ToggleButton value="map" aria-label="map view">
+                  <MapIcon />
+                </ToggleButton>
+              </ToggleButtonGroup>
             </Grid>
           </Grid>
-        </form>
-      </Grid>
-      <Grid item md={8} sm={12}>
-        <Grid container spacing={2}>
-          <Grid item sm={12}>
-            <ToggleButtonGroup
-              value={view}
-              exclusive
-              onChange={handleView}
-              aria-label="editor view"
-            >
-              <ToggleButton value="list" aria-label="list view">
-                <ListAltIcon />
-              </ToggleButton>
-              <ToggleButton value="map" aria-label="map view">
-                <MapIcon />
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </Grid>
-        </Grid>
-        <Grid container spacing={2}>
-          <Grid item sm={12}>
-            {renderView(view)}
+          <Grid container spacing={2}>
+            <Grid item sm={12}>
+              {renderView(view)}
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
+      <Grid container>
+        <Grid item>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={props.publishQuest}
+          >
+            Publish
+          </Button>
+        </Grid>
+      </Grid>
+    </>
   );
 }
 

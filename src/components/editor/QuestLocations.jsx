@@ -43,15 +43,14 @@ function QuestLocations(props) {
     id = Math.max(...idList) + 1;
   }
 
-  const useRefState = initialValue => {
-    const [state, setState] = useState(initialValue)
-    const stateRef = useRef(state)
-    useEffect(
-      () => { stateRef.current = state },
-      [state]
-    )
-    return [state, stateRef, setState]
-  }
+  const useRefState = (initialValue) => {
+    const [state, setState] = useState(initialValue);
+    const stateRef = useRef(state);
+    useEffect(() => {
+      stateRef.current = state;
+    }, [state]);
+    return [state, stateRef, setState];
+  };
 
   const initialLocationState = {
     id: "location-" + id,
@@ -68,7 +67,8 @@ function QuestLocations(props) {
     isStartingPoint: false,
   };
 
-  const [location, locationRef, setLocation] = useRefState(initialLocationState);
+  const [location, locationRef, setLocation] =
+    useRefState(initialLocationState);
 
   useEffect(() => {
     if (props.location) {
@@ -146,7 +146,7 @@ function QuestLocations(props) {
       bearing: event.bearing,
       pitch: event.pitch,
       zoom: event.zoom,
-    }
+    };
     setLocation(updatedLocation);
     setViewport(event);
   };
@@ -164,8 +164,8 @@ function QuestLocations(props) {
     const updatedLocation = {
       ...locationRef.current,
       latitude: lngLat.lat,
-      longitude: lngLat.lng
-    }
+      longitude: lngLat.lng,
+    };
     setLocation(updatedLocation);
   };
 
@@ -196,11 +196,13 @@ function QuestLocations(props) {
                     <ListItemIcon>
                       <LocationOnIcon />
                     </ListItemIcon>
-                    <ListItemText primary={
-                      <Typography variant="subtitle1">
-                        { location.name }
-                      </Typography>
-                    } />
+                    <ListItemText
+                      primary={
+                        <Typography variant="subtitle1">
+                          {location.name}
+                        </Typography>
+                      }
+                    />
                   </ListItem>
                 );
               })}
@@ -218,220 +220,233 @@ function QuestLocations(props) {
   };
 
   return (
-    <Grid container spacing={2} className={classes.root}>
-      <Grid item md={4} sm={12}>
-        <Grid container spacing={2}>
-          <Grid item md={6}>
-            <Typography variant="h4" gutterBottom>
-              Locations
-            </Typography>
-          </Grid>
-          <Grid item md={6}>
-            <Button
-              color="primary"
-              onClick={() => {
-                props.clearLocation();
-                setLocation(initialLocationState);
-                setSelectedIndex(-1);
-              }}
-            >
-              Create New
-            </Button>
-          </Grid>
-        </Grid>
-        <form noValidate>
+    <>
+      <Grid container spacing={2} className={classes.root}>
+        <Grid item md={4} sm={12}>
           <Grid container spacing={2}>
-            <Grid item sm={8}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="locationName"
-                label="Location Name"
-                name="name"
-                type="text"
-                value={location.name}
-                onChange={onChangeLocation}
-              />
+            <Grid item md={6}>
+              <Typography variant="h4" gutterBottom>
+                Locations
+              </Typography>
             </Grid>
-            <Grid item sm={4}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="locationOrder"
-                label="Order"
-                name="order"
-                type="number"
-                value={location.order}
-                onChange={onChangeLocation}
-              />
+            <Grid item md={6}>
+              <Button
+                color="primary"
+                onClick={() => {
+                  props.clearLocation();
+                  setLocation(initialLocationState);
+                  setSelectedIndex(-1);
+                }}
+              >
+                Create New
+              </Button>
             </Grid>
           </Grid>
+          <form noValidate>
+            <Grid container spacing={2}>
+              <Grid item sm={8}>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="locationName"
+                  label="Location Name"
+                  name="name"
+                  type="text"
+                  value={location.name}
+                  onChange={onChangeLocation}
+                />
+              </Grid>
+              <Grid item sm={4}>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="locationOrder"
+                  label="Order"
+                  name="order"
+                  type="number"
+                  value={location.order}
+                  onChange={onChangeLocation}
+                />
+              </Grid>
+            </Grid>
 
-          <Grid container spacing={2}>
-            <Grid item sm={6}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={location.isLandmark}
-                    onChange={onToggleLocation}
-                    name="isLandmark"
-                  />
-                }
-                label="Landmark"
-              />
+            <Grid container spacing={2}>
+              <Grid item sm={6}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={location.isLandmark}
+                      onChange={onToggleLocation}
+                      name="isLandmark"
+                    />
+                  }
+                  label="Landmark"
+                />
+              </Grid>
+              <Grid item sm={6}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={location.isStartingPoint}
+                      onChange={onToggleLocation}
+                      name="isStartingPoint"
+                    />
+                  }
+                  label="Starting Point"
+                />
+              </Grid>
             </Grid>
-            <Grid item sm={6}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={location.isStartingPoint}
-                    onChange={onToggleLocation}
-                    name="isStartingPoint"
-                  />
-                }
-                label="Starting Point"
-              />
-            </Grid>
-          </Grid>
 
-          <Grid container spacing={2}>
-            <Grid item sm={6}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="locationLatitude"
-                label="Latitude"
-                name="latitude"
-                type="number"
-                value={location.latitude}
-                onChange={onChangeLocation}
-              />
+            <Grid container spacing={2}>
+              <Grid item sm={6}>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="locationLatitude"
+                  label="Latitude"
+                  name="latitude"
+                  type="number"
+                  value={location.latitude}
+                  onChange={onChangeLocation}
+                />
+              </Grid>
+              <Grid item sm={6}>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="locationLongitude"
+                  label="Longitude"
+                  name="longitude"
+                  type="number"
+                  value={location.longitude}
+                  onChange={onChangeLocation}
+                />
+              </Grid>
             </Grid>
-            <Grid item sm={6}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="locationLongitude"
-                label="Longitude"
-                name="longitude"
-                type="number"
-                value={location.longitude}
-                onChange={onChangeLocation}
-              />
-            </Grid>
-          </Grid>
 
-          <Grid container spacing={2}>
-            <Grid item sm={4}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="locationBearing"
-                label="Bearing"
-                name="bearing"
-                type="number"
-                value={location.bearing}
-                onChange={onChangeLocation}
-              />
+            <Grid container spacing={2}>
+              <Grid item sm={4}>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="locationBearing"
+                  label="Bearing"
+                  name="bearing"
+                  type="number"
+                  value={location.bearing}
+                  onChange={onChangeLocation}
+                />
+              </Grid>
+              <Grid item sm={4}>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="locationPitch"
+                  label="Pitch"
+                  name="pitch"
+                  type="number"
+                  value={location.pitch}
+                  onChange={onChangeLocation}
+                />
+              </Grid>
+              <Grid item sm={4}>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="locationZoom"
+                  label="Zoom"
+                  name="zoom"
+                  type="number"
+                  value={location.zoom}
+                  onChange={onChangeLocation}
+                />
+              </Grid>
             </Grid>
-            <Grid item sm={4}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="locationPitch"
-                label="Pitch"
-                name="pitch"
-                type="number"
-                value={location.pitch}
-                onChange={onChangeLocation}
-              />
-            </Grid>
-            <Grid item sm={4}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="locationZoom"
-                label="Zoom"
-                name="zoom"
-                type="number"
-                value={location.zoom}
-                onChange={onChangeLocation}
-              />
-            </Grid>
-          </Grid>
 
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="locationMarker"
-            label="Marker"
-            name="marker"
-            type="text"
-            value={location.marker}
-            onChange={onChangeLocation}
-          />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="locationMarker"
+              label="Marker"
+              name="marker"
+              type="text"
+              value={location.marker}
+              onChange={onChangeLocation}
+            />
 
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              {selectedIndex === -1 ? (
-                <Button color="primary" onClick={addLocation}>
-                  Add Location
-                </Button>
-              ) : (
-                <>
-                  <Button color="primary" onClick={updateLocation}>
-                    Update
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                {selectedIndex === -1 ? (
+                  <Button color="primary" onClick={addLocation}>
+                    Add Location
                   </Button>
-                  <Button color="primary" onClick={removeLocation}>
-                    Remove
-                  </Button>
-                </>
-              )}
+                ) : (
+                  <>
+                    <Button color="primary" onClick={updateLocation}>
+                      Update
+                    </Button>
+                    <Button color="primary" onClick={removeLocation}>
+                      Remove
+                    </Button>
+                  </>
+                )}
+              </Grid>
+            </Grid>
+          </form>
+        </Grid>
+        <Grid item md={8} sm={12}>
+          <Grid container spacing={2}>
+            <Grid item sm={12}>
+              <ToggleButtonGroup
+                value={view}
+                exclusive
+                onChange={handleView}
+                aria-label="editor view"
+              >
+                <ToggleButton value="list" aria-label="list view">
+                  <ListAltIcon />
+                </ToggleButton>
+                <ToggleButton value="map" aria-label="map view">
+                  <MapIcon />
+                </ToggleButton>
+              </ToggleButtonGroup>
             </Grid>
           </Grid>
-        </form>
-      </Grid>
-      <Grid item md={8} sm={12}>
-        <Grid container spacing={2}>
-          <Grid item sm={12}>
-            <ToggleButtonGroup
-              value={view}
-              exclusive
-              onChange={handleView}
-              aria-label="editor view"
-            >
-              <ToggleButton value="list" aria-label="list view">
-                <ListAltIcon />
-              </ToggleButton>
-              <ToggleButton value="map" aria-label="map view">
-                <MapIcon />
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </Grid>
-        </Grid>
-        <Grid container spacing={2}>
-          <Grid item sm={12}>
-            {renderView(view)}
+          <Grid container spacing={2}>
+            <Grid item sm={12}>
+              {renderView(view)}
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
+      <Grid container>
+        <Grid item>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={props.publishQuest}
+          >
+            Publish
+          </Button>
+        </Grid>
+      </Grid>
+    </>
   );
 }
 

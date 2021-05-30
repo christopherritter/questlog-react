@@ -18,7 +18,6 @@ import Grid from "@material-ui/core/Grid";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
 
 const layerStyle = {
   id: "point",
@@ -293,7 +292,7 @@ export default function QuestEditor(props) {
     setItem(null);
   };
 
-  const publishQuest = () => {
+  const onPublishQuest = () => {
     QuestDataService.update(quest.questId, quest)
       .then(() => {
         console.log("Updated!");
@@ -365,6 +364,7 @@ export default function QuestEditor(props) {
             <QuestDetails
               quest={quest}
               updateDetails={onUpdateDetails}
+              publishQuest={onPublishQuest}
             ></QuestDetails>
           </TabPanel>
           <TabPanel value={tab} index={1}>
@@ -380,6 +380,7 @@ export default function QuestEditor(props) {
               region={quest.region}
               updateRegion={onUpdateRegion}
               updateCenter={onUpdateCenter}
+              publishQuest={onPublishQuest}
             ></QuestRegion>
           </TabPanel>
           <TabPanel value={tab} index={2}>
@@ -388,6 +389,7 @@ export default function QuestEditor(props) {
               addObjective={onAddObjective}
               updateObjective={onUpdateObjective}
               removeObjective={onRemoveObjective}
+              publishQuest={onPublishQuest}
             ></QuestObjectives>
           </TabPanel>
           <TabPanel value={tab} index={3}>
@@ -414,6 +416,7 @@ export default function QuestEditor(props) {
               updateLocation={onUpdateLocation}
               removeLocation={onRemoveLocation}
               clearLocation={onClearLocation}
+              publishQuest={onPublishQuest}
             ></QuestLocations>
           </TabPanel>
           <TabPanel value={tab} index={4}>
@@ -444,6 +447,7 @@ export default function QuestEditor(props) {
               updateEntry={onUpdateEntry}
               removeEntry={onRemoveEntry}
               clearEntry={onClearEntry}
+              publishQuest={onPublishQuest}
             ></QuestEntries>
           </TabPanel>
           <TabPanel value={tab} index={5}>
@@ -474,16 +478,9 @@ export default function QuestEditor(props) {
               updateItem={onUpdateItem}
               removeItem={onRemoveItem}
               clearItem={onClearItem}
+              publishQuest={onPublishQuest}
             ></QuestItems>
           </TabPanel>
-        </Grid>
-      </Grid>
-
-      <Grid container>
-        <Grid item>
-          <Button variant="contained" color="primary" onClick={publishQuest}>
-            Publish
-          </Button>
         </Grid>
       </Grid>
     </Paper>

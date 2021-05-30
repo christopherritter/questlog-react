@@ -101,92 +101,110 @@ function QuestObjectives(props) {
   };
 
   return (
-    <Grid container spacing={2} className={classes.root}>
-      <Grid item md={4} sm={12}>
-        <Grid container spacing={2}>
-          <Grid item md={6}>
-            <Typography variant="h4" gutterBottom>
-              Objectives
-            </Typography>
-          </Grid>
-          <Grid item md={6}>
-            <Button color="primary" onClick={() => {
-              setObjective(initialObjectiveState);
-              setSelectedIndex(-1);
-            }}>
-              Create New
-            </Button>
-          </Grid>
-        </Grid>
-        <form noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="objectiveText"
-            label="Objective"
-            name="text"
-            value={objective.text}
-            onChange={onChangeObjective}
-          />
-
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={objective.isPrimary}
-                onChange={onToggleObjective}
-                name="isPrimary"
-              />
-            }
-            label="Primary Objective"
-          />
-
+    <>
+      <Grid container spacing={2} className={classes.root}>
+        <Grid item md={4} sm={12}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              {selectedIndex === -1 ? (
-                <Button color="primary" onClick={addObjective}>
-                  Add Objective
-                </Button>
-              ) : (
-                <>
-                  <Button color="primary" onClick={updateObjective}>
-                    Update
-                  </Button>
-                  <Button color="primary" onClick={removeObjective}>
-                    Remove
-                  </Button>
-                </>
-              )}
+            <Grid item md={6}>
+              <Typography variant="h4" gutterBottom>
+                Objectives
+              </Typography>
+            </Grid>
+            <Grid item md={6}>
+              <Button
+                color="primary"
+                onClick={() => {
+                  setObjective(initialObjectiveState);
+                  setSelectedIndex(-1);
+                }}
+              >
+                Create New
+              </Button>
             </Grid>
           </Grid>
-        </form>
+          <form noValidate>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="objectiveText"
+              label="Objective"
+              name="text"
+              value={objective.text}
+              onChange={onChangeObjective}
+            />
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={objective.isPrimary}
+                  onChange={onToggleObjective}
+                  name="isPrimary"
+                />
+              }
+              label="Primary Objective"
+            />
+
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                {selectedIndex === -1 ? (
+                  <Button color="primary" onClick={addObjective}>
+                    Add Objective
+                  </Button>
+                ) : (
+                  <>
+                    <Button color="primary" onClick={updateObjective}>
+                      Update
+                    </Button>
+                    <Button color="primary" onClick={removeObjective}>
+                      Remove
+                    </Button>
+                  </>
+                )}
+              </Grid>
+            </Grid>
+          </form>
+        </Grid>
+        <Grid item md={8} sm={12}>
+          <List component="nav">
+            {props.objectives &&
+              props.objectives.map((objective, index) => {
+                return (
+                  <ListItem
+                    button
+                    key={objective.id}
+                    selected={selectedIndex === index}
+                    onClick={(event) => handleListItemClick(objective, index)}
+                  >
+                    <ListItemIcon>
+                      <CommentIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={
+                        <Typography variant="subtitle1">
+                          {objective.text}
+                        </Typography>
+                      }
+                    />
+                  </ListItem>
+                );
+              })}
+          </List>
+        </Grid>
       </Grid>
-      <Grid item md={8} sm={12}>
-        <List component="nav">
-          {props.objectives &&
-            props.objectives.map((objective, index) => {
-              return (
-                <ListItem
-                  button
-                  key={objective.id}
-                  selected={selectedIndex === index}
-                  onClick={(event) => handleListItemClick(objective, index)}
-                >
-                  <ListItemIcon>
-                    <CommentIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={
-                    <Typography variant="subtitle1">
-                      { objective.text }
-                    </Typography>
-                  } />
-                </ListItem>
-              );
-            })}
-        </List>
+      <Grid container>
+        <Grid item>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={props.publishQuest}
+          >
+            Publish
+          </Button>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 }
 
