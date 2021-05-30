@@ -13,9 +13,7 @@ import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import MenuBookIcon from "@material-ui/icons/MenuBook";
 import ListAltIcon from "@material-ui/icons/ListAlt";
 import MapIcon from "@material-ui/icons/Map";
 import ToggleButton from "@material-ui/lab/ToggleButton";
@@ -69,7 +67,7 @@ function QuestEntries(props) {
     actions: [],
     objectives: [],
     requirements: [],
-    expiration: [],
+    expirations: [],
   };
 
   const [entry, entryRef, setEntry] = useRefState(initialEntryState);
@@ -87,16 +85,44 @@ function QuestEntries(props) {
 
   const onChangeObjectives = (event) => {
     const currentValue = event.target.value[0];
-    const objectives = [...entry.objectives ];
+    const objectives = [...entry.objectives];
     const index = objectives.indexOf(currentValue);
 
     if (index === -1) {
-      objectives.push(currentValue)
+      objectives.push(currentValue);
     } else {
       objectives.splice(index, 1);
     }
 
-    setEntry({...entry, objectives: objectives });
+    setEntry({ ...entry, objectives: objectives });
+  };
+
+  const onChangeRequirements = (event) => {
+    const currentValue = event.target.value[0];
+    const requirements = [...entry.requirements];
+    const index = requirements.indexOf(currentValue);
+
+    if (index === -1) {
+      requirements.push(currentValue);
+    } else {
+      requirements.splice(index, 1);
+    }
+
+    setEntry({ ...entry, requirements: requirements });
+  };
+
+  const onChangeExpirations = (event) => {
+    const currentValue = event.target.value[0];
+    const expirations = [...entry.expirations];
+    const index = expirations.indexOf(currentValue);
+
+    if (index === -1) {
+      expirations.push(currentValue);
+    } else {
+      expirations.splice(index, 1);
+    }
+
+    setEntry({ ...entry, expirations: expirations });
   };
 
   const onSelectLocation = (event) => {
@@ -181,9 +207,6 @@ function QuestEntries(props) {
                           handleListItemClick(entry, entry.id)
                         }
                       >
-                        <ListItemIcon>
-                          <MenuBookIcon />
-                        </ListItemIcon>
                         <ListItemText
                           primary={entry.title}
                           secondary={entry.text}
@@ -304,17 +327,23 @@ function QuestEntries(props) {
             required
             fullWidth
             id="entryText"
-            label="Text"
+            label="Entry"
             name="text"
             type="text"
             multiline
-            rows={4}
+            rows={8}
             value={entry.text}
             onChange={onChangeEntry}
           />
-          
-          <FormControl variant="outlined" fullWidth className={classes.formControl}>
-            <InputLabel id="objectives-multi-select-label">Objectives</InputLabel>
+
+          <FormControl
+            variant="outlined"
+            fullWidth
+            className={classes.formControl}
+          >
+            <InputLabel id="objectives-multi-select-label">
+              Objectives
+            </InputLabel>
             <Select
               labelId="objectives-multi-select-label"
               id="objectives-multi-select"
@@ -322,12 +351,75 @@ function QuestEntries(props) {
               value={entry.objectives}
               onChange={onChangeObjectives}
               input={<Input />}
-              renderValue={(selected) => selected.join(', ')}
-   
+              renderValue={(selected) => selected.join(", ")}
             >
               {props.objectives.map((objective) => (
                 <MenuItem key={objective.id} value={objective.id}>
-                  <Checkbox checked={entry.objectives.indexOf(objective.id) > -1} />
+                  <Checkbox
+                    checked={
+                      entry.objectives.indexOf(objective.id) > -1
+                    }
+                  />
+                  <ListItemText primary={objective.text} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl
+            variant="outlined"
+            fullWidth
+            className={classes.formControl}
+          >
+            <InputLabel id="requirements-multi-select-label">
+              Requirements
+            </InputLabel>
+            <Select
+              labelId="requirements-multi-select-label"
+              id="requirements-multi-select"
+              multiple
+              value={entry.requirements}
+              onChange={onChangeRequirements}
+              input={<Input />}
+              renderValue={(selected) => selected.join(", ")}
+            >
+              {props.objectives.map((objective) => (
+                <MenuItem key={objective.id} value={objective.id}>
+                  <Checkbox
+                    checked={
+                      entry.requirements.indexOf(objective.id) > -1
+                    }
+                  />
+                  <ListItemText primary={objective.text} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl
+            variant="outlined"
+            fullWidth
+            className={classes.formControl}
+          >
+            <InputLabel id="expirations-multi-select-label">
+              Expirations
+            </InputLabel>
+            <Select
+              labelId="expirations-multi-select-label"
+              id="expirations-multi-select"
+              multiple
+              value={entry.expirations}
+              onChange={onChangeExpirations}
+              input={<Input />}
+              renderValue={(selected) => selected.join(", ")}
+            >
+              {props.objectives.map((objective) => (
+                <MenuItem key={objective.id} value={objective.id}>
+                  <Checkbox
+                    checked={
+                      entry.expirations.indexOf(objective.id) > -1
+                    }
+                  />
                   <ListItemText primary={objective.text} />
                 </MenuItem>
               ))}
