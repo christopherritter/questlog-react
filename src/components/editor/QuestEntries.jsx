@@ -15,6 +15,7 @@ import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListAltIcon from "@material-ui/icons/ListAlt";
+import Typography from "@material-ui/core/Typography";
 import MapIcon from "@material-ui/icons/Map";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
@@ -27,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(1),
+  },
+  inline: {
+    display: 'inline',
   },
 }));
 
@@ -209,7 +213,16 @@ function QuestEntries(props) {
                       >
                         <ListItemText
                           primary={entry.title}
-                          secondary={entry.text}
+                          secondary={
+                            <Typography
+                              style={{ whiteSpace: "pre-line" }}
+                              variant="body2"
+                              className={classes.inline}
+                              color="textPrimary"
+                            >
+                              {entry.text}
+                            </Typography>
+                          }
                         />
                       </ListItem>
                     ))}
@@ -356,9 +369,7 @@ function QuestEntries(props) {
               {props.objectives.map((objective) => (
                 <MenuItem key={objective.id} value={objective.id}>
                   <Checkbox
-                    checked={
-                      entry.objectives.indexOf(objective.id) > -1
-                    }
+                    checked={entry.objectives.indexOf(objective.id) > -1}
                   />
                   <ListItemText primary={objective.text} />
                 </MenuItem>
@@ -386,9 +397,7 @@ function QuestEntries(props) {
               {props.objectives.map((objective) => (
                 <MenuItem key={objective.id} value={objective.id}>
                   <Checkbox
-                    checked={
-                      entry.requirements.indexOf(objective.id) > -1
-                    }
+                    checked={entry.requirements.indexOf(objective.id) > -1}
                   />
                   <ListItemText primary={objective.text} />
                 </MenuItem>
@@ -416,9 +425,7 @@ function QuestEntries(props) {
               {props.objectives.map((objective) => (
                 <MenuItem key={objective.id} value={objective.id}>
                   <Checkbox
-                    checked={
-                      entry.expirations.indexOf(objective.id) > -1
-                    }
+                    checked={entry.expirations.indexOf(objective.id) > -1}
                   />
                   <ListItemText primary={objective.text} />
                 </MenuItem>

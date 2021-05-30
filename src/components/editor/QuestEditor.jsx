@@ -254,6 +254,49 @@ export default function QuestEditor(props) {
     setEntry(null);
   };
 
+  // Items
+  // Short descriptions of things that can fit inside a backpack
+  // Usually provide readers with a set of actions to choose from
+
+  const [itemIndex, setItemIndex] = useState(-1);
+
+  const [item, setItem] = useState();
+
+  const onAddItem = (item) => {
+    if (quest.items) {
+      setQuest({ ...quest, items: [...quest.items, item] });
+    } else {
+      setQuest({ ...quest, items: [item] });
+    }
+  };
+
+  const onUpdateItem = (item) => {
+    const selectedItem = quest.items.findIndex(function (i) {
+      return item.id === i.id;
+    });
+    let updatedItems = [...quest.items];
+    let updatedItem = { ...quest.items[selectedItem] };
+
+    updatedItem = { ...item }
+    updatedItems[selectedItem] = updatedItem;
+
+    setQuest({ ...quest, items: updatedItems });
+  };
+
+  const onRemoveItem = (item) => {
+    const updatedItems = quest.items.filter(
+      (i) => i.id !== item.id
+    );
+    setQuest({ ...quest, items: updatedItems });
+    setItemIndex(-1);
+    setItem(null);
+  };
+
+  const onClearItem = () => {
+    setItemIndex(-1);
+    setItem(null);
+  };
+
   const publishQuest = () => {
     QuestDataService.update(quest.questId, quest)
       .then(() => {
@@ -408,7 +451,34 @@ export default function QuestEditor(props) {
             ></QuestEntries>
           </TabPanel>
           <TabPanel value={tab} index={5}>
-            <QuestItems items={quest.items}></QuestItems>
+          <QuestItems
+              map={
+                <MapGL
+                  style={{ width: "100%", height: "400px" }}
+                  mapStyle="mapbox://styles/mapbox/streets-v11"
+                  accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+                >
+                  <Source id="locationsData" type="geojson" data={geojson} />
+                  <Layer
+                    source="locationsData"
+                    onClick={onMapPointClick}
+                    {...layerStyle}
+                  />
+                </MapGL>
+              }
+              region={quest.region}
+              objectives={quest.objectives}
+              locations={quest.locations}
+              locationIndex={locationIndex}
+              location={location}
+              items={quest.items}
+              itemIndex={itemIndex}
+              item={item}
+              addItem={onAddItem}
+              updateItem={onUpdateItem}
+              removeItem={onRemoveItem}
+              clearItem={onClearItem}
+            ></QuestItems>
           </TabPanel>
         </Grid>
       </Grid>
