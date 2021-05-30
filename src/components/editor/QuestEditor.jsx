@@ -234,16 +234,14 @@ export default function QuestEditor(props) {
     let updatedEntries = [...quest.entries];
     let updatedEntry = { ...quest.entries[selectedEntry] };
 
-    updatedEntry = { ...entry }
+    updatedEntry = { ...entry };
     updatedEntries[selectedEntry] = updatedEntry;
 
     setQuest({ ...quest, entries: updatedEntries });
   };
 
   const onRemoveEntry = (entry) => {
-    const updatedEntries = quest.entries.filter(
-      (ent) => ent.id !== entry.id
-    );
+    const updatedEntries = quest.entries.filter((ent) => ent.id !== entry.id);
     setQuest({ ...quest, entries: updatedEntries });
     setEntryIndex(-1);
     setEntry(null);
@@ -277,16 +275,14 @@ export default function QuestEditor(props) {
     let updatedItems = [...quest.items];
     let updatedItem = { ...quest.items[selectedItem] };
 
-    updatedItem = { ...item }
+    updatedItem = { ...item };
     updatedItems[selectedItem] = updatedItem;
 
     setQuest({ ...quest, items: updatedItems });
   };
 
   const onRemoveItem = (item) => {
-    const updatedItems = quest.items.filter(
-      (i) => i.id !== item.id
-    );
+    const updatedItems = quest.items.filter((i) => i.id !== item.id);
     setQuest({ ...quest, items: updatedItems });
     setItemIndex(-1);
     setItem(null);
@@ -451,7 +447,7 @@ export default function QuestEditor(props) {
             ></QuestEntries>
           </TabPanel>
           <TabPanel value={tab} index={5}>
-          <QuestItems
+            <QuestItems
               map={
                 <MapGL
                   style={{ width: "100%", height: "400px" }}
@@ -483,7 +479,13 @@ export default function QuestEditor(props) {
         </Grid>
       </Grid>
 
-      <Button onClick={publishQuest}>Publish</Button>
+      <Grid container>
+        <Grid item>
+          <Button variant="contained" color="primary" onClick={publishQuest}>
+            Publish
+          </Button>
+        </Grid>
+      </Grid>
     </Paper>
   );
 }

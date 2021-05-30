@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -103,10 +104,12 @@ function QuestObjectives(props) {
     <Grid container spacing={2} className={classes.root}>
       <Grid item md={4} sm={12}>
         <Grid container spacing={2}>
-          <Grid item md={8}>
-            <h2>Objectives</h2>
+          <Grid item md={6}>
+            <Typography variant="h4" gutterBottom>
+              Objectives
+            </Typography>
           </Grid>
-          <Grid item md={4}>
+          <Grid item md={6}>
             <Button color="primary" onClick={() => {
               setObjective(initialObjectiveState);
               setSelectedIndex(-1);

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
 
 const QuestRegion = (props) => {
   const [viewport, setViewport] = useState({
@@ -30,6 +31,9 @@ const QuestRegion = (props) => {
     <Grid container spacing={4}>
       <Grid item md={4}>
         <form noValidate>
+          <Typography variant="h4" gutterBottom>
+            Region
+          </Typography>
           <TextField
             variant="outlined"
             margin="normal"
@@ -90,7 +94,7 @@ const QuestRegion = (props) => {
         </form>
       </Grid>
       <Grid item md={8}>
-        { QuestMap }
+        {QuestMap}
       </Grid>
     </Grid>
   );
