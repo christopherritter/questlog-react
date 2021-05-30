@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   buttons: {
-    display: 'flex',
-    justifyContent: 'flex-end',
+    display: "flex",
+    justifyContent: "flex-end",
   },
   button: {
     marginTop: theme.spacing(3),
@@ -19,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 
 const QuestRegion = (props) => {
   const classes = useStyles();
-  
+
   const [viewport, setViewport] = useState({
     latitude: 39.82817,
     longitude: -98.5795,
@@ -43,12 +44,12 @@ const QuestRegion = (props) => {
 
   return (
     <>
-      <Grid container spacing={4}>
+      <Grid container spacing={2}>
+        <Grid item sm={12}>
+          <Typography variant="h4">Region</Typography>
+        </Grid>
         <Grid item md={4}>
           <form noValidate>
-            <Typography variant="h4" gutterBottom>
-              Region
-            </Typography>
             <TextField
               variant="outlined"
               margin="normal"
@@ -112,17 +113,16 @@ const QuestRegion = (props) => {
           {QuestMap}
         </Grid>
       </Grid>
-      <Grid container>
-        <Grid item>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={props.publishQuest}
-          >
-            Publish
-          </Button>
-        </Grid>
-      </Grid>
+      <Box className={classes.buttons} display="flex">
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={props.publishQuest}
+          className={classes.button}
+        >
+          Publish
+        </Button>
+      </Box>
     </>
   );
 };

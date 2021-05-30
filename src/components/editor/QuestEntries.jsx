@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -31,6 +32,13 @@ const useStyles = makeStyles((theme) => ({
   },
   inline: {
     display: "inline",
+  },
+  buttons: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+  button: {
+    marginTop: theme.spacing(3),
   },
 }));
 
@@ -259,27 +267,39 @@ function QuestEntries(props) {
 
   return (
     <>
+      <Grid container spacing={2}>
+        <Grid item md={4} sm={12}>
+          <Typography variant="h4" gutterBottom>
+            Entries
+          </Typography>
+        </Grid>
+        <Grid item md={8} sm={12}>
+          <Button
+            onClick={() => {
+              props.clearEntry();
+              setEntry(initialEntryState);
+              setSelectedIndex(-1);
+            }}
+          >
+            Create New
+          </Button>
+          <ToggleButtonGroup
+            value={view}
+            exclusive
+            onChange={handleView}
+            aria-label="editor view"
+          >
+            <ToggleButton value="list" aria-label="list view">
+              <ListAltIcon />
+            </ToggleButton>
+            <ToggleButton value="map" aria-label="map view">
+              <MapIcon />
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Grid>
+      </Grid>
       <Grid container spacing={2} className={classes.root}>
         <Grid item md={4} sm={12}>
-          <Grid container spacing={2}>
-            <Grid item md={6}>
-              <Typography variant="h4" gutterBottom>
-                Entries
-              </Typography>
-            </Grid>
-            <Grid item md={6}>
-              <Button
-                color="primary"
-                onClick={() => {
-                  props.clearEntry();
-                  setEntry(initialEntryState);
-                  setSelectedIndex(-1);
-                }}
-              >
-                Create New
-              </Button>
-            </Grid>
-          </Grid>
           <form noValidate>
             <Grid container spacing={2}>
               <Grid item sm={8}>
@@ -439,45 +459,9 @@ function QuestEntries(props) {
                 ))}
               </Select>
             </FormControl>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                {selectedIndex === -1 ? (
-                  <Button color="primary" onClick={addEntry}>
-                    Add Entry
-                  </Button>
-                ) : (
-                  <>
-                    <Button color="primary" onClick={updateEntry}>
-                      Update
-                    </Button>
-                    <Button color="primary" onClick={removeEntry}>
-                      Remove
-                    </Button>
-                  </>
-                )}
-              </Grid>
-            </Grid>
           </form>
         </Grid>
         <Grid item md={8} sm={12}>
-          <Grid container spacing={2}>
-            <Grid item sm={12}>
-              <ToggleButtonGroup
-                value={view}
-                exclusive
-                onChange={handleView}
-                aria-label="editor view"
-              >
-                <ToggleButton value="list" aria-label="list view">
-                  <ListAltIcon />
-                </ToggleButton>
-                <ToggleButton value="map" aria-label="map view">
-                  <MapIcon />
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </Grid>
-          </Grid>
           <Grid container spacing={2}>
             <Grid item sm={12}>
               {renderView(view)}
@@ -485,17 +469,48 @@ function QuestEntries(props) {
           </Grid>
         </Grid>
       </Grid>
-      <Grid container>
-        <Grid item>
+      <Box className={classes.buttons} display="flex">
+        <Box flexGrow={1}>
+          {selectedIndex === -1 ? (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={addEntry}
+              className={classes.button}
+            >
+              Add Entry
+            </Button>
+          ) : (
+            <>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={updateEntry}
+                className={classes.button}
+              >
+                Update
+              </Button>
+              <Button
+                variant="contained"
+                onClick={removeEntry}
+                className={classes.button}
+              >
+                Remove
+              </Button>
+            </>
+          )}
+        </Box>
+        <Box flexGrow={0}>
           <Button
             variant="contained"
-            color="primary"
+            color="secondary"
             onClick={props.publishQuest}
+            className={classes.button}
           >
             Publish
           </Button>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
     </>
   );
 }

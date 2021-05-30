@@ -2,9 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
@@ -19,15 +20,18 @@ const useStyles = makeStyles((theme) => ({
 
 function QuestDetails(props) {
   const classes = useStyles();
-  
+
   return (
     <>
       <Grid container spacing={2}>
         <Grid item sm={12}>
+          <Typography variant="h4">
+            Quest
+          </Typography>
+        </Grid>
+        <Grid item sm={12}>
           <form noValidate>
-            <Typography variant="h4" gutterBottom>
-              Quest
-            </Typography>
+            
             <TextField
               variant="outlined"
               margin="normal"
@@ -67,18 +71,16 @@ function QuestDetails(props) {
           </form>
         </Grid>
       </Grid>
-      <Grid container>
-        <Grid item className={classes.buttons}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={props.publishQuest}
-            className={classes.button}
-          >
-            Publish
-          </Button>
-        </Grid>
-      </Grid>
+      <Box className={classes.buttons} display="flex">
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={props.publishQuest}
+          className={classes.button}
+        >
+          Publish
+        </Button>
+      </Box>
     </>
   );
 }

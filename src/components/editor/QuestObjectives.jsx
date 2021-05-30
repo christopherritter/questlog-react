@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -17,6 +18,13 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     backgroundColor: theme.palette.background.paper,
+  },
+  buttons: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+  button: {
+    marginTop: theme.spacing(3),
   },
 }));
 
@@ -102,26 +110,24 @@ function QuestObjectives(props) {
 
   return (
     <>
+      <Grid container spacing={2}>
+        <Grid item md={4} sm={12}>
+          <Typography variant="h4">Objectives</Typography>
+        </Grid>
+        <Grid item md={8} sm={12}>
+          <Button
+            color="primary"
+            onClick={() => {
+              setObjective(initialObjectiveState);
+              setSelectedIndex(-1);
+            }}
+          >
+            Create New
+          </Button>
+        </Grid>
+      </Grid>
       <Grid container spacing={2} className={classes.root}>
         <Grid item md={4} sm={12}>
-          <Grid container spacing={2}>
-            <Grid item md={6}>
-              <Typography variant="h4" gutterBottom>
-                Objectives
-              </Typography>
-            </Grid>
-            <Grid item md={6}>
-              <Button
-                color="primary"
-                onClick={() => {
-                  setObjective(initialObjectiveState);
-                  setSelectedIndex(-1);
-                }}
-              >
-                Create New
-              </Button>
-            </Grid>
-          </Grid>
           <form noValidate>
             <TextField
               variant="outlined"
@@ -145,25 +151,6 @@ function QuestObjectives(props) {
               }
               label="Primary Objective"
             />
-
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                {selectedIndex === -1 ? (
-                  <Button color="primary" onClick={addObjective}>
-                    Add Objective
-                  </Button>
-                ) : (
-                  <>
-                    <Button color="primary" onClick={updateObjective}>
-                      Update
-                    </Button>
-                    <Button color="primary" onClick={removeObjective}>
-                      Remove
-                    </Button>
-                  </>
-                )}
-              </Grid>
-            </Grid>
           </form>
         </Grid>
         <Grid item md={8} sm={12}>
@@ -193,17 +180,48 @@ function QuestObjectives(props) {
           </List>
         </Grid>
       </Grid>
-      <Grid container>
-        <Grid item>
+      <Box className={classes.buttons} display="flex">
+        <Box flexGrow={1}>
+          {selectedIndex === -1 ? (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={addObjective}
+              className={classes.button}
+            >
+              Add Objective
+            </Button>
+          ) : (
+            <>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={updateObjective}
+                className={classes.button}
+              >
+                Update
+              </Button>
+              <Button
+                variant="contained"
+                onClick={removeObjective}
+                className={classes.button}
+              >
+                Remove
+              </Button>
+            </>
+          )}
+        </Box>
+        <Box flexGrow={0}>
           <Button
             variant="contained"
-            color="primary"
+            color="secondary"
             onClick={props.publishQuest}
+            className={classes.button}
           >
             Publish
           </Button>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
     </>
   );
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -21,6 +22,13 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     backgroundColor: theme.palette.background.paper,
+  },
+  buttons: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+  button: {
+    marginTop: theme.spacing(3),
   },
 }));
 
@@ -221,27 +229,40 @@ function QuestLocations(props) {
 
   return (
     <>
+      <Grid container spacing={2}>
+        <Grid item md={4} sm={12}>
+          <Typography variant="h4" gutterBottom>
+            Locations
+          </Typography>
+        </Grid>
+        <Grid item md={4} sm={12}>
+          <Button
+            onClick={() => {
+              props.clearLocation();
+              setLocation(initialLocationState);
+              setSelectedIndex(-1);
+            }}
+          >
+            Create New
+          </Button>
+
+          <ToggleButtonGroup
+            value={view}
+            exclusive
+            onChange={handleView}
+            aria-label="editor view"
+          >
+            <ToggleButton value="list" aria-label="list view">
+              <ListAltIcon />
+            </ToggleButton>
+            <ToggleButton value="map" aria-label="map view">
+              <MapIcon />
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Grid>
+      </Grid>
       <Grid container spacing={2} className={classes.root}>
         <Grid item md={4} sm={12}>
-          <Grid container spacing={2}>
-            <Grid item md={6}>
-              <Typography variant="h4" gutterBottom>
-                Locations
-              </Typography>
-            </Grid>
-            <Grid item md={6}>
-              <Button
-                color="primary"
-                onClick={() => {
-                  props.clearLocation();
-                  setLocation(initialLocationState);
-                  setSelectedIndex(-1);
-                }}
-              >
-                Create New
-              </Button>
-            </Grid>
-          </Grid>
           <form noValidate>
             <Grid container spacing={2}>
               <Grid item sm={8}>
@@ -389,45 +410,9 @@ function QuestLocations(props) {
               value={location.marker}
               onChange={onChangeLocation}
             />
-
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                {selectedIndex === -1 ? (
-                  <Button color="primary" onClick={addLocation}>
-                    Add Location
-                  </Button>
-                ) : (
-                  <>
-                    <Button color="primary" onClick={updateLocation}>
-                      Update
-                    </Button>
-                    <Button color="primary" onClick={removeLocation}>
-                      Remove
-                    </Button>
-                  </>
-                )}
-              </Grid>
-            </Grid>
           </form>
         </Grid>
         <Grid item md={8} sm={12}>
-          <Grid container spacing={2}>
-            <Grid item sm={12}>
-              <ToggleButtonGroup
-                value={view}
-                exclusive
-                onChange={handleView}
-                aria-label="editor view"
-              >
-                <ToggleButton value="list" aria-label="list view">
-                  <ListAltIcon />
-                </ToggleButton>
-                <ToggleButton value="map" aria-label="map view">
-                  <MapIcon />
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </Grid>
-          </Grid>
           <Grid container spacing={2}>
             <Grid item sm={12}>
               {renderView(view)}
@@ -435,17 +420,48 @@ function QuestLocations(props) {
           </Grid>
         </Grid>
       </Grid>
-      <Grid container>
-        <Grid item>
+      <Box className={classes.buttons} display="flex">
+        <Box flexGrow={1}>
+          {selectedIndex === -1 ? (
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={addLocation}
+              className={classes.button}
+            >
+              Add Location
+            </Button>
+          ) : (
+            <>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={updateLocation}
+                className={classes.button}
+              >
+                Update
+              </Button>
+              <Button
+                variant="contained"
+                onClick={removeLocation}
+                className={classes.button}
+              >
+                Remove
+              </Button>
+            </>
+          )}
+          </Box>
+          <Box flexGrow={0}>
           <Button
             variant="contained"
-            color="primary"
+            color="secondary"
             onClick={props.publishQuest}
+            className={classes.button}
           >
             Publish
           </Button>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
     </>
   );
 }
