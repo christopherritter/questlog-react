@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
 import {
   Link as RouterLink,
   Switch,
@@ -7,6 +6,7 @@ import {
   useHistory,
 } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import theme from './theme.jsx';
 
 import PrivateRoute from "./utils/PrivateRoute.jsx";
 // import Home from "./Home.jsx";
@@ -19,7 +19,7 @@ import CreateQuest from "./editor/CreateQuest.jsx";
 import QuestEditor from "./editor/QuestEditor.jsx";
 import Quest from "./quests/Quest.jsx";
 
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -82,7 +82,7 @@ const App = () => {
   }
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <AppBar color="primary" className={classes.appBar}>
         <Toolbar>
@@ -162,7 +162,7 @@ const App = () => {
           <PrivateRoute path="/update-profile" component={UpdateProfile} />
         </Switch>
       </main>
-    </>
+    </ThemeProvider>
   );
 };
 

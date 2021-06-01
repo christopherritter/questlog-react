@@ -69,7 +69,7 @@ const Quest = (props) => {
   }, [props]);
 
   return (
-    <Paper elevation={0} className={classes.root}>
+    <Paper elevation={0} className={classes.root} square >
       <Container>
         <Grid container>
           <Grid sm={12} item>
