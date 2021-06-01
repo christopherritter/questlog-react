@@ -236,29 +236,37 @@ function QuestLocations(props) {
           </Typography>
         </Grid>
         <Grid item md={4} sm={12}>
-          <Button
-            onClick={() => {
-              props.clearLocation();
-              setLocation(initialLocationState);
-              setSelectedIndex(-1);
-            }}
-          >
-            Create New
-          </Button>
-
-          <ToggleButtonGroup
-            value={view}
-            exclusive
-            onChange={handleView}
-            aria-label="editor view"
-          >
-            <ToggleButton value="list" aria-label="list view">
-              <ListAltIcon />
-            </ToggleButton>
-            <ToggleButton value="map" aria-label="map view">
-              <MapIcon />
-            </ToggleButton>
-          </ToggleButtonGroup>
+          <Grid container alignItems="center" justify="flex-start">
+            <Grid item>
+              <Button
+                variant="contained"
+                disableElevation
+                onClick={() => {
+                  props.clearLocation();
+                  setLocation(initialLocationState);
+                  setSelectedIndex(-1);
+                }}
+              >
+                Create New
+              </Button>
+ 
+              <ToggleButtonGroup
+                variant="contained"
+                value={view}
+                exclusive
+                onChange={handleView}
+                aria-label="location view"
+                size="small"
+              >
+                <ToggleButton value="list" aria-label="list view">
+                  <ListAltIcon />
+                </ToggleButton>
+                <ToggleButton value="map" aria-label="map view">
+                  <MapIcon />
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
       <Grid container spacing={2} className={classes.root}>
@@ -450,8 +458,8 @@ function QuestLocations(props) {
               </Button>
             </>
           )}
-          </Box>
-          <Box flexGrow={0}>
+        </Box>
+        <Box flexGrow={0}>
           <Button
             variant="contained"
             color="secondary"
