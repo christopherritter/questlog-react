@@ -1,37 +1,25 @@
 import React, { useState, useEffect } from "react";
 import QuestDataService from "../../services/QuestService";
+import QuestContext from "../../contexts/QuestContext.jsx"
+import QuestViewer from "./QuestViewer.jsx";
+import QuestReader from "./QuestReader.jsx";
 
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import Typography from '@material-ui/core/Typography';
-import Button from "@material-ui/core/Button";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-  },
-  headerTitle: {
-    marginTop: "1.5em",
-  },
-  headerText: {
-    marginBottom: "1.5em",
-    marginBottom: "2em",
-  },
-  headerButtonBar: {
-    marginBottom: "1em",
-    marginBottom: "4em",
-  },
-  headerButtons: {
-    marginRight: "1em",
+function renderView(role) {
+  if (role === "play") {
+    console.log("Player role.")
+    return <h1>Quest Player</h1>;
+  } else if (role === "read") {
+    return <QuestReader />;
+  } else if (role === "edit") {
+    console.log("Editor role.")
+    return <h1>Quest Editor</h1>;
+  } else {
+    return <QuestViewer />;
   }
-}));
+}
 
 const Quest = (props) => {
-  const classes = useStyles();
+  const role = props.match.params.role;
 
   const initialQuestState = {
     author: "",
@@ -46,19 +34,10 @@ const Quest = (props) => {
     startingPoint: "",
     title: "",
   };
-  const initialRegionState = {
-    latitude: 39.82835,
-    longitude: -98.5816737,
-    name: "Geographic Center of the United States",
-    zoom: 12.5,
-  };
 
   const [quest, setQuest] = useState(initialQuestState);
-  const [currentRegion, setCurrentRegion] = useState(initialRegionState);
-  const [error, setError] = useState("");
 
   useEffect(() => {
-    console.log(props);
     const unsubscribe = QuestDataService.getAll()
       .where("questId", "==", props.match.params.questId)
       .onSnapshot((snapshot) => {
@@ -66,27 +45,24 @@ const Quest = (props) => {
       });
 
     return unsubscribe;
-  }, [props]);
+  }, [props.match.params.questId]);
+
+  function handleAddItem(item) {
+    // setItems([...items, item]);
+    console.log("Handle Add Item")
+  }
+
+  function handleRemoveItem(index) {
+    // const copy = [...items];
+    // copy.splice(index, 1);
+    // setItems(copy);
+    console.log("Handle Remove Item")
+  }
 
   return (
-    <Paper elevation={0} className={classes.root} square >
-      <Container>
-        <Grid container>
-          <Grid sm={12} item>
-            <Typography variant="h2" gutterBottom className={ classes.headerTitle }>{quest.title}</Typography>
-            <Typography variant="subtitle1" className={ classes.headerText }>{quest.description}</Typography>
-            <Box className={classes.headerButtonBar}>
-              <Button variant="contained" className={classes.headerButtons} color="primary">Play</Button>
-              <Button variant="contained" className={classes.headerButtons}>Read</Button>
-              <Button variant="contained" className={classes.headerButtons}>Edit</Button>
-            </Box>
-          </Grid>
-          <Grid sm={12} item>
-
-          </Grid>
-        </Grid>
-      </Container>
-    </Paper>
+    <QuestContext.Provider value={{quest, add: handleAddItem, remove: handleRemoveItem}}>
+      { renderView(role) }
+    </QuestContext.Provider>
   );
 };
 

@@ -155,7 +155,7 @@ const App = () => {
           <Route path="/quests" component={QuestsList} />
           <Route path="/create-quest" component={CreateQuest} />
           <Route exact path="/quest-editor/:questId" component={QuestEditor} />
-          <Route exact path="/quest/:questId" component={Quest} />
+          <Route exact path="/quest/:questId/:role?" component={Quest} />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
           <PrivateRoute path="/profile" component={Profile} />
