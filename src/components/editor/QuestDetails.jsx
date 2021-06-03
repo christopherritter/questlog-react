@@ -26,7 +26,7 @@ function QuestDetails(props) {
       <Grid container spacing={2}>
         <Grid item sm={12}>
           <Typography variant="h4">
-            Quest
+            Create Quest
           </Typography>
         </Grid>
         <Grid item sm={12}>
