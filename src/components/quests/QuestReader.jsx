@@ -6,19 +6,34 @@ import QuestContext from "../../contexts/QuestContext.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+
+const sidebarWidth = 275;
 
 const useStyles = makeStyles((theme) => ({
   sidebar: {
-    backgroundColor: "rgba(35, 55, 75, 0.9)",
-    color: "#ffffff",
-    padding: "6px 12px",
-    fontFamily: "monospace",
     zIndex: "1",
     position: "absolute",
     top: "64px",
     left: "0",
     margin: "12px",
     borderRadius: "4px",
+    width: sidebarWidth,
+  },
+  bullet: {
+    display: "inline-block",
+    margin: "0 2px",
+    transform: "scale(0.8)",
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
   },
 }));
 
@@ -46,15 +61,38 @@ function QuestReader(props) {
     console.log(event);
   };
 
+  const bull = <span className={classes.bullet}>•</span>;
+
   return (
     <Box>
       {quest.region && (
         <React.Fragment>
           {showSidebar && (
-            <div className={classes.sidebar}>
-              Longitude: {quest.region.longitude} | Latitude:{" "}
-              {quest.region.latitude} | Zoom: {quest.region.zoom}
-            </div>
+            <Card className={classes.sidebar}>
+              <CardContent>
+                <Typography
+                  className={classes.title}
+                  color="textSecondary"
+                  gutterBottom
+                >
+                  Word of the Day
+                </Typography>
+                <Typography variant="h5" component="h2">
+                  be{bull}nev{bull}o{bull}lent
+                </Typography>
+                <Typography className={classes.pos} color="textSecondary">
+                  adjective
+                </Typography>
+                <Typography variant="body2" component="p">
+                  well meaning and kindly.
+                  <br />
+                  {'"a benevolent smile"'}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small">Learn More</Button>
+              </CardActions>
+            </Card>
           )}
           <MapGL
             ref={mapRef}
