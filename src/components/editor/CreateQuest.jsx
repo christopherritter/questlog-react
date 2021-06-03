@@ -98,7 +98,7 @@ const CreateQuest = (props) => {
       <Container>
         <Grid container spacing={2}>
           <Grid item sm={12}>
-            <Typography variant="h4">Quest</Typography>
+            <Typography variant="h4">Create Quest</Typography>
           </Grid>
           <Grid item sm={12}>
             <form noValidate>
