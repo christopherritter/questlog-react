@@ -57,14 +57,26 @@ const QuestViewer = () => {
                 variant="contained"
                 className={classes.headerButtons}
                 color="primary"
+                component={RouterLink}
+                to={"/quest/" + quest.questId + "/play"}
               >
                 Play
               </Button>
-              <Button variant="contained" className={classes.headerButtons}>
+              <Button
+                variant="contained"
+                className={classes.headerButtons}
+                component={RouterLink}
+                to={"/quest/" + quest.questId + "/read"}
+              >
                 Read
               </Button>
               {currentUser.uid === quest.authorId && (
-                <Button variant="contained" className={classes.headerButtons} component={RouterLink} to={"/quest-editor/" + quest.questId }>
+                <Button
+                  variant="contained"
+                  className={classes.headerButtons}
+                  component={RouterLink}
+                  to={"/quest-editor/" + quest.questId}
+                >
                   Edit
                 </Button>
               )}
