@@ -117,6 +117,7 @@ function QuestReader(props) {
   function viewLocation(event) {
     var padding = {};
 
+    console.log(event.features[0].properties)
     selectLocation(event);
 
     if (event.features[0].properties.id !== location.id) {
@@ -125,6 +126,7 @@ function QuestReader(props) {
       setShowLocationSidebar(true);
 
       mapRef.current.easeTo({
+        center: event.lngLat,
         padding: padding,
         duration: 1000,
       });
@@ -135,6 +137,7 @@ function QuestReader(props) {
         setShowLocationSidebar(false);
 
         mapRef.current.easeTo({
+          center: event.lngLat,
           padding: padding,
           duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
         });
@@ -144,6 +147,7 @@ function QuestReader(props) {
         setShowLocationSidebar(true);
 
         mapRef.current.easeTo({
+          center: event.lngLat,
           padding: padding,
           duration: 1000,
         });
