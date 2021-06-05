@@ -241,7 +241,7 @@ function QuestReader(props) {
               } ${showLocationSidebar ? "" : "collapsed"}`}
             >
               {location && (
-                <Card className={`${classes.sidebarContent}`}>
+                <Card className={`${classes.sidebarContent}`} elevation={5}>
                   <CardContent>
                     <Typography
                       className={classes.title}
@@ -276,7 +276,7 @@ function QuestReader(props) {
               ${classes.legendSidebar}
               ${showLegendSidebar ? "" : "collapsed"}`}
             >
-              <Card className={`${classes.sidebarContent}`}>
+              <Card className={`${classes.sidebarContent}`} elevation={5}>
                 <Typography variant="h5" component="h2">
                   Legend
                 </Typography>
