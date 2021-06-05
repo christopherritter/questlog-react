@@ -6,14 +6,16 @@ import QuestContext from "../../contexts/QuestContext.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import { Grid } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import MapIcon from "@material-ui/icons/Map";
 
-const sidebarWidth = 320;
+const sidebarWidth = 352;
 
 const useStyles = makeStyles({
   bullet: {
@@ -32,38 +34,64 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    "&$left": {
+    "&$locationSidebar": {
       left: 0,
     },
-    "&$right": {
+    "&$sidebarControlPanel": {
+      right: 0,
+    },
+    "&$legendSidebar": {
       right: 0,
     },
   },
   sidebar: {
-    transition: "transform 1s",
+    transition: "transform 900ms",
     zIndex: 100,
-    // width: sidebarWidth,
+    width: sidebarWidth,
     // maxHeight: "calc(100vh - 188px)",
   },
-  sidebarContent: {
-    top: 16,
-    margin: 16,
-    width: sidebarWidth,
-    maxHeight: "calc(100vh - 120px)",
-    // position: "absolute",
-    fontSize: 32,
-    overflowY: "auto",
-  },
-  left: {
+  sidebarControlPanel: {
+    zIndex: 100,
     transitionDuration: "900ms",
+    marginRight: -68,
     "&.collapsed": {
-      transform: "translateX(-353px)",
+      transform: "translateX(-68px)",
     },
   },
-  right: {
-    transitionDuration: "900ms",
+  sidebarButton: {
+    marginTop: 16,
+    borderTopRightRadius: 0,
+    borderBottomRightRadius: 0,
+    right: 0,
+    "&.MuiButton-containedSizeLarge": {
+      padding: 16,
+      paddingLeft: 20,
+    },
+    "& .MuiButton-startIcon": {
+      marginRight: 0,
+    },
+    "& .MuiSvgIcon-root": {
+      fontSize: 36,
+    },
+  },
+  sidebarContent: {
+    margin: 16,
+    width: "100%",
+    maxHeight: "calc(100vh - 120px)",
+    // position: "absolute",
+    overflowY: "auto",
+  },
+  locationSidebar: {
     "&.collapsed": {
-      transform: "translateX(353px)",
+      transform: "translateX(-352px)",
+    },
+  },
+  legendSidebar: {
+    "& $sidebarContent": {
+      minHeight: 400,
+    },
+    "&.collapsed": {
+      transform: "translateX(352px)",
     },
   },
 });
@@ -114,7 +142,9 @@ function QuestReader(props) {
   };
 
   function viewLocation(event) {
-    var padding = {};
+    var padding = {
+      bottom: 100,
+    };
 
     selectLocation(event);
 
@@ -162,6 +192,31 @@ function QuestReader(props) {
     }
   }
 
+  function toggleLegend() {
+    var padding = {
+      bottom: 100,
+    };
+    if (showLegendSidebar) {
+      padding["right"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
+
+      setShowLegendSidebar(false);
+
+      mapRef.current.easeTo({
+        padding: padding,
+        duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
+      });
+    } else {
+      padding["right"] = 300;
+
+      setShowLegendSidebar(true);
+
+      mapRef.current.easeTo({
+        padding: padding,
+        duration: 1000,
+      });
+    }
+  }
+
   return (
     <Box overflow="hidden">
       {quest.region && (
@@ -180,9 +235,9 @@ function QuestReader(props) {
             onLoad={onLoad}
           >
             <Box
-              id="left"
+              id="locationSidebar"
               className={`${classes.sidebar} ${classes.flexCenter} ${
-                classes.left
+                classes.locationSidebar
               } ${showLocationSidebar ? "" : "collapsed"}`}
             >
               {location && (
@@ -215,13 +270,43 @@ function QuestReader(props) {
               )}
             </Box>
             <Box
-              id="right"
+              id="legendSidebar"
               className={`${classes.sidebar}
               ${classes.flexCenter}
-              ${classes.right}
+              ${classes.legendSidebar}
               ${showLegendSidebar ? "" : "collapsed"}`}
             >
-              <Card className={`${classes.sidebarContent}`}>Right Sidebar</Card>
+              <Card className={`${classes.sidebarContent}`}>
+                <Typography variant="h5" component="h2">
+                  Legend
+                </Typography>
+                <IconButton
+                  aria-label="delete"
+                  className={classes.margin}
+                  onClick={toggleLegend}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Card>
+            </Box>
+            <Box
+              id="sidebarControlPanel"
+              className={
+                classes.sidebarControlPanel +
+                " " +
+                classes.flexCenter +
+                ` ${showLegendSidebar ? "" : "collapsed"}`
+              }
+            >
+              <Button
+                variant="contained"
+                color="secondary"
+                size="large"
+                aria-label="map"
+                className={classes.button + " " + classes.sidebarButton}
+                startIcon={<MapIcon />}
+                onClick={toggleLegend}
+              />
             </Box>
             <Source id="locationsData" type="geojson" data={geojson} />
             <Layer
