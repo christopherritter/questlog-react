@@ -117,7 +117,6 @@ function QuestReader(props) {
   function viewLocation(event) {
     var padding = {};
 
-    console.log(event.features[0].properties)
     selectLocation(event);
 
     if (event.features[0].properties.id !== location.id) {
