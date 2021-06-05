@@ -49,7 +49,6 @@ const useStyles = makeStyles({
     top: 16,
     margin: 16,
     width: sidebarWidth,
-    minHeight: 400,
     maxHeight: "calc(100vh - 120px)",
     // position: "absolute",
     fontSize: 32,
@@ -126,6 +125,9 @@ function QuestReader(props) {
 
       mapRef.current.easeTo({
         center: event.lngLat,
+        bearing: event.features[0].properties.bearing,
+        pitch: event.features[0].properties.pitch,
+        zoom: event.features[0].properties.zoom,
         padding: padding,
         duration: 1000,
       });
@@ -137,6 +139,9 @@ function QuestReader(props) {
 
         mapRef.current.easeTo({
           center: event.lngLat,
+          bearing: event.features[0].properties.bearing,
+          pitch: event.features[0].properties.pitch,
+          zoom: event.features[0].properties.zoom,
           padding: padding,
           duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
         });
@@ -148,6 +153,9 @@ function QuestReader(props) {
         mapRef.current.easeTo({
           center: event.lngLat,
           padding: padding,
+          bearing: event.features[0].properties.bearing,
+          pitch: event.features[0].properties.pitch,
+          zoom: event.features[0].properties.zoom,
           duration: 1000,
         });
       }
