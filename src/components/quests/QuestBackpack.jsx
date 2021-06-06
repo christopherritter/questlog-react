@@ -31,7 +31,7 @@ const useStyles = makeStyles((props) => ({
   },
 }));
 
-const QuestJournal = props => {
+const QuestBackpack = props => {
   const classes = useStyles(props);
   const { quest, location, updateCenter, selectLocation, locationIndex } =
     useContext(QuestContext);
@@ -42,14 +42,14 @@ const QuestJournal = props => {
         <Grid container>
           <Grid item sm={11}>
             <Typography className={classes.title} color="textSecondary">
-              Journal
+              Backpack
             </Typography>
           </Grid>
           <Grid item>
             <IconButton
               aria-label="delete"
               className={classes.margin}
-              onClick={props.toggleJournal}
+              onClick={props.toggleBackpack}
               size="small"
             >
               <CloseIcon fontSize="inherit" />
@@ -64,8 +64,8 @@ const QuestJournal = props => {
   )
 }
 
-QuestJournal.propTypes = {
+QuestBackpack.propTypes = {
 
 }
 
-export default QuestJournal
+export default QuestBackpack

@@ -26,7 +26,7 @@ const useStyles = makeStyles({
   },
 });
 
-function QuestSidebar(props) {
+const QuestSidebar = props => {
   const classes = useStyles(props);
   const { quest, location, updateCenter, selectLocation } =
     useContext(QuestContext);

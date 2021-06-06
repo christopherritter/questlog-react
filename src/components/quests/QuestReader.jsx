@@ -5,11 +5,15 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import QuestContext from "../../contexts/QuestContext.jsx";
 import QuestSidebar from "./QuestSidebar.jsx";
 import QuestLegend from "./QuestLegend.jsx";
+import QuestJournal from "./QuestJournal.jsx";
+import QuestBackpack from "./QuestBackpack.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import MapIcon from "@material-ui/icons/Map";
+import BookIcon from "@material-ui/icons/Book";
+import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 
 const sidebarWidth = 352;
 
@@ -39,6 +43,12 @@ const useStyles = makeStyles({
     "&$legendSidebar": {
       right: 0,
     },
+    "&$journalSidebar": {
+      right: 0,
+    },
+    "&$backpackSidebar": {
+      right: 0,
+    },
   },
   sidebar: {
     transition: "transform 900ms",
@@ -47,9 +57,12 @@ const useStyles = makeStyles({
     // maxHeight: "calc(100vh - 188px)",
   },
   sidebarControlPanel: {
+    display: "flex",
+    flexDirection: "column",
     zIndex: 100,
-    transitionDuration: "900ms",
+    right: 0,
     marginRight: -68,
+    transitionDuration: "900ms",
     "&.collapsed": {
       transform: "translateX(-68px)",
     },
@@ -58,7 +71,7 @@ const useStyles = makeStyles({
     marginTop: 16,
     borderTopRightRadius: 0,
     borderBottomRightRadius: 0,
-    right: 0,
+
     "&.MuiButton-containedSizeLarge": {
       padding: 16,
       paddingLeft: 20,
@@ -87,6 +100,16 @@ const useStyles = makeStyles({
       transform: "translateX(352px)",
     },
   },
+  journalSidebar: {
+    "&.collapsed": {
+      transform: "translateX(352px)",
+    },
+  },
+  backpackSidebar: {
+    "&.collapsed": {
+      transform: "translateX(352px)",
+    },
+  },
 });
 
 const layerStyle = {
@@ -105,7 +128,9 @@ function QuestReader(props) {
 
   const [isLoaded, setLoaded] = useState(false);
   const [showLocationSidebar, setShowLocationSidebar] = useState(false);
-  const [showLegendSidebar, setShowLegendSidebar] = useState(false);
+  const [showLegend, setShowLegend] = useState(false);
+  const [showJournal, setShowJournal] = useState(false);
+  const [showBackpack, setShowBackpack] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const mapRef = useRef();
@@ -190,27 +215,27 @@ function QuestReader(props) {
     var padding = {
       bottom: 50,
     };
-    if (showLegendSidebar) {
+    if (showLegend) {
       padding["right"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
-  
-      setShowLegendSidebar(false);
-  
+
+      setShowLegend(false);
+
       mapRef.current.easeTo({
         padding: padding,
         duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
       });
     } else {
       padding["right"] = 300;
-  
-      setShowLegendSidebar(true);
-  
+
+      setShowLegend(true);
+
       mapRef.current.easeTo({
         padding: padding,
         duration: 1000,
       });
     }
   }
-  
+
   function selectLegendItem(item) {
     const formattedLocation = {
       features: [
@@ -224,16 +249,16 @@ function QuestReader(props) {
     var padding = {
       bottom: 50,
     };
-  
+
     selectLocation(formattedLocation);
-  
+
     if (item.id !== location.id) {
       padding["left"] = 300;
-  
+
       setShowLocationSidebar(true);
-  
+
       mapRef.current.easeTo({
-        center: [ item.longitude, item.latitude ],
+        center: [item.longitude, item.latitude],
         bearing: item.bearing,
         pitch: item.pitch,
         zoom: item.zoom,
@@ -243,11 +268,11 @@ function QuestReader(props) {
     } else {
       if (showLocationSidebar) {
         padding["left"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
-  
+
         setShowLocationSidebar(false);
-  
+
         mapRef.current.easeTo({
-          center: [ item.longitude, item.latitude ],
+          center: [item.longitude, item.latitude],
           bearing: item.bearing,
           pitch: item.pitch,
           zoom: item.zoom,
@@ -256,11 +281,11 @@ function QuestReader(props) {
         });
       } else {
         padding["left"] = 300;
-  
+
         setShowLocationSidebar(true);
-  
+
         mapRef.current.easeTo({
-          center: [ item.longitude, item.latitude ],
+          center: [item.longitude, item.latitude],
           padding: padding,
           bearing: item.bearing,
           pitch: item.pitch,
@@ -269,6 +294,64 @@ function QuestReader(props) {
         });
       }
     }
+  }
+
+  function toggleJournal() {
+    var padding = {
+      bottom: 50,
+    };
+    if (showJournal) {
+      padding["right"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
+
+      setShowJournal(false);
+
+      mapRef.current.easeTo({
+        padding: padding,
+        duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
+      });
+    } else {
+      padding["right"] = 300;
+
+      setShowJournal(true);
+
+      mapRef.current.easeTo({
+        padding: padding,
+        duration: 1000,
+      });
+    }
+  }
+
+  function selectJournalItem() {
+    console.log("Select journal item");
+  }
+
+  function toggleBackpack() {
+    var padding = {
+      bottom: 50,
+    };
+    if (showBackpack) {
+      padding["right"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
+
+      setShowBackpack(false);
+
+      mapRef.current.easeTo({
+        padding: padding,
+        duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
+      });
+    } else {
+      padding["right"] = 300;
+
+      setShowBackpack(true);
+
+      mapRef.current.easeTo({
+        padding: padding,
+        duration: 1000,
+      });
+    }
+  }
+
+  function selectBackpackItem() {
+    console.log("Select backpack item");
   }
 
   return (
@@ -294,18 +377,46 @@ function QuestReader(props) {
                 classes.locationSidebar
               } ${showLocationSidebar ? "" : "collapsed"}`}
             >
-              {location && (
-                <QuestSidebar width={sidebarWidth} />
-              )}
+              {location && <QuestSidebar width={sidebarWidth} />}
             </Box>
             <Box
               id="legendSidebar"
               className={`${classes.sidebar}
               ${classes.flexCenter}
               ${classes.legendSidebar}
-              ${showLegendSidebar ? "" : "collapsed"}`}
+              ${showLegend ? "" : "collapsed"}`}
             >
-              <QuestLegend width={sidebarWidth} toggleLegend={toggleLegend} selectedIndex={selectedIndex} selectLegendItem={selectLegendItem} />
+              <QuestLegend
+                width={sidebarWidth}
+                toggleLegend={toggleLegend}
+                selectLegendItem={selectLegendItem}
+              />
+            </Box>
+            <Box
+              id="journalSidebar"
+              className={`${classes.sidebar}
+              ${classes.flexCenter}
+              ${classes.journalSidebar}
+              ${showJournal ? "" : "collapsed"}`}
+            >
+              <QuestJournal
+                width={sidebarWidth}
+                toggleJournal={toggleJournal}
+                selectJournalItem={selectJournalItem}
+              />
+            </Box>
+            <Box
+              id="backpackSidebar"
+              className={`${classes.sidebar}
+              ${classes.flexCenter}
+              ${classes.backpackSidebar}
+              ${showBackpack ? "" : "collapsed"}`}
+            >
+              <QuestBackpack
+                width={sidebarWidth}
+                toggleBackpack={toggleBackpack}
+                selectBackpackItem={selectBackpackItem}
+              />
             </Box>
             <Box
               id="sidebarControlPanel"
@@ -313,17 +424,37 @@ function QuestReader(props) {
                 classes.sidebarControlPanel +
                 " " +
                 classes.flexCenter +
-                ` ${showLegendSidebar ? "" : "collapsed"}`
+                ` ${
+                  showLegend || showJournal || showBackpack ? "" : "collapsed"
+                }`
               }
             >
               <Button
                 variant="contained"
                 color="secondary"
                 size="large"
-                aria-label="map"
-                className={classes.button + " " + classes.sidebarButton}
+                aria-label="Legend"
+                className={classes.sidebarButton}
                 startIcon={<MapIcon />}
                 onClick={toggleLegend}
+              />
+              <Button
+                variant="contained"
+                color="secondary"
+                size="large"
+                aria-label="Journal"
+                className={classes.sidebarButton}
+                startIcon={<BookIcon />}
+                onClick={toggleJournal}
+              />
+              <Button
+                variant="contained"
+                color="secondary"
+                size="large"
+                aria-label="Backpack"
+                className={classes.sidebarButton}
+                startIcon={<ShoppingBasketIcon />}
+                onClick={toggleBackpack}
               />
             </Box>
             <Source id="locationsData" type="geojson" data={geojson} />

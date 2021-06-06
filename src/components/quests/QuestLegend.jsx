@@ -31,9 +31,9 @@ const useStyles = makeStyles((props) => ({
   },
 }));
 
-function QuestLegend(props) {
+const QuestLegend = props => {
   const classes = useStyles(props);
-  const { quest, location, updateCenter, selectLocation } =
+  const { quest, location, updateCenter, selectLocation, locationIndex } =
     useContext(QuestContext);
 
   return (
@@ -42,7 +42,7 @@ function QuestLegend(props) {
         <Grid container>
           <Grid item sm={11}>
             <Typography className={classes.title} color="textSecondary">
-              Locations
+              Legend
             </Typography>
           </Grid>
           <Grid item>
@@ -58,13 +58,13 @@ function QuestLegend(props) {
         </Grid>
         <List component="nav">
           {quest.locations &&
-            quest.locations.map((location, index) => {
+            quest.locations.map((loc, index) => {
               return (
                 <ListItem
                   button
-                  key={location.id}
-                  selected={props.selectedIndex === index}
-                  onClick={() => props.selectLegendItem(location)}
+                  key={loc.id}
+                  selected={loc.id === location.id}
+                  onClick={() => props.selectLegendItem(loc)}
                 >
                   <ListItemIcon>
                     <LocationOnIcon />
@@ -72,7 +72,7 @@ function QuestLegend(props) {
                   <ListItemText
                     primary={
                       <Typography variant="subtitle1">
-                        {location.name}
+                        {loc.name}
                       </Typography>
                     }
                   />
