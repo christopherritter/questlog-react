@@ -6,14 +6,20 @@ import QuestContext from "../../contexts/QuestContext.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
+import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 import CloseIcon from "@material-ui/icons/Close";
 import MapIcon from "@material-ui/icons/Map";
+import LocationOnIcon from "@material-ui/icons/LocationOn";
 
 const sidebarWidth = 352;
 
@@ -87,9 +93,6 @@ const useStyles = makeStyles({
     },
   },
   legendSidebar: {
-    "& $sidebarContent": {
-      minHeight: 400,
-    },
     "&.collapsed": {
       transform: "translateX(352px)",
     },
@@ -113,6 +116,7 @@ function QuestReader(props) {
   const [isLoaded, setLoaded] = useState(false);
   const [showLocationSidebar, setShowLocationSidebar] = useState(false);
   const [showLegendSidebar, setShowLegendSidebar] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const mapRef = useRef();
   const onLoad = () => setLoaded(true);
@@ -248,7 +252,7 @@ function QuestReader(props) {
                       color="textSecondary"
                       gutterBottom
                     >
-                      Word of the Day
+                      Location
                     </Typography>
                     <Typography variant="h5" component="h2">
                       {location.name}
@@ -277,16 +281,51 @@ function QuestReader(props) {
               ${showLegendSidebar ? "" : "collapsed"}`}
             >
               <Card className={`${classes.sidebarContent}`} elevation={5}>
-                <Typography variant="h5" component="h2">
-                  Legend
-                </Typography>
-                <IconButton
-                  aria-label="delete"
-                  className={classes.margin}
-                  onClick={toggleLegend}
-                >
-                  <CloseIcon />
-                </IconButton>
+                <CardContent>
+                  <Grid container>
+                    <Grid item sm={11}>
+                      <Typography
+                        className={classes.title}
+                        color="textSecondary"
+                      >
+                        Locations
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <IconButton
+                        aria-label="delete"
+                        className={classes.margin}
+                        onClick={toggleLegend}
+                        size="small"
+                      >
+                        <CloseIcon fontSize="inherit" />
+                      </IconButton>
+                    </Grid>
+                  </Grid>
+                  <List component="nav">
+                    {quest.locations &&
+                      quest.locations.map((location, index) => {
+                        return (
+                          <ListItem
+                            button
+                            key={location.id}
+                            selected={selectedIndex === index}
+                          >
+                            <ListItemIcon>
+                              <LocationOnIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={
+                                <Typography variant="subtitle1">
+                                  {location.name}
+                                </Typography>
+                              }
+                            />
+                          </ListItem>
+                        );
+                      })}
+                  </List>
+                </CardContent>
               </Card>
             </Box>
             <Box
