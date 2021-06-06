@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
+import QuestActions from "./QuestActions.jsx";
+
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
@@ -255,7 +257,7 @@ function QuestEntries(props) {
     onClick: mapClick,
   });
 
-  const renderView = (view) => {
+  function renderView(view) {
     switch (view) {
       case "list":
         var entryList = EntryList();
@@ -263,6 +265,24 @@ function QuestEntries(props) {
       default:
         return QuestMap;
     }
+  };
+
+  function onAddAction(action) {
+    console.log("Passing the props")
+    console.log(action)
+    props.addAction(action)
+  };
+
+  function onUpdateAction(action) {
+    props.updateAction(action)
+  };
+
+  function onRemoveAction(action) {
+    props.removeAction(action)
+  };
+
+  function onClearAction() {
+    props.clearAction()
   };
 
   return (
@@ -374,6 +394,15 @@ function QuestEntries(props) {
               rows={8}
               value={entry.text}
               onChange={onChangeEntry}
+            />
+
+            <QuestActions
+              action={props.action}
+              actions={props.actions}
+              addAction={onAddAction}
+              updateAction={onUpdateAction}
+              removeAction={onRemoveAction}
+              clearAction={onClearAction}
             />
 
             <FormControl

@@ -76,7 +76,7 @@ function findWithAttr(array, attr, value) {
   return -1;
 }
 
-export default function QuestEditor(props) {
+const QuestEditor = props => {
   const classes = useStyles();
 
   const [quest, setQuest] = useState({
@@ -98,7 +98,7 @@ export default function QuestEditor(props) {
     locations: [],
     entries: [],
     items: [],
-    startingPoint: "",
+    actions: [],
   });
 
   useEffect(() => {
@@ -292,6 +292,48 @@ export default function QuestEditor(props) {
     setItem(null);
   };
 
+  // Actions 
+  // Actions may be taken by the user to move the story
+  // They are associated with Entries and Items
+
+  const [actionIndex, setActionIndex] = useState(-1);
+
+  const [action, setAction] = useState();
+
+  const onAddAction = (action) => {
+    console.log("The top add action!")
+    if (quest.actions) {
+      setQuest({ ...quest, actions: [...quest.actions, action] });
+    } else {
+      setQuest({ ...quest, actions: [action] });
+    }
+  };
+
+  const onUpdateAction = (action) => {
+    const selectedAction = quest.actions.findIndex(function (a) {
+      return action.id === a.id;
+    });
+    let updatedActions = [...quest.actions];
+    let updatedAction = { ...quest.actions[selectedAction] };
+
+    updatedAction = { ...action };
+    updatedActions[selectedAction] = updatedAction;
+
+    setQuest({ ...quest, actions: updatedActions });
+  };
+
+  const onRemoveAction = (action) => {
+    const updatedActions = quest.actions.filter((a) => a.id !== action.id);
+    setQuest({ ...quest, actions: updatedActions });
+    setActionIndex(-1);
+    setAction(null);
+  };
+
+  const onClearAction = () => {
+    setActionIndex(-1);
+    setAction(null);
+  };
+
   const onPublishQuest = () => {
     QuestDataService.update(quest.questId, quest)
       .then(() => {
@@ -447,6 +489,15 @@ export default function QuestEditor(props) {
               updateEntry={onUpdateEntry}
               removeEntry={onRemoveEntry}
               clearEntry={onClearEntry}
+
+              actions={quest.actions}
+              actionIndex={actionIndex}
+              action={action}
+              addAction={onAddAction}
+              updateAction={onUpdateAction}
+              removeAction={onRemoveAction}
+              clearAction={onClearAction}
+
               publishQuest={onPublishQuest}
             ></QuestEntries>
           </TabPanel>
@@ -486,3 +537,5 @@ export default function QuestEditor(props) {
     </Paper>
   );
 }
+
+export default QuestEditor
