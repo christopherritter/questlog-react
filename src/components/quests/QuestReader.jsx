@@ -137,7 +137,7 @@ function QuestReader(props) {
 
   function viewLocation(event) {
     var padding = {
-      bottom: 100,
+      bottom: 50,
     };
 
     selectLocation(event);
@@ -188,7 +188,7 @@ function QuestReader(props) {
 
   function toggleLegend() {
     var padding = {
-      bottom: 100,
+      bottom: 50,
     };
     if (showLegendSidebar) {
       padding["right"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
@@ -222,7 +222,7 @@ function QuestReader(props) {
       ],
     };
     var padding = {
-      bottom: 100,
+      bottom: 50,
     };
   
     selectLocation(formattedLocation);
