@@ -14,7 +14,7 @@ import Signup from "./auth/Signup.jsx";
 import Login from "./auth/Login.jsx";
 import Profile from "./user/Profile.jsx";
 import UpdateProfile from "./user/UpdateProfile.jsx";
-import QuestsList from "./quests/QuestsList.jsx";
+import QuestLibrary from "./quests/QuestLibrary.jsx";
 import CreateQuest from "./editor/CreateQuest.jsx";
 import QuestEditor from "./editor/QuestEditor.jsx";
 import Quest from "./quests/Quest.jsx";
@@ -151,8 +151,8 @@ const App = () => {
       </AppBar>
       <main className={classes.root}>
         <Switch>
-          <Route exact path="/" component={QuestsList} />
-          <Route path="/quests" component={QuestsList} />
+          <Route exact path="/" component={QuestLibrary} />
+          <Route path="/quests" component={QuestLibrary} />
           <Route path="/create-quest" component={CreateQuest} />
           <Route exact path="/quest-editor/:questId" component={QuestEditor} />
           <Route exact path="/quest/:questId/:role?" component={Quest} />

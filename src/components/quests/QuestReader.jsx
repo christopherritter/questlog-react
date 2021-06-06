@@ -3,23 +3,13 @@ import MapGL, { Source, Layer } from "@urbica/react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
+import QuestSidebar from "./QuestSidebar.jsx";
+import QuestLegend from "./QuestLegend.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import CloseIcon from "@material-ui/icons/Close";
 import MapIcon from "@material-ui/icons/Map";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
 
 const sidebarWidth = 352;
 
@@ -196,6 +186,31 @@ function QuestReader(props) {
     }
   }
 
+  function toggleLegend() {
+    var padding = {
+      bottom: 100,
+    };
+    if (showLegendSidebar) {
+      padding["right"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
+  
+      setShowLegendSidebar(false);
+  
+      mapRef.current.easeTo({
+        padding: padding,
+        duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
+      });
+    } else {
+      padding["right"] = 300;
+  
+      setShowLegendSidebar(true);
+  
+      mapRef.current.easeTo({
+        padding: padding,
+        duration: 1000,
+      });
+    }
+  }
+  
   function selectLegendItem(item) {
     const formattedLocation = {
       features: [
@@ -209,14 +224,14 @@ function QuestReader(props) {
     var padding = {
       bottom: 100,
     };
-
+  
     selectLocation(formattedLocation);
-
+  
     if (item.id !== location.id) {
       padding["left"] = 300;
-
+  
       setShowLocationSidebar(true);
-
+  
       mapRef.current.easeTo({
         center: [ item.longitude, item.latitude ],
         bearing: item.bearing,
@@ -228,9 +243,9 @@ function QuestReader(props) {
     } else {
       if (showLocationSidebar) {
         padding["left"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
-
+  
         setShowLocationSidebar(false);
-
+  
         mapRef.current.easeTo({
           center: [ item.longitude, item.latitude ],
           bearing: item.bearing,
@@ -241,9 +256,9 @@ function QuestReader(props) {
         });
       } else {
         padding["left"] = 300;
-
+  
         setShowLocationSidebar(true);
-
+  
         mapRef.current.easeTo({
           center: [ item.longitude, item.latitude ],
           padding: padding,
@@ -253,31 +268,6 @@ function QuestReader(props) {
           duration: 1000,
         });
       }
-    }
-  }
-
-  function toggleLegend() {
-    var padding = {
-      bottom: 100,
-    };
-    if (showLegendSidebar) {
-      padding["right"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
-
-      setShowLegendSidebar(false);
-
-      mapRef.current.easeTo({
-        padding: padding,
-        duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
-      });
-    } else {
-      padding["right"] = 300;
-
-      setShowLegendSidebar(true);
-
-      mapRef.current.easeTo({
-        padding: padding,
-        duration: 1000,
-      });
     }
   }
 
@@ -305,32 +295,7 @@ function QuestReader(props) {
               } ${showLocationSidebar ? "" : "collapsed"}`}
             >
               {location && (
-                <Card className={`${classes.sidebarContent}`} elevation={5}>
-                  <CardContent>
-                    <Typography
-                      className={classes.title}
-                      color="textSecondary"
-                      gutterBottom
-                    >
-                      Location
-                    </Typography>
-                    <Typography variant="h5" component="h2">
-                      {location.name}
-                    </Typography>
-                    <Typography className={classes.pos} color="textSecondary">
-                      adjective
-                    </Typography>
-                    <Typography variant="body2" component="p">
-                      {quest.entries &&
-                        quest.entries
-                          .filter((entry) => entry.locationId === location.id)
-                          .map((entry) => entry.text)}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small">Learn More</Button>
-                  </CardActions>
-                </Card>
+                <QuestSidebar width={sidebarWidth} />
               )}
             </Box>
             <Box
@@ -340,54 +305,7 @@ function QuestReader(props) {
               ${classes.legendSidebar}
               ${showLegendSidebar ? "" : "collapsed"}`}
             >
-              <Card className={`${classes.sidebarContent}`} elevation={5}>
-                <CardContent>
-                  <Grid container>
-                    <Grid item sm={11}>
-                      <Typography
-                        className={classes.title}
-                        color="textSecondary"
-                      >
-                        Locations
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <IconButton
-                        aria-label="delete"
-                        className={classes.margin}
-                        onClick={toggleLegend}
-                        size="small"
-                      >
-                        <CloseIcon fontSize="inherit" />
-                      </IconButton>
-                    </Grid>
-                  </Grid>
-                  <List component="nav">
-                    {quest.locations &&
-                      quest.locations.map((location, index) => {
-                        return (
-                          <ListItem
-                            button
-                            key={location.id}
-                            selected={selectedIndex === index}
-                            onClick={() => selectLegendItem(location)}
-                          >
-                            <ListItemIcon>
-                              <LocationOnIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                              primary={
-                                <Typography variant="subtitle1">
-                                  {location.name}
-                                </Typography>
-                              }
-                            />
-                          </ListItem>
-                        );
-                      })}
-                  </List>
-                </CardContent>
-              </Card>
+              <QuestLegend width={sidebarWidth} toggleLegend={toggleLegend} selectedIndex={selectedIndex} selectLegendItem={selectLegendItem} />
             </Box>
             <Box
               id="sidebarControlPanel"
