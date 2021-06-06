@@ -1,5 +1,5 @@
-import React, { useContext } from 'react'
-import PropTypes from 'prop-types'
+import React, { useContext } from "react";
+import PropTypes from "prop-types";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
 
@@ -16,7 +16,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
+import CheckBox from '@material-ui/icons/CheckBox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 
 const useStyles = makeStyles((props) => ({
   title: {
@@ -31,7 +32,7 @@ const useStyles = makeStyles((props) => ({
   },
 }));
 
-const QuestJournal = props => {
+const QuestJournal = (props) => {
   const classes = useStyles(props);
   const { quest, location, updateCenter, selectLocation, locationIndex } =
     useContext(QuestContext);
@@ -57,15 +58,34 @@ const QuestJournal = props => {
           </Grid>
         </Grid>
         <List component="nav">
-
+          {quest.objectives &&
+            quest.objectives.filter((obj) => {
+              return obj.isPrimary === true;
+            }).map((obj) => {
+              return (
+                <ListItem
+                  button
+                  key={obj.id}
+                  selected={obj.id === location.id}
+                  onClick={() => props.selectJournalItem(obj)}
+                >
+                  <ListItemIcon>
+                    { obj.isComplete ? <CheckBox /> : <CheckBoxOutlineBlankIcon /> }
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <Typography variant="subtitle1">{obj.text}</Typography>
+                    }
+                  />
+                </ListItem>
+              );
+            })}
         </List>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-QuestJournal.propTypes = {
+QuestJournal.propTypes = {};
 
-}
-
-export default QuestJournal
+export default QuestJournal;
