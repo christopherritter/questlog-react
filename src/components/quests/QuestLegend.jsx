@@ -7,10 +7,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import List from "@material-ui/core/List";
-import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import IconButton from "@material-ui/core/IconButton";
@@ -18,7 +16,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 
-const useStyles = makeStyles((props) => ({
+const useStyles = makeStyles({
   title: {
     fontSize: 14,
   },
@@ -29,7 +27,7 @@ const useStyles = makeStyles((props) => ({
     // position: "absolute",
     overflowY: "auto",
   },
-}));
+});
 
 const QuestLegend = props => {
   const classes = useStyles(props);

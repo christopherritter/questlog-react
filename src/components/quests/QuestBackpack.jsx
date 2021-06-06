@@ -7,18 +7,16 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import List from "@material-ui/core/List";
-import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
-const useStyles = makeStyles((props) => ({
+const useStyles = makeStyles({
   title: {
     fontSize: 14,
   },
@@ -29,7 +27,7 @@ const useStyles = makeStyles((props) => ({
     // position: "absolute",
     overflowY: "auto",
   },
-}));
+});
 
 const QuestBackpack = props => {
   const classes = useStyles(props);
@@ -57,7 +55,28 @@ const QuestBackpack = props => {
           </Grid>
         </Grid>
         <List component="nav">
-
+          {quest.items &&
+            quest.items.map((i, index) => {
+              return (
+                <ListItem
+                  button
+                  key={i.id}
+                  selected={i.id === location.id}
+                  onClick={() => props.selectBackpackItem(i)}
+                >
+                  <ListItemIcon>
+                    <VisibilityIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <Typography variant="subtitle1">
+                        {i.name}
+                      </Typography>
+                    }
+                  />
+                </ListItem>
+              );
+            })}
         </List>
       </CardContent>
     </Card>
