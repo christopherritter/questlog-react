@@ -196,6 +196,66 @@ function QuestReader(props) {
     }
   }
 
+  function selectLegendItem(item) {
+    const formattedLocation = {
+      features: [
+        {
+          properties: {
+            id: item.id,
+          },
+        },
+      ],
+    };
+    var padding = {
+      bottom: 100,
+    };
+
+    selectLocation(formattedLocation);
+
+    if (item.id !== location.id) {
+      padding["left"] = 300;
+
+      setShowLocationSidebar(true);
+
+      mapRef.current.easeTo({
+        center: [ item.longitude, item.latitude ],
+        bearing: item.bearing,
+        pitch: item.pitch,
+        zoom: item.zoom,
+        padding: padding,
+        duration: 1000,
+      });
+    } else {
+      if (showLocationSidebar) {
+        padding["left"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
+
+        setShowLocationSidebar(false);
+
+        mapRef.current.easeTo({
+          center: [ item.longitude, item.latitude ],
+          bearing: item.bearing,
+          pitch: item.pitch,
+          zoom: item.zoom,
+          padding: padding,
+          duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
+        });
+      } else {
+        padding["left"] = 300;
+
+        setShowLocationSidebar(true);
+
+        mapRef.current.easeTo({
+          center: [ item.longitude, item.latitude ],
+          padding: padding,
+          bearing: item.bearing,
+          pitch: item.pitch,
+          zoom: item.zoom,
+          duration: 1000,
+        });
+      }
+    }
+  }
+
   function toggleLegend() {
     var padding = {
       bottom: 100,
@@ -310,6 +370,7 @@ function QuestReader(props) {
                             button
                             key={location.id}
                             selected={selectedIndex === index}
+                            onClick={() => selectLegendItem(location)}
                           >
                             <ListItemIcon>
                               <LocationOnIcon />
