@@ -1,7 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useContext } from "react";
 
-import { makeStyles } from '@material-ui/core/styles';
+import QuestContext from "../../contexts/QuestContext.jsx";
+
+import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
@@ -10,28 +11,26 @@ import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   buttons: {
-    display: 'flex',
-    justifyContent: 'flex-end',
+    display: "flex",
+    justifyContent: "flex-end",
   },
   button: {
     marginTop: theme.spacing(3),
   },
 }));
 
-function QuestDetails(props) {
+function QuestDetails() {
   const classes = useStyles();
+  const { quest, updateDetails, publishQuest } = useContext(QuestContext);
 
   return (
     <>
       <Grid container spacing={2}>
         <Grid item sm={12}>
-          <Typography variant="h4">
-            Create
-          </Typography>
+          <Typography variant="h4">Create</Typography>
         </Grid>
         <Grid item sm={12}>
           <form noValidate>
-            
             <TextField
               variant="outlined"
               margin="normal"
@@ -40,8 +39,8 @@ function QuestDetails(props) {
               id="questTitle"
               label="Quest Title"
               name="title"
-              value={props.quest.title}
-              onChange={props.updateDetails}
+              value={quest.title}
+              onChange={updateDetails}
             />
             <TextField
               variant="outlined"
@@ -50,7 +49,7 @@ function QuestDetails(props) {
               id="questAuthor"
               label="Author"
               name="author"
-              value={props.quest.author}
+              value={quest.author}
               InputProps={{
                 readOnly: true,
               }}
@@ -65,8 +64,8 @@ function QuestDetails(props) {
               name="description"
               multiline
               rows={4}
-              value={props.quest.description}
-              onChange={props.updateDetails}
+              value={quest.description}
+              onChange={updateDetails}
             />
           </form>
         </Grid>
@@ -75,7 +74,7 @@ function QuestDetails(props) {
         <Button
           variant="contained"
           color="secondary"
-          onClick={props.publishQuest}
+          onClick={publishQuest}
           className={classes.button}
         >
           Publish
@@ -84,9 +83,5 @@ function QuestDetails(props) {
     </>
   );
 }
-
-QuestDetails.propTypes = {
-  quest: PropTypes.object,
-};
 
 export default QuestDetails;

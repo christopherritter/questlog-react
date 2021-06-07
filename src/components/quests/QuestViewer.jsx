@@ -75,7 +75,7 @@ const QuestViewer = () => {
                   variant="contained"
                   className={classes.headerButtons}
                   component={RouterLink}
-                  to={"/quest-editor/" + quest.questId}
+                  to={"/quest/" + quest.questId + "/edit"}
                 >
                   Edit
                 </Button>

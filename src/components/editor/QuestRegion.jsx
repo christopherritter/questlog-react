@@ -1,5 +1,8 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useContext } from "react";
+
+import QuestContext from "../../contexts/QuestContext.jsx";
+import MapGL, { Source, Layer } from "@urbica/react-map-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -18,29 +21,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const QuestRegion = (props) => {
+const QuestRegion = () => {
   const classes = useStyles();
-
-  const [viewport, setViewport] = useState({
-    latitude: 39.82817,
-    longitude: -98.5795,
-    bearing: 0,
-    pitch: 0,
-    zoom: 17,
-  });
-
-  const updateCenter = (event) => {
-    props.updateCenter(event);
-  };
-
-  const QuestMap = React.cloneElement(props.map, {
-    latitude: props.region.latitude,
-    longitude: props.region.longitude,
-    bearing: props.region.bearing,
-    pitch: props.region.pitch,
-    zoom: props.region.zoom,
-    onViewportChange: updateCenter,
-  });
+  const { quest, updateCenter, updateRegion, publishQuest } =
+    useContext(QuestContext);
 
   return (
     <>
@@ -58,8 +42,8 @@ const QuestRegion = (props) => {
               label="Latitude"
               name="latitude"
               type="number"
-              value={props.region.latitude}
-              onChange={props.updateRegion}
+              value={quest.region.latitude}
+              onChange={updateRegion}
               required
             />
             <TextField
@@ -70,8 +54,8 @@ const QuestRegion = (props) => {
               label="Longitude"
               name="longitude"
               type="number"
-              value={props.region.longitude}
-              onChange={props.updateRegion}
+              value={quest.region.longitude}
+              onChange={updateRegion}
               required
             />
             <TextField
@@ -82,8 +66,8 @@ const QuestRegion = (props) => {
               label="Bearing"
               name="bearing"
               type="number"
-              value={props.region.bearing}
-              onChange={props.updateRegion}
+              value={quest.region.bearing}
+              onChange={updateRegion}
             />
             <TextField
               variant="outlined"
@@ -93,8 +77,8 @@ const QuestRegion = (props) => {
               label="Pitch"
               name="pitch"
               type="number"
-              value={props.region.pitch}
-              onChange={props.updateRegion}
+              value={quest.region.pitch}
+              onChange={updateRegion}
             />
             <TextField
               variant="outlined"
@@ -104,20 +88,30 @@ const QuestRegion = (props) => {
               label="Zoom"
               name="zoom"
               type="number"
-              value={props.region.zoom}
-              onChange={props.updateRegion}
+              value={quest.region.zoom}
+              onChange={updateRegion}
             />
           </form>
         </Grid>
         <Grid item md={8}>
-          {QuestMap}
+          <MapGL
+            latitude={quest.region.latitude}
+            longitude={quest.region.longitude}
+            bearing={quest.region.bearing}
+            pitch={quest.region.pitch}
+            zoom={quest.region.zoom}
+            style={{ width: "100%", height: "400px" }}
+            mapStyle="mapbox://styles/mapbox/streets-v11"
+            accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+            onViewportChange={updateCenter}
+          />
         </Grid>
       </Grid>
       <Box className={classes.buttons} display="flex">
         <Button
           variant="contained"
           color="secondary"
-          onClick={props.publishQuest}
+          onClick={publishQuest}
           className={classes.button}
         >
           Publish
@@ -125,10 +119,6 @@ const QuestRegion = (props) => {
       </Box>
     </>
   );
-};
-
-QuestRegion.propTypes = {
-  region: PropTypes.object,
 };
 
 export default QuestRegion;

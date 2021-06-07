@@ -70,6 +70,10 @@ const Quest = (props) => {
     setQuest({ ...quest, region: newRegion });
   }
 
+  // Objectives
+  // The ultimate goals for the quest
+  // Used to define the state of the quest
+
   function handleAddObjective(objective) {
     if (quest.objectives) {
       setQuest({ ...quest, objectives: [...quest.objectives, objective] });
@@ -99,6 +103,37 @@ const Quest = (props) => {
     );
     setQuest({ ...quest, objectives: updatedObjectives });
   }
+
+  // const handleAddObjective = (e) => {
+  //   e.preventDefault();
+  //   addObjective({
+  //     id: "objective-" + id,
+  //     text: objective.text,
+  //     isPrimary: objective.isPrimary,
+  //     isComplete: objective.isComplete,
+  //   });
+  //   setObjective(initialObjectiveState);
+  //   setSelectedIndex(-1);
+  // };
+
+  // const handleUpdateObjective = (e) => {
+  //   e.preventDefault();
+  //   updateObjective({
+  //     id: objective.id,
+  //     text: objective.text,
+  //     isPrimary: objective.isPrimary,
+  //     isComplete: objective.isComplete,
+  //   });
+  //   setObjective(initialObjectiveState);
+  //   setSelectedIndex(-1);
+  // };
+
+  // const handleRemoveObjective = (e) => {
+  //   e.preventDefault();
+  //   removeObjective(objective);
+  //   setObjective(initialObjectiveState);
+  //   setSelectedIndex(-1);
+  // };
 
   // Locations
   // Places on the map that contain events and items

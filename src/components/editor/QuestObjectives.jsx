@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+
+import QuestContext from "../../contexts/QuestContext.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -30,10 +32,12 @@ const useStyles = makeStyles((theme) => ({
 
 function QuestObjectives(props) {
   const classes = useStyles();
+  const { quest, addObjective, updateObjective, removeObjective } =
+    useContext(QuestContext);
   var id = 0;
 
-  if (props.objectives) {
-    var idList = props.objectives.map((obj) => {
+  if (quest.objectives) {
+    var idList = quest.objectives.map((obj) => {
       var idNumber,
         matches = obj.id.match(/\d+$/);
 
@@ -64,9 +68,9 @@ function QuestObjectives(props) {
     setObjective({ ...objective, [name]: checked });
   };
 
-  const addObjective = (e) => {
+  const handleAddObjective = (e) => {
     e.preventDefault();
-    props.addObjective({
+    addObjective({
       id: "objective-" + id,
       text: objective.text,
       isPrimary: objective.isPrimary,
@@ -76,9 +80,9 @@ function QuestObjectives(props) {
     setSelectedIndex(-1);
   };
 
-  const updateObjective = (e) => {
+  const handleUpdateObjective = (e) => {
     e.preventDefault();
-    props.updateObjective({
+    updateObjective({
       id: objective.id,
       text: objective.text,
       isPrimary: objective.isPrimary,
@@ -88,9 +92,9 @@ function QuestObjectives(props) {
     setSelectedIndex(-1);
   };
 
-  const removeObjective = (e) => {
+  const handleRemoveObjective = (e) => {
     e.preventDefault();
-    props.removeObjective(objective);
+    removeObjective(objective);
     setObjective(initialObjectiveState);
     setSelectedIndex(-1);
   };
@@ -186,7 +190,7 @@ function QuestObjectives(props) {
             <Button
               variant="contained"
               color="primary"
-              onClick={addObjective}
+              onClick={handleAddObjective}
               className={classes.button}
             >
               Add Objective
@@ -196,14 +200,14 @@ function QuestObjectives(props) {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={updateObjective}
+                onClick={handleUpdateObjective}
                 className={classes.button}
               >
                 Update
               </Button>
               <Button
                 variant="contained"
-                onClick={removeObjective}
+                onClick={handleRemoveObjective}
                 className={classes.button}
               >
                 Remove

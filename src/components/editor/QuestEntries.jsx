@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 
+import QuestContext from "../../contexts/QuestContext.jsx";
 import QuestActions from "./QuestActions.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -46,10 +47,17 @@ const useStyles = makeStyles((theme) => ({
 
 function QuestEntries(props) {
   const classes = useStyles();
+  const {
+    quest,
+    region,
+    addEntry,
+    updateEntry,
+    removeEntry,
+  } = useContext(QuestContext);
   var id = 0;
 
-  if (props.entries && props.entries.length > 0) {
-    var idList = props.entries.map((obj) => {
+  if (quest.entries && quest.entries.length > 0) {
+    var idList = quest.entries.map((obj) => {
       var idNumber,
         matches = obj.id.match(/\d+$/);
 
@@ -86,11 +94,11 @@ function QuestEntries(props) {
 
   const [entry, entryRef, setEntry] = useRefState(initialEntryState);
 
-  useEffect(() => {
-    if (props.entry) {
-      setEntry(props.entry);
-    }
-  }, [props.entry, setEntry]);
+  // useEffect(() => {
+  //   if (entry) {
+  //     setEntry(props.entry);
+  //   }
+  // }, [props.entry, setEntry]);
 
   const onChangeEntry = (event) => {
     const { name, value } = event.target;
@@ -144,30 +152,30 @@ function QuestEntries(props) {
     setEntry({ ...entry, [name]: value });
   };
 
-  const addEntry = (e) => {
-    e.preventDefault();
-    props.addEntry({
-      id: "entry-" + id,
-      ...entry,
-    });
-    setEntry(initialEntryState);
-    setSelectedIndex(-1);
-  };
+  // const addEntry = (e) => {
+  //   e.preventDefault();
+  //   props.addEntry({
+  //     id: "entry-" + id,
+  //     ...entry,
+  //   });
+  //   setEntry(initialEntryState);
+  //   setSelectedIndex(-1);
+  // };
 
-  const updateEntry = (e) => {
-    e.preventDefault();
-    props.updateEntry({ ...entry });
-    props.clearEntry();
-    setEntry(initialEntryState);
-    setSelectedIndex(-1);
-  };
+  // const updateEntry = (e) => {
+  //   e.preventDefault();
+  //   props.updateEntry({ ...entry });
+  //   props.clearEntry();
+  //   setEntry(initialEntryState);
+  //   setSelectedIndex(-1);
+  // };
 
-  const removeEntry = (e) => {
-    e.preventDefault();
-    props.removeEntry(entry);
-    setEntry(initialEntryState);
-    setSelectedIndex(-1);
-  };
+  // const removeEntry = (e) => {
+  //   e.preventDefault();
+  //   props.removeEntry(entry);
+  //   setEntry(initialEntryState);
+  //   setSelectedIndex(-1);
+  // };
 
   const [view, setView] = React.useState("list");
 
@@ -187,7 +195,7 @@ function QuestEntries(props) {
     setEntry(selectedEntry);
   };
 
-  const [viewport, setViewport] = useState(props.region);
+  const [viewport, setViewport] = useState(region);
 
   const mapClick = (event) => {
     const { lngLat } = event;

@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TabPanel = props => {
+const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
 
   return (
@@ -53,7 +53,7 @@ const TabPanel = props => {
       {value === index && <Box p={3}>{children}</Box>}
     </div>
   );
-}
+};
 
 TabPanel.propTypes = {
   children: PropTypes.node,
@@ -167,26 +167,22 @@ const QuestEditor = (props) => {
         </Grid>
         <Grid item md={10}>
           <TabPanel value={tab} index={0}>
-            <QuestDetails
-              quest={quest}
-              updateDetails={updateDetails}
-              publishQuest={publishQuest}
-            ></QuestDetails>
+            <QuestDetails />
           </TabPanel>
           <TabPanel value={tab} index={1}>
             <QuestRegion
-              map={
-                <MapGL
-                  style={{ width: "100%", height: "400px" }}
-                  mapStyle="mapbox://styles/mapbox/streets-v11"
-                  accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
-                  updateCenter={updateCenter}
-                />
-              }
-              region={quest.region}
-              updateRegion={updateRegion}
-              updateCenter={updateCenter}
-              publishQuest={publishQuest}
+              // map={
+              //   <MapGL
+              //     style={{ width: "100%", height: "400px" }}
+              //     mapStyle="mapbox://styles/mapbox/streets-v11"
+              //     accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+              //     updateCenter={updateCenter}
+              //   />
+              // }
+              // region={quest.region}
+              // updateRegion={updateRegion}
+              // updateCenter={updateCenter}
+              // publishQuest={publishQuest}
             ></QuestRegion>
           </TabPanel>
           <TabPanel value={tab} index={2}>
@@ -241,26 +237,26 @@ const QuestEditor = (props) => {
                   />
                 </MapGL>
               }
-              region={quest.region}
-              objectives={quest.objectives}
-              locations={quest.locations}
-              locationIndex={locationIndex}
-              location={location}
-              entries={quest.entries}
-              entryIndex={entryIndex}
-              entry={entry}
-              addEntry={addEntry}
-              updateEntry={updateEntry}
-              removeEntry={removeEntry}
-              clearEntry={clearEntry}
-              actions={quest.actions}
-              actionIndex={actionIndex}
-              action={action}
-              addAction={addAction}
-              updateAction={updateAction}
-              removeAction={removeAction}
-              clearAction={clearAction}
-              publishQuest={publishQuest}
+              // region={quest.region}
+              // objectives={quest.objectives}
+              // locations={quest.locations}
+              // locationIndex={locationIndex}
+              // location={location}
+              // entries={quest.entries}
+              // entryIndex={entryIndex}
+              // entry={entry}
+              // addEntry={addEntry}
+              // updateEntry={updateEntry}
+              // removeEntry={removeEntry}
+              // clearEntry={clearEntry}
+              // actions={quest.actions}
+              // actionIndex={actionIndex}
+              // action={action}
+              // addAction={addAction}
+              // updateAction={updateAction}
+              // removeAction={removeAction}
+              // clearAction={clearAction}
+              // publishQuest={publishQuest}
             ></QuestEntries>
           </TabPanel>
           <TabPanel value={tab} index={5}>
