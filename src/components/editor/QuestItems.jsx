@@ -465,6 +465,4 @@ const QuestItems = () => {
   );
 };
 
-QuestItems.propTypes = {};
-
 export default QuestItems;
