@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const QuestItems = (props) => {
+const QuestItems = () => {
   const classes = useStyles();
   const {
     quest,
@@ -197,7 +197,7 @@ const QuestItems = (props) => {
         <Grid item md={8} sm={12}>
           <Button
             onClick={() => {
-              props.clearItem();
+              clearItem();
               setItem(initialItemState);
               setSelectedIndex(-1);
             }}
@@ -258,8 +258,8 @@ const QuestItems = (props) => {
                 }}
               >
                 <option value={undefined}></option>
-                {props.locations &&
-                  props.locations.map((location) => {
+                {quest.locations &&
+                  quest.locations.map((location) => {
                     return (
                       <option value={location.id} key={location.id}>
                         {location.name}
@@ -373,8 +373,8 @@ const QuestItems = (props) => {
           <Grid container spacing={2}>
             <Grid item sm={12}>
               <List component="nav" subheader={<li />}>
-                {props.locations &&
-                  props.locations.map((location) => (
+                {quest.locations &&
+                  quest.locations.map((location) => (
                     <li key={location.id}>
                       <ul>
                         <ListSubheader>{location.name}</ListSubheader>
