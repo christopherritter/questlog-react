@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Link as RouterLink } from "react-router-dom";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
 
@@ -16,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     marginTop: theme.spacing(3),
+    marginLeft: theme.spacing(1)
   },
 }));
 
@@ -78,6 +80,24 @@ function QuestDetails() {
           className={classes.button}
         >
           Publish
+        </Button>
+        <Button
+          variant="contained"
+          color="default"
+          component={RouterLink}
+          to={`/quest/` + quest.questId + `/read`}
+          className={classes.button}
+        >
+          Read
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          component={RouterLink}
+          to={`/quest/` + quest.questId + `/play`}
+          className={classes.button}
+        >
+          Play
         </Button>
       </Box>
     </>
