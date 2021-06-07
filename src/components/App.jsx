@@ -16,7 +16,7 @@ import Profile from "./user/Profile.jsx";
 import UpdateProfile from "./user/UpdateProfile.jsx";
 import QuestLibrary from "./quests/QuestLibrary.jsx";
 import CreateQuest from "./editor/CreateQuest.jsx";
-import QuestEditor from "./editor/QuestEditor.jsx";
+// import QuestEditor from "./editor/QuestEditor.jsx";
 import Quest from "./quests/Quest.jsx";
 
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
