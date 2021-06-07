@@ -1,4 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
+
+import MapGL, { Source, Layer } from "@urbica/react-map-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
+
+import QuestContext from "../../contexts/QuestContext.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -32,12 +37,46 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const layerStyle = {
+  id: "point",
+  type: "circle",
+  paint: {
+    "circle-radius": 10,
+    "circle-color": "#007cbf",
+  },
+};
+
 function QuestLocations(props) {
   const classes = useStyles();
+  const { quest, addLocation, setLocationIndex, findWithAttr, updateLocation, removeLocation, publishQuest } =
+    useContext(QuestContext);
+    const geojson = {
+      type: "FeatureCollection",
+      features: quest.locations
+        ? quest.locations.map((location) => {
+            var feature = {
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: [location.longitude, location.latitude],
+              },
+              properties: {
+                id: location.id,
+                name: location.name,
+                bearing: location.bearing,
+                pitch: location.pitch,
+                zoom: location.zoom,
+                marker: location.marker,
+              },
+            };
+            return feature;
+          })
+        : [],
+    };
   var id = 0;
 
-  if (props.locations && props.locations.length > 0) {
-    var idList = props.locations.map((obj) => {
+  if (quest.locations && quest.locations.length > 0) {
+    var idList = quest.locations.map((obj) => {
       var idNumber,
         matches = obj.id.match(/\d+$/);
 
@@ -66,9 +105,9 @@ function QuestLocations(props) {
     order: 0,
     latitude: 0,
     longitude: 0,
-    bearing: props.region.bearing,
-    pitch: props.region.pitch,
-    zoom: props.region.zoom,
+    bearing: quest.region.bearing,
+    pitch: quest.region.pitch,
+    zoom: quest.region.zoom,
     image: "",
     marker: "",
     isLandmark: false,
@@ -78,25 +117,25 @@ function QuestLocations(props) {
   const [location, locationRef, setLocation] =
     useRefState(initialLocationState);
 
-  useEffect(() => {
-    if (props.location) {
-      setLocation(props.location);
-    }
-  }, [props.location, setLocation]);
+  // useEffect(() => {
+  //   if (props.location) {
+  //     setLocation(props.location);
+  //   }
+  // }, [props.location, setLocation]);
 
-  const onChangeLocation = (event) => {
+  function handleChangeLocation(event) {
     const { name, value } = event.target;
     setLocation({ ...location, [name]: value });
   };
 
-  const onToggleLocation = (event) => {
+  function handleToggleLocation(event) {
     const { name, checked } = event.target;
     setLocation({ ...location, [name]: checked });
   };
 
-  const addLocation = (e) => {
+  function handleAddLocation(e) {
     e.preventDefault();
-    props.addLocation({
+    addLocation({
       id: "location-" + id,
       name: location.name,
       latitude: location.latitude,
@@ -114,9 +153,9 @@ function QuestLocations(props) {
     setSelectedIndex(-1);
   };
 
-  const updateLocation = (e) => {
+  function handleUpdateLocation(e) {
     e.preventDefault();
-    props.updateLocation({
+    updateLocation({
       id: location.id,
       name: location.name,
       latitude: location.latitude,
@@ -135,9 +174,9 @@ function QuestLocations(props) {
     setSelectedIndex(-1);
   };
 
-  const removeLocation = (e) => {
+  const handleRemoveLocation = (e) => {
     e.preventDefault();
-    props.removeLocation(location);
+    removeLocation(location);
     setLocation(initialLocationState);
     setSelectedIndex(-1);
   };
@@ -165,35 +204,32 @@ function QuestLocations(props) {
     setSelectedIndex(props.locationIndex);
   }, [props.locationIndex]);
 
-  const [viewport, setViewport] = useState(props.region);
+  const [viewport, setViewport] = useState(quest.region);
 
-  const mapClick = (event) => {
-    const { lngLat } = event;
-    const updatedLocation = {
-      ...locationRef.current,
-      latitude: lngLat.lat,
-      longitude: lngLat.lng,
-    };
-    setLocation(updatedLocation);
+  // const mapClick = (event) => {
+  //   const { lngLat } = event;
+  //   const updatedLocation = {
+  //     ...locationRef.current,
+  //     latitude: lngLat.lat,
+  //     longitude: lngLat.lng,
+  //   };
+  //   setLocation(updatedLocation);
+  // };
+
+  const onMapPointClick = (event) => {
+    const { id } = event.features[0].properties;
+    const index = findWithAttr(quest.locations, "id", id);
+    setLocationIndex(index);
+    setLocation(quest.locations[index]);
   };
-
-  const QuestMap = React.cloneElement(props.map, {
-    latitude: viewport.latitude,
-    longitude: viewport.longitude,
-    bearing: viewport.bearing,
-    pitch: viewport.pitch,
-    zoom: viewport.zoom,
-    onViewportChange: changeViewport,
-    onClick: mapClick,
-  });
 
   const renderView = (view) => {
     switch (view) {
       case "list":
         return (
           <List component="nav">
-            {props.locations &&
-              props.locations.map((location, index) => {
+            {quest.locations &&
+              quest.locations.map((location, index) => {
                 return (
                   <ListItem
                     button
@@ -217,7 +253,24 @@ function QuestLocations(props) {
           </List>
         );
       default:
-        return QuestMap;
+        return (<MapGL
+          latitude={quest.region.latitude}
+          longitude={quest.region.longitude}
+          bearing={quest.region.bearing}
+          pitch={quest.region.pitch}
+          zoom={quest.region.zoom}
+          onViewportChange={changeViewport}
+          style={{ width: "100%", height: "400px" }}
+          mapStyle="mapbox://styles/mapbox/streets-v11"
+          accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+        >
+          <Source id="locationsData" type="geojson" data={geojson} />
+          <Layer
+            source="locationsData"
+            onClick={onMapPointClick}
+            {...layerStyle}
+          />
+        </MapGL>)
     }
   };
 
@@ -284,7 +337,7 @@ function QuestLocations(props) {
                   name="name"
                   type="text"
                   value={location.name}
-                  onChange={onChangeLocation}
+                  onChange={handleChangeLocation}
                 />
               </Grid>
               <Grid item sm={4}>
@@ -298,7 +351,7 @@ function QuestLocations(props) {
                   name="order"
                   type="number"
                   value={location.order}
-                  onChange={onChangeLocation}
+                  onChange={handleChangeLocation}
                 />
               </Grid>
             </Grid>
@@ -309,7 +362,7 @@ function QuestLocations(props) {
                   control={
                     <Checkbox
                       checked={location.isLandmark}
-                      onChange={onToggleLocation}
+                      onChange={handleToggleLocation}
                       name="isLandmark"
                     />
                   }
@@ -321,7 +374,7 @@ function QuestLocations(props) {
                   control={
                     <Checkbox
                       checked={location.isStartingPoint}
-                      onChange={onToggleLocation}
+                      onChange={handleToggleLocation}
                       name="isStartingPoint"
                     />
                   }
@@ -342,7 +395,7 @@ function QuestLocations(props) {
                   name="latitude"
                   type="number"
                   value={location.latitude}
-                  onChange={onChangeLocation}
+                  onChange={handleChangeLocation}
                 />
               </Grid>
               <Grid item sm={6}>
@@ -356,7 +409,7 @@ function QuestLocations(props) {
                   name="longitude"
                   type="number"
                   value={location.longitude}
-                  onChange={onChangeLocation}
+                  onChange={handleChangeLocation}
                 />
               </Grid>
             </Grid>
@@ -373,7 +426,7 @@ function QuestLocations(props) {
                   name="bearing"
                   type="number"
                   value={location.bearing}
-                  onChange={onChangeLocation}
+                  onChange={handleChangeLocation}
                 />
               </Grid>
               <Grid item sm={4}>
@@ -387,7 +440,7 @@ function QuestLocations(props) {
                   name="pitch"
                   type="number"
                   value={location.pitch}
-                  onChange={onChangeLocation}
+                  onChange={handleChangeLocation}
                 />
               </Grid>
               <Grid item sm={4}>
@@ -401,7 +454,7 @@ function QuestLocations(props) {
                   name="zoom"
                   type="number"
                   value={location.zoom}
-                  onChange={onChangeLocation}
+                  onChange={handleChangeLocation}
                 />
               </Grid>
             </Grid>
@@ -416,7 +469,7 @@ function QuestLocations(props) {
               name="marker"
               type="text"
               value={location.marker}
-              onChange={onChangeLocation}
+              onChange={handleChangeLocation}
             />
           </form>
         </Grid>
@@ -434,7 +487,7 @@ function QuestLocations(props) {
             <Button
               color="primary"
               variant="contained"
-              onClick={addLocation}
+              onClick={handleAddLocation}
               className={classes.button}
             >
               Add Location
@@ -444,14 +497,14 @@ function QuestLocations(props) {
               <Button
                 color="primary"
                 variant="contained"
-                onClick={updateLocation}
+                onClick={handleUpdateLocation}
                 className={classes.button}
               >
                 Update
               </Button>
               <Button
                 variant="contained"
-                onClick={removeLocation}
+                onClick={handleRemoveLocation}
                 className={classes.button}
               >
                 Remove
@@ -463,7 +516,7 @@ function QuestLocations(props) {
           <Button
             variant="contained"
             color="secondary"
-            onClick={props.publishQuest}
+            onClick={publishQuest}
             className={classes.button}
           >
             Publish
@@ -473,7 +526,5 @@ function QuestLocations(props) {
     </>
   );
 }
-
-QuestLocations.propTypes = {};
 
 export default QuestLocations;
