@@ -19,10 +19,6 @@ import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import ListAltIcon from "@material-ui/icons/ListAlt";
-import MapIcon from "@material-ui/icons/Map";
-import ToggleButton from "@material-ui/lab/ToggleButton";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,14 +41,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function QuestEntries(props) {
+const QuestEntries = () => {
   const classes = useStyles();
   const {
     quest,
-    region,
+    entryIndex,
     addEntry,
     updateEntry,
+    clearEntry,
     removeEntry,
+    publishQuest,
   } = useContext(QuestContext);
   var id = 0;
 
@@ -100,12 +98,12 @@ function QuestEntries(props) {
   //   }
   // }, [props.entry, setEntry]);
 
-  const onChangeEntry = (event) => {
+  function handleChangeEntry(event) {
     const { name, value } = event.target;
     setEntry({ ...entry, [name]: value });
   };
 
-  const onChangeObjectives = (event) => {
+  function handleChangeObjectives(event) {
     const currentValue = event.target.value[0];
     const objectives = [...entry.objectives];
     const index = objectives.indexOf(currentValue);
@@ -119,7 +117,7 @@ function QuestEntries(props) {
     setEntry({ ...entry, objectives: objectives });
   };
 
-  const onChangeRequirements = (event) => {
+  function handleChangeRequirements(event) {
     const currentValue = event.target.value[0];
     const requirements = [...entry.requirements];
     const index = requirements.indexOf(currentValue);
@@ -133,7 +131,7 @@ function QuestEntries(props) {
     setEntry({ ...entry, requirements: requirements });
   };
 
-  const onChangeExpirations = (event) => {
+  function handleChangeExpirations(event) {
     const currentValue = event.target.value[0];
     const expirations = [...entry.expirations];
     const index = expirations.indexOf(currentValue);
@@ -147,150 +145,46 @@ function QuestEntries(props) {
     setEntry({ ...entry, expirations: expirations });
   };
 
-  const onSelectLocation = (event) => {
+  function handleSelectLocation(event) {
     const { name, value } = event.target;
     setEntry({ ...entry, [name]: value });
   };
 
-  // const addEntry = (e) => {
-  //   e.preventDefault();
-  //   props.addEntry({
-  //     id: "entry-" + id,
-  //     ...entry,
-  //   });
-  //   setEntry(initialEntryState);
-  //   setSelectedIndex(-1);
-  // };
+  function handleAddEntry(e) {
+    e.preventDefault();
+    addEntry({
+      id: "entry-" + id,
+      ...entry,
+    });
+    setEntry(initialEntryState);
+    setSelectedIndex(-1);
+  }
 
-  // const updateEntry = (e) => {
-  //   e.preventDefault();
-  //   props.updateEntry({ ...entry });
-  //   props.clearEntry();
-  //   setEntry(initialEntryState);
-  //   setSelectedIndex(-1);
-  // };
+  function handleUpdateEntry(e) {
+    e.preventDefault();
+    updateEntry({ ...entry });
+    clearEntry();
+    setEntry(initialEntryState);
+    setSelectedIndex(-1);
+  }
 
-  // const removeEntry = (e) => {
-  //   e.preventDefault();
-  //   props.removeEntry(entry);
-  //   setEntry(initialEntryState);
-  //   setSelectedIndex(-1);
-  // };
-
-  const [view, setView] = React.useState("list");
-
-  const handleView = (event, newView) => {
-    setView(newView);
-  };
+  function handleRemoveEntry(e) {
+    e.preventDefault();
+    removeEntry(entry);
+    setEntry(initialEntryState);
+    setSelectedIndex(-1);
+  }
 
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
 
   useEffect(() => {
-    setSelectedIndex(props.entryIndex);
-  }, [props.entryIndex]);
+    setSelectedIndex(entryIndex);
+  }, [entryIndex]);
 
-  const handleListItemClick = (entry, index) => {
+  function handleListItemClick(entry, index) {
     const selectedEntry = { ...entry };
     setSelectedIndex(index);
     setEntry(selectedEntry);
-  };
-
-  const [viewport, setViewport] = useState(region);
-
-  const mapClick = (event) => {
-    const { lngLat } = event;
-    const updatedEntry = {
-      ...entryRef.current,
-      latitude: lngLat.lat,
-      longitude: lngLat.lng,
-    };
-    setEntry(updatedEntry);
-  };
-
-  const EntryList = () => {
-    return (
-      <List component="nav" subheader={<li />}>
-        {props.locations &&
-          props.locations.map((location) => (
-            <li key={location.id}>
-              <ul>
-                <ListSubheader>{location.name}</ListSubheader>
-                {props.entries &&
-                  props.entries
-                    .filter((entry) => {
-                      return entry.locationId === location.id;
-                    })
-                    .map((entry, index) => (
-                      <ListItem
-                        button
-                        key={entry.id}
-                        selected={selectedIndex === entry.id}
-                        onClick={(event) =>
-                          handleListItemClick(entry, entry.id)
-                        }
-                      >
-                        <ListItemText
-                          primary={
-                            <Typography variant="h6" gutterBottom>
-                              {entry.title}
-                            </Typography>
-                          }
-                          secondary={
-                            <Typography
-                              style={{ whiteSpace: "pre-line" }}
-                              variant="body2"
-                              className={classes.inline}
-                              color="textPrimary"
-                            >
-                              {entry.text}
-                            </Typography>
-                          }
-                        />
-                      </ListItem>
-                    ))}
-              </ul>
-            </li>
-          ))}
-      </List>
-    );
-  };
-
-  const QuestMap = React.cloneElement(props.map, {
-    latitude: viewport.latitude,
-    longitude: viewport.longitude,
-    bearing: viewport.bearing,
-    pitch: viewport.pitch,
-    zoom: viewport.zoom,
-    onViewportChange: setViewport,
-    onClick: mapClick,
-  });
-
-  function renderView(view) {
-    switch (view) {
-      case "list":
-        var entryList = EntryList();
-        return entryList;
-      default:
-        return QuestMap;
-    }
-  };
-
-  function onAddAction(action) {
-    console.log("Passing the props")
-    console.log(action)
-    props.addAction(action)
-  };
-
-  function onUpdateAction(action) {
-    props.updateAction(action)
-  };
-
-  function onRemoveAction(action) {
-    props.removeAction(action)
-  };
-
-  function onClearAction() {
-    props.clearAction()
   };
 
   return (
@@ -304,26 +198,13 @@ function QuestEntries(props) {
         <Grid item md={8} sm={12}>
           <Button
             onClick={() => {
-              props.clearEntry();
+              clearEntry();
               setEntry(initialEntryState);
               setSelectedIndex(-1);
             }}
           >
             Create New
           </Button>
-          <ToggleButtonGroup
-            value={view}
-            exclusive
-            onChange={handleView}
-            aria-label="editor view"
-          >
-            <ToggleButton value="list" aria-label="list view">
-              <ListAltIcon />
-            </ToggleButton>
-            <ToggleButton value="map" aria-label="map view">
-              <MapIcon />
-            </ToggleButton>
-          </ToggleButtonGroup>
         </Grid>
       </Grid>
       <Grid container spacing={2} className={classes.root}>
@@ -341,7 +222,7 @@ function QuestEntries(props) {
                   name="title"
                   type="text"
                   value={entry.title}
-                  onChange={onChangeEntry}
+                  onChange={handleChangeEntry}
                 />
               </Grid>
               <Grid item sm={4}>
@@ -355,7 +236,7 @@ function QuestEntries(props) {
                   name="order"
                   type="number"
                   value={entry.order}
-                  onChange={onChangeEntry}
+                  onChange={handleChangeEntry}
                 />
               </Grid>
             </Grid>
@@ -370,7 +251,7 @@ function QuestEntries(props) {
               <Select
                 native
                 value={entry.locationId}
-                onChange={onSelectLocation}
+                onChange={handleSelectLocation}
                 label="Location"
                 inputProps={{
                   name: "locationId",
@@ -378,8 +259,8 @@ function QuestEntries(props) {
                 }}
               >
                 <option value={undefined}></option>
-                {props.locations &&
-                  props.locations.map((location) => {
+                {quest.locations &&
+                  quest.locations.map((location) => {
                     return (
                       <option value={location.id} key={location.id}>
                         {location.name}
@@ -401,16 +282,16 @@ function QuestEntries(props) {
               multiline
               rows={8}
               value={entry.text}
-              onChange={onChangeEntry}
+              onChange={handleChangeEntry}
             />
 
             <QuestActions
-              action={props.action}
-              actions={props.actions}
-              addAction={onAddAction}
-              updateAction={onUpdateAction}
-              removeAction={onRemoveAction}
-              clearAction={onClearAction}
+              // action={props.action}
+              // actions={props.actions}
+              // addAction={addAction}
+              // updateAction={updateAction}
+              // removeAction={removeAction}
+              // clearAction={clearAction}
             />
 
             <FormControl
@@ -426,11 +307,11 @@ function QuestEntries(props) {
                 id="objectives-multi-select"
                 multiple
                 value={entry.objectives}
-                onChange={onChangeObjectives}
+                onChange={handleChangeObjectives}
                 input={<Input />}
                 renderValue={(selected) => selected.join(", ")}
               >
-                {props.objectives.map((objective) => (
+                {quest.objectives.map((objective) => (
                   <MenuItem key={objective.id} value={objective.id}>
                     <Checkbox
                       checked={entry.objectives.indexOf(objective.id) > -1}
@@ -454,11 +335,11 @@ function QuestEntries(props) {
                 id="requirements-multi-select"
                 multiple
                 value={entry.requirements}
-                onChange={onChangeRequirements}
+                onChange={handleChangeRequirements}
                 input={<Input />}
                 renderValue={(selected) => selected.join(", ")}
               >
-                {props.objectives.map((objective) => (
+                {quest.objectives.map((objective) => (
                   <MenuItem key={objective.id} value={objective.id}>
                     <Checkbox
                       checked={entry.requirements.indexOf(objective.id) > -1}
@@ -482,11 +363,11 @@ function QuestEntries(props) {
                 id="expirations-multi-select"
                 multiple
                 value={entry.expirations}
-                onChange={onChangeExpirations}
+                onChange={handleChangeExpirations}
                 input={<Input />}
                 renderValue={(selected) => selected.join(", ")}
               >
-                {props.objectives.map((objective) => (
+                {quest.objectives.map((objective) => (
                   <MenuItem key={objective.id} value={objective.id}>
                     <Checkbox
                       checked={entry.expirations.indexOf(objective.id) > -1}
@@ -501,7 +382,49 @@ function QuestEntries(props) {
         <Grid item md={8} sm={12}>
           <Grid container spacing={2}>
             <Grid item sm={12}>
-              {renderView(view)}
+              <List component="nav" subheader={<li />}>
+                {quest.locations &&
+                  quest.locations.map((location) => (
+                    <li key={location.id}>
+                      <ul>
+                        <ListSubheader>{location.name}</ListSubheader>
+                        {quest.entries &&
+                          quest.entries
+                            .filter((entry) => {
+                              return entry.locationId === location.id;
+                            })
+                            .map((entry, index) => (
+                              <ListItem
+                                button
+                                key={entry.id}
+                                selected={selectedIndex === entry.id}
+                                onClick={(event) =>
+                                  handleListItemClick(entry, entry.id)
+                                }
+                              >
+                                <ListItemText
+                                  primary={
+                                    <Typography variant="h6" gutterBottom>
+                                      {entry.title}
+                                    </Typography>
+                                  }
+                                  secondary={
+                                    <Typography
+                                      style={{ whiteSpace: "pre-line" }}
+                                      variant="body2"
+                                      className={classes.inline}
+                                      color="textPrimary"
+                                    >
+                                      {entry.text}
+                                    </Typography>
+                                  }
+                                />
+                              </ListItem>
+                            ))}
+                      </ul>
+                    </li>
+                  ))}
+              </List>
             </Grid>
           </Grid>
         </Grid>
@@ -512,7 +435,7 @@ function QuestEntries(props) {
             <Button
               variant="contained"
               color="primary"
-              onClick={addEntry}
+              onClick={handleAddEntry}
               className={classes.button}
             >
               Add Entry
@@ -522,14 +445,14 @@ function QuestEntries(props) {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={updateEntry}
+                onClick={handleUpdateEntry}
                 className={classes.button}
               >
                 Update
               </Button>
               <Button
                 variant="contained"
-                onClick={removeEntry}
+                onClick={handleRemoveEntry}
                 className={classes.button}
               >
                 Remove
@@ -541,7 +464,7 @@ function QuestEntries(props) {
           <Button
             variant="contained"
             color="secondary"
-            onClick={props.publishQuest}
+            onClick={publishQuest}
             className={classes.button}
           >
             Publish
@@ -551,7 +474,5 @@ function QuestEntries(props) {
     </>
   );
 }
-
-QuestEntries.propTypes = {};
 
 export default QuestEntries;

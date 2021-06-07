@@ -170,69 +170,10 @@ const QuestEditor = (props) => {
             <QuestObjectives />
           </TabPanel>
           <TabPanel value={tab} index={3}>
-            <QuestLocations
-              map={
-                <MapGL
-                  style={{ width: "100%", height: "400px" }}
-                  mapStyle="mapbox://styles/mapbox/streets-v11"
-                  accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
-                >
-                  <Source id="locationsData" type="geojson" data={geojson} />
-                  <Layer
-                    source="locationsData"
-                    onClick={onMapPointClick}
-                    {...layerStyle}
-                  />
-                </MapGL>
-              }
-              region={quest.region}
-              locations={quest.locations}
-              locationIndex={locationIndex}
-              location={location}
-              addLocation={addLocation}
-              updateLocation={updateLocation}
-              removeLocation={removeLocation}
-              clearLocation={clearLocation}
-              publishQuest={publishQuest}
-            ></QuestLocations>
+            <QuestLocations />
           </TabPanel>
           <TabPanel value={tab} index={4}>
-            <QuestEntries
-              map={
-                <MapGL
-                  style={{ width: "100%", height: "400px" }}
-                  mapStyle="mapbox://styles/mapbox/streets-v11"
-                  accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
-                >
-                  <Source id="locationsData" type="geojson" data={geojson} />
-                  <Layer
-                    source="locationsData"
-                    onClick={onMapPointClick}
-                    {...layerStyle}
-                  />
-                </MapGL>
-              }
-              // region={quest.region}
-              // objectives={quest.objectives}
-              // locations={quest.locations}
-              // locationIndex={locationIndex}
-              // location={location}
-              // entries={quest.entries}
-              // entryIndex={entryIndex}
-              // entry={entry}
-              // addEntry={addEntry}
-              // updateEntry={updateEntry}
-              // removeEntry={removeEntry}
-              // clearEntry={clearEntry}
-              // actions={quest.actions}
-              // actionIndex={actionIndex}
-              // action={action}
-              // addAction={addAction}
-              // updateAction={updateAction}
-              // removeAction={removeAction}
-              // clearAction={clearAction}
-              // publishQuest={publishQuest}
-            ></QuestEntries>
+            <QuestEntries />
           </TabPanel>
           <TabPanel value={tab} index={5}>
             <QuestItems

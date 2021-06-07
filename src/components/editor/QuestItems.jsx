@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
+
+import QuestContext from "../../contexts/QuestContext.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -16,10 +18,6 @@ import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import ListAltIcon from "@material-ui/icons/ListAlt";
-import MapIcon from "@material-ui/icons/Map";
-import ToggleButton from "@material-ui/lab/ToggleButton";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,12 +40,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function QuestItems(props) {
+const QuestItems = (props) => {
   const classes = useStyles();
+  const {
+    quest,
+    itemIndex,
+    addItem,
+    updateItem,
+    clearItem,
+    removeItem,
+    publishQuest,
+  } = useContext(QuestContext);
   var id = 0;
 
-  if (props.items && props.items.length > 0) {
-    var idList = props.items.map((obj) => {
+  if (quest.items && quest.items.length > 0) {
+    var idList = quest.items.map((obj) => {
       var idNumber,
         matches = obj.id.match(/\d+$/);
 
@@ -84,18 +91,18 @@ function QuestItems(props) {
 
   const [item, itemRef, setItem] = useRefState(initialItemState);
 
-  useEffect(() => {
-    if (props.item) {
-      setItem(props.item);
-    }
-  }, [props.item, setItem]);
+  // useEffect(() => {
+  //   if (props.item) {
+  //     setItem(props.item);
+  //   }
+  // }, [props.item, setItem]);
 
-  const onChangeItem = (event) => {
+  function handleChangeItem(event) {
     const { name, value } = event.target;
     setItem({ ...item, [name]: value });
-  };
+  }
 
-  const onChangeObjectives = (event) => {
+  function handleChangeObjectives(event) {
     const currentValue = event.target.value[0];
     const objectives = [...item.objectives];
     const index = objectives.indexOf(currentValue);
@@ -107,9 +114,9 @@ function QuestItems(props) {
     }
 
     setItem({ ...item, objectives: objectives });
-  };
+  }
 
-  const onChangeRequirements = (event) => {
+  function handleChangeRequirements(event) {
     const currentValue = event.target.value[0];
     const requirements = [...item.requirements];
     const index = requirements.indexOf(currentValue);
@@ -121,9 +128,9 @@ function QuestItems(props) {
     }
 
     setItem({ ...item, requirements: requirements });
-  };
+  }
 
-  const onChangeExpirations = (event) => {
+  function handleChangeExpirations(event) {
     const currentValue = event.target.value[0];
     const expirations = [...item.expirations];
     const index = expirations.indexOf(currentValue);
@@ -137,14 +144,14 @@ function QuestItems(props) {
     setItem({ ...item, expirations: expirations });
   };
 
-  const onSelectLocation = (event) => {
+  function handleSelectLocation(event) {
     const { name, value } = event.target;
     setItem({ ...item, [name]: value });
   };
 
-  const addItem = (e) => {
+  function handleAddItem(e) {
     e.preventDefault();
-    props.addItem({
+    addItem({
       id: "item-" + id,
       ...item,
     });
@@ -152,115 +159,31 @@ function QuestItems(props) {
     setSelectedIndex(-1);
   };
 
-  const updateItem = (e) => {
+  function handleUpdateItem(e) {
     e.preventDefault();
-    props.updateItem({ ...item });
-    props.clearItem();
+    updateItem({ ...item });
+    clearItem();
     setItem(initialItemState);
     setSelectedIndex(-1);
   };
 
-  const removeItem = (e) => {
+  function handleRemoveItem(e) {
     e.preventDefault();
-    props.removeItem(item);
+    removeItem(item);
     setItem(initialItemState);
     setSelectedIndex(-1);
-  };
-
-  const [view, setView] = React.useState("list");
-
-  const handleView = (event, newView) => {
-    setView(newView);
   };
 
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
 
   useEffect(() => {
-    setSelectedIndex(props.itemIndex);
-  }, [props.itemIndex]);
+    setSelectedIndex(itemIndex);
+  }, [itemIndex]);
 
   const handleListItemClick = (item, index) => {
     const selectedItem = { ...item };
     setSelectedIndex(index);
     setItem(selectedItem);
-  };
-
-  const [viewport, setViewport] = useState(props.region);
-
-  const mapClick = (event) => {
-    const { lngLat } = event;
-    const updatedItem = {
-      ...itemRef.current,
-      latitude: lngLat.lat,
-      longitude: lngLat.lng,
-    };
-    setItem(updatedItem);
-  };
-
-  const ItemList = () => {
-    return (
-      <List component="nav" subheader={<li />}>
-        {props.locations &&
-          props.locations.map((location) => (
-            <li key={location.id}>
-              <ul>
-                <ListSubheader>{location.name}</ListSubheader>
-                {props.items &&
-                  props.items
-                    .filter((item) => {
-                      return item.locationId === location.id;
-                    })
-                    .map((item, index) => (
-                      <ListItem
-                        button
-                        key={item.id}
-                        selected={selectedIndex === item.id}
-                        onClick={(event) => handleListItemClick(item, item.id)}
-                      >
-                        <ListItemText
-                          primary={
-                            <Typography variant="h6" gutterBottom>
-                              {item.name}
-                            </Typography>
-                          }
-                          secondary={
-                            <Typography
-                              style={{ whiteSpace: "pre-line" }}
-                              variant="body2"
-                              className={classes.inline}
-                              color="textPrimary"
-                            >
-                              {item.description}
-                            </Typography>
-                          }
-                        />
-                      </ListItem>
-                    ))}
-              </ul>
-            </li>
-          ))}
-      </List>
-    );
-  };
-
-  const QuestMap = React.cloneElement(props.map, {
-    latitude: viewport.latitude,
-    longitude: viewport.longitude,
-    bearing: viewport.bearing,
-    pitch: viewport.pitch,
-    zoom: viewport.zoom,
-    onViewportChange: setViewport,
-    onClick: mapClick,
-  });
-
-  const renderView = (view) => {
-    switch (view) {
-      case "list":
-        var itemList = ItemList();
-        return itemList;
-      default:
-        return QuestMap;
-    }
   };
 
   return (
@@ -281,19 +204,6 @@ function QuestItems(props) {
           >
             Create New
           </Button>
-          <ToggleButtonGroup
-            value={view}
-            exclusive
-            onChange={handleView}
-            aria-label="editor view"
-          >
-            <ToggleButton value="list" aria-label="list view">
-              <ListAltIcon />
-            </ToggleButton>
-            <ToggleButton value="map" aria-label="map view">
-              <MapIcon />
-            </ToggleButton>
-          </ToggleButtonGroup>
         </Grid>
       </Grid>
       <Grid container spacing={2} className={classes.root}>
@@ -311,7 +221,7 @@ function QuestItems(props) {
                   name="name"
                   type="text"
                   value={item.name}
-                  onChange={onChangeItem}
+                  onChange={handleChangeItem}
                 />
               </Grid>
               <Grid item sm={4}>
@@ -325,7 +235,7 @@ function QuestItems(props) {
                   name="order"
                   type="number"
                   value={item.order}
-                  onChange={onChangeItem}
+                  onChange={handleChangeItem}
                 />
               </Grid>
             </Grid>
@@ -340,7 +250,7 @@ function QuestItems(props) {
               <Select
                 native
                 value={item.locationId}
-                onChange={onSelectLocation}
+                onChange={handleSelectLocation}
                 label="Location"
                 inputProps={{
                   name: "locationId",
@@ -371,7 +281,7 @@ function QuestItems(props) {
               multiline
               rows={8}
               value={item.description}
-              onChange={onChangeItem}
+              onChange={handleChangeItem}
             />
 
             <FormControl
@@ -387,11 +297,11 @@ function QuestItems(props) {
                 id="objectives-multi-select"
                 multiple
                 value={item.objectives}
-                onChange={onChangeObjectives}
+                onChange={handleChangeObjectives}
                 input={<Input />}
                 renderValue={(selected) => selected.join(", ")}
               >
-                {props.objectives.map((objective) => (
+                {quest.objectives.map((objective) => (
                   <MenuItem key={objective.id} value={objective.id}>
                     <Checkbox
                       checked={item.objectives.indexOf(objective.id) > -1}
@@ -415,11 +325,11 @@ function QuestItems(props) {
                 id="requirements-multi-select"
                 multiple
                 value={item.requirements}
-                onChange={onChangeRequirements}
+                onChange={handleChangeRequirements}
                 input={<Input />}
                 renderValue={(selected) => selected.join(", ")}
               >
-                {props.objectives.map((objective) => (
+                {quest.objectives.map((objective) => (
                   <MenuItem key={objective.id} value={objective.id}>
                     <Checkbox
                       checked={item.requirements.indexOf(objective.id) > -1}
@@ -443,11 +353,11 @@ function QuestItems(props) {
                 id="expirations-multi-select"
                 multiple
                 value={item.expirations}
-                onChange={onChangeExpirations}
+                onChange={handleChangeExpirations}
                 input={<Input />}
                 renderValue={(selected) => selected.join(", ")}
               >
-                {props.objectives.map((objective) => (
+                {quest.objectives.map((objective) => (
                   <MenuItem key={objective.id} value={objective.id}>
                     <Checkbox
                       checked={item.expirations.indexOf(objective.id) > -1}
@@ -462,7 +372,49 @@ function QuestItems(props) {
         <Grid item md={8} sm={12}>
           <Grid container spacing={2}>
             <Grid item sm={12}>
-              {renderView(view)}
+              <List component="nav" subheader={<li />}>
+                {props.locations &&
+                  props.locations.map((location) => (
+                    <li key={location.id}>
+                      <ul>
+                        <ListSubheader>{location.name}</ListSubheader>
+                        {quest.items &&
+                          quest.items
+                            .filter((item) => {
+                              return item.locationId === location.id;
+                            })
+                            .map((item, index) => (
+                              <ListItem
+                                button
+                                key={item.id}
+                                selected={selectedIndex === item.id}
+                                onClick={(event) =>
+                                  handleListItemClick(item, item.id)
+                                }
+                              >
+                                <ListItemText
+                                  primary={
+                                    <Typography variant="h6" gutterBottom>
+                                      {item.name}
+                                    </Typography>
+                                  }
+                                  secondary={
+                                    <Typography
+                                      style={{ whiteSpace: "pre-line" }}
+                                      variant="body2"
+                                      className={classes.inline}
+                                      color="textPrimary"
+                                    >
+                                      {item.description}
+                                    </Typography>
+                                  }
+                                />
+                              </ListItem>
+                            ))}
+                      </ul>
+                    </li>
+                  ))}
+              </List>
             </Grid>
           </Grid>
         </Grid>
@@ -473,7 +425,7 @@ function QuestItems(props) {
             <Button
               variant="contained"
               color="primary"
-              onClick={addItem}
+              onClick={handleAddItem}
               className={classes.button}
             >
               Add Item
@@ -483,14 +435,14 @@ function QuestItems(props) {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={updateItem}
+                onClick={handleUpdateItem}
                 className={classes.button}
               >
                 Update
               </Button>
               <Button
                 variant="contained"
-                onClick={removeItem}
+                onClick={handleRemoveItem}
                 className={classes.button}
               >
                 Remove
@@ -502,7 +454,7 @@ function QuestItems(props) {
           <Button
             variant="contained"
             color="secondary"
-            onClick={props.publishQuest}
+            onClick={publishQuest}
             className={classes.button}
           >
             Publish
@@ -511,7 +463,7 @@ function QuestItems(props) {
       </Box>
     </>
   );
-}
+};
 
 QuestItems.propTypes = {};
 
