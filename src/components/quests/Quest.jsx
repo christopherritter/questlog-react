@@ -45,7 +45,11 @@ const Quest = (props) => {
     const unsubscribe = QuestDataService.getAll()
       .where("questId", "==", props.match.params.questId)
       .onSnapshot((snapshot) => {
-        snapshot.docs.map((doc) => setQuest(doc.data()));
+        snapshot.docs.map((doc) => {
+          var q = doc.data()
+          props.setQuestTitle(q.title);
+          setQuest(q)
+        });
       });
 
     return unsubscribe;

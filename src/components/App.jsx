@@ -6,7 +6,7 @@ import {
   useHistory,
 } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
-import theme from './theme.jsx';
+import theme from "./theme.jsx";
 
 import PrivateRoute from "./utils/PrivateRoute.jsx";
 // import Home from "./Home.jsx";
@@ -19,7 +19,7 @@ import CreateQuest from "./editor/CreateQuest.jsx";
 // import QuestEditor from "./editor/QuestEditor.jsx";
 import Quest from "./quests/Quest.jsx";
 
-import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -81,6 +81,12 @@ const App = () => {
     }
   }
 
+  const [questTitle, setQuestTitle] = React.useState(null);
+
+  function handleSetQuestTitle(title) {
+    setQuestTitle(title);
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -99,6 +105,11 @@ const App = () => {
           <Typography variant="h6" className={classes.title}>
             QuestLog
           </Typography>
+          {questTitle && (
+            <Typography variant="h6" className={classes.title}>
+              { questTitle }
+            </Typography>
+          )}
           {loggedIn ? (
             <div>
               <IconButton
@@ -154,7 +165,13 @@ const App = () => {
           <Route exact path="/" component={QuestLibrary} />
           <Route path="/quests" component={QuestLibrary} />
           <Route path="/create-quest" component={CreateQuest} />
-          <Route exact path="/quest/:questId/:role?" component={Quest} />
+          <Route
+            exact
+            path="/quest/:questId/:role?"
+            render={(props) => (
+              <Quest {...props} setQuestTitle={handleSetQuestTitle} />
+            )}
+          />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
           <PrivateRoute path="/profile" component={Profile} />
