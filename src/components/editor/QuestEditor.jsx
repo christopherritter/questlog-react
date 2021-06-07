@@ -170,29 +170,10 @@ const QuestEditor = (props) => {
             <QuestDetails />
           </TabPanel>
           <TabPanel value={tab} index={1}>
-            <QuestRegion
-              // map={
-              //   <MapGL
-              //     style={{ width: "100%", height: "400px" }}
-              //     mapStyle="mapbox://styles/mapbox/streets-v11"
-              //     accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
-              //     updateCenter={updateCenter}
-              //   />
-              // }
-              // region={quest.region}
-              // updateRegion={updateRegion}
-              // updateCenter={updateCenter}
-              // publishQuest={publishQuest}
-            ></QuestRegion>
+            <QuestRegion />
           </TabPanel>
           <TabPanel value={tab} index={2}>
-            <QuestObjectives
-              objectives={quest.objectives}
-              addObjective={addObjective}
-              updateObjective={updateObjective}
-              removeObjective={removeObjective}
-              publishQuest={publishQuest}
-            ></QuestObjectives>
+            <QuestObjectives />
           </TabPanel>
           <TabPanel value={tab} index={3}>
             <QuestLocations

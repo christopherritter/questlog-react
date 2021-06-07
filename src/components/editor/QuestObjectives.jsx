@@ -30,9 +30,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function QuestObjectives(props) {
+const QuestObjectives = () => {
   const classes = useStyles();
-  const { quest, addObjective, updateObjective, removeObjective } =
+  const { quest, addObjective, updateObjective, removeObjective, publishQuest } =
     useContext(QuestContext);
   var id = 0;
 
@@ -159,8 +159,8 @@ function QuestObjectives(props) {
         </Grid>
         <Grid item md={8} sm={12}>
           <List component="nav">
-            {props.objectives &&
-              props.objectives.map((objective, index) => {
+            {quest.objectives &&
+              quest.objectives.map((objective, index) => {
                 return (
                   <ListItem
                     button
@@ -219,7 +219,7 @@ function QuestObjectives(props) {
           <Button
             variant="contained"
             color="secondary"
-            onClick={props.publishQuest}
+            onClick={publishQuest}
             className={classes.button}
           >
             Publish
