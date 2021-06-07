@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect, useContext } from "react";
+
+import QuestContext from "../../contexts/QuestContext.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -33,10 +34,19 @@ const useStyles = makeStyles((theme) => ({
 
 const QuestActions = (props) => {
   const classes = useStyles();
+  const {
+    quest,
+    actionIndex,
+    addAction,
+    updateAction,
+    clearAction,
+    removeAction,
+    publishQuest,
+  } = useContext(QuestContext);
   var id = 0;
 
-  if (props.actions && props.actions.length > 0) {
-    var idList = props.actions.map((obj) => {
+  if (quest.actions && quest.actions.length > 0) {
+    var idList = quest.actions.map((obj) => {
       var idNumber,
         matches = obj.id.match(/\d+$/);
 
@@ -60,11 +70,11 @@ const QuestActions = (props) => {
 
   const [action, setAction ] = useState(initialActionState);
 
-  useEffect(() => {
-    if (props.action) {
-      setAction(props.action);
-    }
-  }, [props.action]);
+  // useEffect(() => {
+  //   if (props.action) {
+  //     setAction(props.action);
+  //   }
+  // }, [props.action]);
 
   function onChangeAction(event) {
     const { name, value } = event.target;
@@ -89,7 +99,7 @@ const QuestActions = (props) => {
 
   function handleSaveAction() {
     console.log("Handle save action");
-    props.addAction({
+    addAction({
       id: "action-" + id,
       ...action,
     });
@@ -177,8 +187,8 @@ const QuestActions = (props) => {
 
 
 
-        {props.actions &&
-          props.actions
+        {quest.actions &&
+          quest.actions
             .map((action, index) => (
               <ListItem
                 button

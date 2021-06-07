@@ -46,9 +46,9 @@ const layerStyle = {
   },
 };
 
-function QuestLocations(props) {
+function QuestLocations() {
   const classes = useStyles();
-  const { quest, addLocation, setLocationIndex, findWithAttr, updateLocation, removeLocation, publishQuest } =
+  const { quest, addLocation, setLocationIndex, findWithAttr, updateLocation, locationIndex, clearLocation, removeLocation, publishQuest } =
     useContext(QuestContext);
     const geojson = {
       type: "FeatureCollection",
@@ -169,7 +169,7 @@ function QuestLocations(props) {
       isLandmark: location.isLandmark,
       isStartingPoint: location.isStartingPoint,
     });
-    props.clearLocation();
+    clearLocation();
     setLocation(initialLocationState);
     setSelectedIndex(-1);
   };
@@ -195,16 +195,16 @@ function QuestLocations(props) {
       zoom: event.zoom,
     };
     setLocation(updatedLocation);
-    setViewport(event);
+    // setViewport(event);
   };
 
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
 
-  useEffect(() => {
-    setSelectedIndex(props.locationIndex);
-  }, [props.locationIndex]);
+  // useEffect(() => {
+  //   setSelectedIndex(locationIndex);
+  // }, [locationIndex]);
 
-  const [viewport, setViewport] = useState(quest.region);
+  // const [viewport, setViewport] = useState(quest.region);
 
   // const mapClick = (event) => {
   //   const { lngLat } = event;
@@ -295,7 +295,7 @@ function QuestLocations(props) {
                 variant="contained"
                 disableElevation
                 onClick={() => {
-                  props.clearLocation();
+                  clearLocation();
                   setLocation(initialLocationState);
                   setSelectedIndex(-1);
                 }}

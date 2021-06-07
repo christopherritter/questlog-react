@@ -176,9 +176,9 @@ const QuestItems = () => {
 
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
 
-  useEffect(() => {
-    setSelectedIndex(itemIndex);
-  }, [itemIndex]);
+  // useEffect(() => {
+  //   setSelectedIndex(itemIndex);
+  // }, [itemIndex]);
 
   const handleListItemClick = (item, index) => {
     const selectedItem = { ...item };

@@ -177,15 +177,22 @@ const QuestEntries = () => {
 
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
 
-  useEffect(() => {
-    setSelectedIndex(entryIndex);
-  }, [entryIndex]);
+  // useEffect(() => {
+  //   setSelectedIndex(entryIndex);
+  // }, [entryIndex]);
 
   function handleListItemClick(entry, index) {
     const selectedEntry = { ...entry };
     setSelectedIndex(index);
     setEntry(selectedEntry);
   };
+
+  function handleAddAction(event) {
+    console.log("Handle add action")
+    console.log(event)
+    // const { name, value } = event.target;
+    // setEntry({ ...entry, [name]: value });
+  }
 
   return (
     <>
@@ -288,7 +295,7 @@ const QuestEntries = () => {
             <QuestActions
               // action={props.action}
               // actions={props.actions}
-              // addAction={addAction}
+              addAction={handleAddAction}
               // updateAction={updateAction}
               // removeAction={removeAction}
               // clearAction={clearAction}
