@@ -2,21 +2,18 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import DraftsIcon from "@material-ui/icons/Drafts";
-import SendIcon from "@material-ui/icons/Send";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,11 +52,10 @@ const QuestActions = (props) => {
 
   const initialActionState = {
     id: "action-" + id,
-    marker: "",
-    target: "",
-    targetName: "",
     text: "",
+    targetId: "",
     type: "" ,
+    marker: "",
   };
 
   const [action, setAction ] = useState(initialActionState);
@@ -76,6 +72,12 @@ const QuestActions = (props) => {
   };
 
   const [open, setOpen] = React.useState(false);
+
+  const [selectedIndex, setSelectedIndex] = useState(false);
+
+  function handleListItemClick() {
+    console.log("Quest item click")
+  };
 
   function handleClickOpen() {
     setOpen(true);
@@ -125,19 +127,9 @@ const QuestActions = (props) => {
             id="actionTarget"
             label="Target"
             type="text"
-            name="target"
+            name="targetId"
             fullWidth
-            value={action.target}
-            onChange={onChangeAction}
-          />
-          <TextField
-            margin="normal"
-            id="actionTargetName"
-            label="Target name"
-            type="text"
-            name="targetName"
-            fullWidth
-            value={action.targetName}
+            value={action.targetId}
             onChange={onChangeAction}
           />
           <TextField
@@ -185,22 +177,19 @@ const QuestActions = (props) => {
 
 
 
-        {/* {props.entries &&
-          props.entries
-            .filter((entry) => {
-              return entry.locationId === location.id;
-            })
-            .map((entry, index) => (
+        {props.actions &&
+          props.actions
+            .map((action, index) => (
               <ListItem
                 button
-                key={entry.id}
-                selected={selectedIndex === entry.id}
-                onClick={(event) => handleListItemClick(entry, entry.id)}
+                key={action.id}
+                selected={selectedIndex === action.id}
+                onClick={() => handleListItemClick(action, action.id)}
               >
                 <ListItemText
                   primary={
                     <Typography variant="h6" gutterBottom>
-                      {entry.title}
+                      {action.text}
                     </Typography>
                   }
                   secondary={
@@ -210,17 +199,17 @@ const QuestActions = (props) => {
                       className={classes.inline}
                       color="textPrimary"
                     >
-                      {entry.text}
+                      {action.text}
                     </Typography>
                   }
                 />
               </ListItem>
-            ))} */}
+            ))}
 
 
 
 
-        <ListItem button>
+        {/* <ListItem button>
           <ListItemIcon>
             <SendIcon />
           </ListItemIcon>
@@ -231,7 +220,7 @@ const QuestActions = (props) => {
             <DraftsIcon />
           </ListItemIcon>
           <ListItemText primary="Drafts" />
-        </ListItem>
+        </ListItem> */}
 
 
 
