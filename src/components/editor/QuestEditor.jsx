@@ -1,8 +1,6 @@
 import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 
-import QuestContext from "../../contexts/QuestContext.jsx";
-
 import QuestDetails from "./QuestDetails.jsx";
 import QuestRegion from "./QuestRegion.jsx";
 import QuestObjectives from "./QuestObjectives.jsx";
@@ -58,7 +56,6 @@ function a11yProps(index) {
 
 const QuestEditor = () => {
   const classes = useStyles();
-  const { quest } = useContext(QuestContext);
 
   const viewTab = (event, newTab) => {
     setTab(newTab);
