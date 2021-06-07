@@ -154,7 +154,6 @@ const App = () => {
           <Route exact path="/" component={QuestLibrary} />
           <Route path="/quests" component={QuestLibrary} />
           <Route path="/create-quest" component={CreateQuest} />
-          <Route exact path="/quest-editor/:questId" component={QuestEditor} />
           <Route exact path="/quest/:questId/:role?" component={Quest} />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />

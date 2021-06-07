@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 
 import MapGL, { Source, Layer } from "@urbica/react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import QuestDataService from "../../services/QuestService";
+import QuestContext from "../../contexts/QuestContext.jsx";
+
 import QuestDetails from "./QuestDetails.jsx";
 import QuestRegion from "./QuestRegion.jsx";
 import QuestObjectives from "./QuestObjectives.jsx";
@@ -67,282 +69,320 @@ function a11yProps(index) {
   };
 }
 
-function findWithAttr(array, attr, value) {
-  for (var i = 0; i < array.length; i += 1) {
-    if (array[i][attr] === value) {
-      return i;
-    }
-  }
-  return -1;
-}
+// function findWithAttr(array, attr, value) {
+//   for (var i = 0; i < array.length; i += 1) {
+//     if (array[i][attr] === value) {
+//       return i;
+//     }
+//   }
+//   return -1;
+// }
 
-const QuestEditor = props => {
+const QuestEditor = (props) => {
   const classes = useStyles();
+  const {
+    quest,
+    location,
+    entry,
+    item,
+    action,
+    updateCenter,
+    updateDetails,
+    updateRegion,
+    locationIndex,
+    addObjective,
+    updateObjective,
+    removeObjective,
+    addLocation,
+    updateLocation,
+    removeLocation,
+    clearLocation,
+    addEntry,
+    updateEntry,
+    removeEntry,
+    clearEntry,
+    addItem,
+    updateItem,
+    removeItem,
+    clearItem,
+    addAction,
+    updateAction,
+    removeAction,
+    clearAction,
+    publishQuest,
+    findWithAttr,
+    setLocation,
+    setLocationIndex,
+    entryIndex,
+    actionIndex,
+    itemIndex,
+  } = useContext(QuestContext);
 
-  const [quest, setQuest] = useState({
-    questId: "",
-    title: "",
-    author: "",
-    authorId: "",
-    description: "",
-    categories: [],
-    image: "",
-    region: {
-      latitude: 39.82817,
-      longitude: -98.5795,
-      bearing: 0,
-      pitch: 0,
-      zoom: 17,
-    },
-    objectives: [],
-    locations: [],
-    entries: [],
-    items: [],
-    actions: [],
-  });
+  // const [quest, setQuest] = useState({
+  //   questId: "",
+  //   title: "",
+  //   author: "",
+  //   authorId: "",
+  //   description: "",
+  //   categories: [],
+  //   image: "",
+  //   region: {
+  //     latitude: 39.82817,
+  //     longitude: -98.5795,
+  //     bearing: 0,
+  //     pitch: 0,
+  //     zoom: 17,
+  //   },
+  //   objectives: [],
+  //   locations: [],
+  //   entries: [],
+  //   items: [],
+  //   actions: [],
+  // });
 
-  useEffect(() => {
-    const unsubscribe = QuestDataService.getAll()
-      .where("questId", "==", props.match.params.questId)
-      .onSnapshot((snapshot) => {
-        snapshot.docs.map((doc) => {
-          return setQuest(doc.data());
-        });
-      });
-    return unsubscribe;
-  }, [props.match.params.questId]);
+  // useEffect(() => {
+  //   const unsubscribe = QuestDataService.getAll()
+  //     .where("questId", "==", props.match.params.questId)
+  //     .onSnapshot((snapshot) => {
+  //       snapshot.docs.map((doc) => {
+  //         return setQuest(doc.data());
+  //       });
+  //     });
+  //   return unsubscribe;
+  // }, [props.match.params.questId]);
 
-  const onUpdateDetails = (event) => {
-    const { name, value } = event.target;
-    setQuest({ ...quest, [name]: value });
-  };
+  // const onUpdateDetails = (event) => {
+  //   const { name, value } = event.target;
+  //   setQuest({ ...quest, [name]: value });
+  // };
 
-  const onUpdateRegion = (event) => {
-    const { name, value } = event.target;
-    setQuest({
-      ...quest,
-      region: {
-        [name]: value,
-      },
-    });
-  };
+  // const onUpdateRegion = (event) => {
+  //   const { name, value } = event.target;
+  //   setQuest({
+  //     ...quest,
+  //     region: {
+  //       [name]: value,
+  //     },
+  //   });
+  // };
 
-  const onUpdateCenter = (newRegion) => {
-    setQuest({ ...quest, region: newRegion });
-  };
+  // const onUpdateCenter = (newRegion) => {
+  //   setQuest({ ...quest, region: newRegion });
+  // };
 
-  const onAddObjective = (objective) => {
-    if (quest.objectives) {
-      setQuest({ ...quest, objectives: [...quest.objectives, objective] });
-    } else {
-      setQuest({ ...quest, objectives: [objective] });
-    }
-  };
+  // const onAddObjective = (objective) => {
+  //   if (quest.objectives) {
+  //     setQuest({ ...quest, objectives: [...quest.objectives, objective] });
+  //   } else {
+  //     setQuest({ ...quest, objectives: [objective] });
+  //   }
+  // };
 
-  const onUpdateObjective = (objective) => {
-    const selectedObjective = quest.objectives.findIndex(function (obj) {
-      return objective.id === obj.id;
-    });
-    let updatedObjectives = [...quest.objectives];
-    let updatedObjective = { ...quest.objectives[selectedObjective] };
+  // const onUpdateObjective = (objective) => {
+  //   const selectedObjective = quest.objectives.findIndex(function (obj) {
+  //     return objective.id === obj.id;
+  //   });
+  //   let updatedObjectives = [...quest.objectives];
+  //   let updatedObjective = { ...quest.objectives[selectedObjective] };
 
-    updatedObjective.text = objective.text;
-    updatedObjective.isPrimary = objective.isPrimary;
-    updatedObjective.isComplete = objective.isComplete;
-    updatedObjectives[selectedObjective] = updatedObjective;
+  //   updatedObjective.text = objective.text;
+  //   updatedObjective.isPrimary = objective.isPrimary;
+  //   updatedObjective.isComplete = objective.isComplete;
+  //   updatedObjectives[selectedObjective] = updatedObjective;
 
-    setQuest({ ...quest, objectives: updatedObjectives });
-  };
+  //   setQuest({ ...quest, objectives: updatedObjectives });
+  // };
 
-  const onRemoveObjective = (objective) => {
-    const updatedObjectives = quest.objectives.filter(
-      (obj) => obj.id !== objective.id
-    );
-    setQuest({ ...quest, objectives: updatedObjectives });
-  };
+  // const onRemoveObjective = (objective) => {
+  //   const updatedObjectives = quest.objectives.filter(
+  //     (obj) => obj.id !== objective.id
+  //   );
+  //   setQuest({ ...quest, objectives: updatedObjectives });
+  // };
 
-  const [locationIndex, setLocationIndex] = useState(-1);
+  // const [locationIndex, setLocationIndex] = useState(-1);
 
-  const [location, setLocation] = useState();
+  // const [location, setLocation] = useState();
 
-  const onAddLocation = (location) => {
-    if (quest.locations) {
-      setQuest({ ...quest, locations: [...quest.locations, location] });
-    } else {
-      setQuest({ ...quest, locations: [location] });
-    }
-  };
+  // const onAddLocation = (location) => {
+  //   if (quest.locations) {
+  //     setQuest({ ...quest, locations: [...quest.locations, location] });
+  //   } else {
+  //     setQuest({ ...quest, locations: [location] });
+  //   }
+  // };
 
-  const onUpdateLocation = (location) => {
-    const selectedLocation = quest.locations.findIndex(function (loc) {
-      return location.id === loc.id;
-    });
-    let updatedLocations = [...quest.locations];
-    let updatedLocation = { ...quest.locations[selectedLocation] };
+  // const onUpdateLocation = (location) => {
+  //   const selectedLocation = quest.locations.findIndex(function (loc) {
+  //     return location.id === loc.id;
+  //   });
+  //   let updatedLocations = [...quest.locations];
+  //   let updatedLocation = { ...quest.locations[selectedLocation] };
 
-    updatedLocation.name = location.name;
-    updatedLocation.latitude = location.latitude;
-    updatedLocation.longitude = location.longitude;
-    updatedLocation.bearing = location.bearing;
-    updatedLocation.pitch = location.pitch;
-    updatedLocation.zoom = location.zoom;
-    updatedLocation.image = location.image;
-    updatedLocation.marker = location.marker;
-    updatedLocation.order = location.order;
-    updatedLocation.isLandmark = location.isLandmark;
-    updatedLocation.isStartingPoint = location.isStartingPoint;
-    updatedLocations[selectedLocation] = updatedLocation;
+  //   updatedLocation.name = location.name;
+  //   updatedLocation.latitude = location.latitude;
+  //   updatedLocation.longitude = location.longitude;
+  //   updatedLocation.bearing = location.bearing;
+  //   updatedLocation.pitch = location.pitch;
+  //   updatedLocation.zoom = location.zoom;
+  //   updatedLocation.image = location.image;
+  //   updatedLocation.marker = location.marker;
+  //   updatedLocation.order = location.order;
+  //   updatedLocation.isLandmark = location.isLandmark;
+  //   updatedLocation.isStartingPoint = location.isStartingPoint;
+  //   updatedLocations[selectedLocation] = updatedLocation;
 
-    setQuest({ ...quest, locations: updatedLocations });
-  };
+  //   setQuest({ ...quest, locations: updatedLocations });
+  // };
 
-  const onRemoveLocation = (location) => {
-    const updatedLocations = quest.locations.filter(
-      (loc) => loc.id !== location.id
-    );
-    setQuest({ ...quest, locations: updatedLocations });
-    setLocationIndex(-1);
-    setLocation(null);
-  };
+  // const onRemoveLocation = (location) => {
+  //   const updatedLocations = quest.locations.filter(
+  //     (loc) => loc.id !== location.id
+  //   );
+  //   setQuest({ ...quest, locations: updatedLocations });
+  //   setLocationIndex(-1);
+  //   setLocation(null);
+  // };
 
-  const onClearLocation = () => {
-    setLocationIndex(-1);
-    setLocation(null);
-  };
+  // const onClearLocation = () => {
+  //   setLocationIndex(-1);
+  //   setLocation(null);
+  // };
 
   // Entries
   // Short text entries that are displayed at a location
   // Usually provide readers with a set of actions to choose from
 
-  const [entryIndex, setEntryIndex] = useState(-1);
+  // const [entryIndex, setEntryIndex] = useState(-1);
 
-  const [entry, setEntry] = useState();
+  // const [entry, setEntry] = useState();
 
-  const onAddEntry = (entry) => {
-    if (quest.entries) {
-      setQuest({ ...quest, entries: [...quest.entries, entry] });
-    } else {
-      setQuest({ ...quest, entries: [entry] });
-    }
-  };
+  // const onAddEntry = (entry) => {
+  //   if (quest.entries) {
+  //     setQuest({ ...quest, entries: [...quest.entries, entry] });
+  //   } else {
+  //     setQuest({ ...quest, entries: [entry] });
+  //   }
+  // };
 
-  const onUpdateEntry = (entry) => {
-    const selectedEntry = quest.entries.findIndex(function (ent) {
-      return entry.id === ent.id;
-    });
-    let updatedEntries = [...quest.entries];
-    let updatedEntry = { ...quest.entries[selectedEntry] };
+  // const onUpdateEntry = (entry) => {
+  //   const selectedEntry = quest.entries.findIndex(function (ent) {
+  //     return entry.id === ent.id;
+  //   });
+  //   let updatedEntries = [...quest.entries];
+  //   let updatedEntry = { ...quest.entries[selectedEntry] };
 
-    updatedEntry = { ...entry };
-    updatedEntries[selectedEntry] = updatedEntry;
+  //   updatedEntry = { ...entry };
+  //   updatedEntries[selectedEntry] = updatedEntry;
 
-    setQuest({ ...quest, entries: updatedEntries });
-  };
+  //   setQuest({ ...quest, entries: updatedEntries });
+  // };
 
-  const onRemoveEntry = (entry) => {
-    const updatedEntries = quest.entries.filter((ent) => ent.id !== entry.id);
-    setQuest({ ...quest, entries: updatedEntries });
-    setEntryIndex(-1);
-    setEntry(null);
-  };
+  // const onRemoveEntry = (entry) => {
+  //   const updatedEntries = quest.entries.filter((ent) => ent.id !== entry.id);
+  //   setQuest({ ...quest, entries: updatedEntries });
+  //   setEntryIndex(-1);
+  //   setEntry(null);
+  // };
 
-  const onClearEntry = () => {
-    setEntryIndex(-1);
-    setEntry(null);
-  };
+  // const onClearEntry = () => {
+  //   setEntryIndex(-1);
+  //   setEntry(null);
+  // };
 
   // Items
   // Short descriptions of things that can fit inside a backpack
   // Usually provide readers with a set of actions to choose from
 
-  const [itemIndex, setItemIndex] = useState(-1);
+  // const [itemIndex, setItemIndex] = useState(-1);
 
-  const [item, setItem] = useState();
+  // const [item, setItem] = useState();
 
-  const onAddItem = (item) => {
-    if (quest.items) {
-      setQuest({ ...quest, items: [...quest.items, item] });
-    } else {
-      setQuest({ ...quest, items: [item] });
-    }
-  };
+  // const onAddItem = (item) => {
+  //   if (quest.items) {
+  //     setQuest({ ...quest, items: [...quest.items, item] });
+  //   } else {
+  //     setQuest({ ...quest, items: [item] });
+  //   }
+  // };
 
-  const onUpdateItem = (item) => {
-    const selectedItem = quest.items.findIndex(function (i) {
-      return item.id === i.id;
-    });
-    let updatedItems = [...quest.items];
-    let updatedItem = { ...quest.items[selectedItem] };
+  // const onUpdateItem = (item) => {
+  //   const selectedItem = quest.items.findIndex(function (i) {
+  //     return item.id === i.id;
+  //   });
+  //   let updatedItems = [...quest.items];
+  //   let updatedItem = { ...quest.items[selectedItem] };
 
-    updatedItem = { ...item };
-    updatedItems[selectedItem] = updatedItem;
+  //   updatedItem = { ...item };
+  //   updatedItems[selectedItem] = updatedItem;
 
-    setQuest({ ...quest, items: updatedItems });
-  };
+  //   setQuest({ ...quest, items: updatedItems });
+  // };
 
-  const onRemoveItem = (item) => {
-    const updatedItems = quest.items.filter((i) => i.id !== item.id);
-    setQuest({ ...quest, items: updatedItems });
-    setItemIndex(-1);
-    setItem(null);
-  };
+  // const onRemoveItem = (item) => {
+  //   const updatedItems = quest.items.filter((i) => i.id !== item.id);
+  //   setQuest({ ...quest, items: updatedItems });
+  //   setItemIndex(-1);
+  //   setItem(null);
+  // };
 
-  const onClearItem = () => {
-    setItemIndex(-1);
-    setItem(null);
-  };
+  // const onClearItem = () => {
+  //   setItemIndex(-1);
+  //   setItem(null);
+  // };
 
-  // Actions 
+  // Actions
   // Actions may be taken by the user to move the story
   // They are associated with Entries and Items
 
-  const [actionIndex, setActionIndex] = useState(-1);
+  // const [actionIndex, setActionIndex] = useState(-1);
 
-  const [action, setAction] = useState();
+  // const [action, setAction] = useState();
 
-  const onAddAction = (action) => {
-    console.log("The top add action!")
-    if (quest.actions) {
-      setQuest({ ...quest, actions: [...quest.actions, action] });
-    } else {
-      setQuest({ ...quest, actions: [action] });
-    }
-  };
+  // const onAddAction = (action) => {
+  //   console.log("The top add action!");
+  //   if (quest.actions) {
+  //     setQuest({ ...quest, actions: [...quest.actions, action] });
+  //   } else {
+  //     setQuest({ ...quest, actions: [action] });
+  //   }
+  // };
 
-  const onUpdateAction = (action) => {
-    const selectedAction = quest.actions.findIndex(function (a) {
-      return action.id === a.id;
-    });
-    let updatedActions = [...quest.actions];
-    let updatedAction = { ...quest.actions[selectedAction] };
+  // const onUpdateAction = (action) => {
+  //   const selectedAction = quest.actions.findIndex(function (a) {
+  //     return action.id === a.id;
+  //   });
+  //   let updatedActions = [...quest.actions];
+  //   let updatedAction = { ...quest.actions[selectedAction] };
 
-    updatedAction = { ...action };
-    updatedActions[selectedAction] = updatedAction;
+  //   updatedAction = { ...action };
+  //   updatedActions[selectedAction] = updatedAction;
 
-    setQuest({ ...quest, actions: updatedActions });
-  };
+  //   setQuest({ ...quest, actions: updatedActions });
+  // };
 
-  const onRemoveAction = (action) => {
-    const updatedActions = quest.actions.filter((a) => a.id !== action.id);
-    setQuest({ ...quest, actions: updatedActions });
-    setActionIndex(-1);
-    setAction(null);
-  };
+  // const onRemoveAction = (action) => {
+  //   const updatedActions = quest.actions.filter((a) => a.id !== action.id);
+  //   setQuest({ ...quest, actions: updatedActions });
+  //   setActionIndex(-1);
+  //   setAction(null);
+  // };
 
-  const onClearAction = () => {
-    setActionIndex(-1);
-    setAction(null);
-  };
+  // const onClearAction = () => {
+  //   setActionIndex(-1);
+  //   setAction(null);
+  // };
 
-  const onPublishQuest = () => {
-    QuestDataService.update(quest.questId, quest)
-      .then(() => {
-        console.log("Updated!");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
+  // const onPublishQuest = () => {
+  //   console.log("Publish quest");
+  //   QuestDataService.update(quest.questId, quest)
+  //     .then(() => {
+  //       console.log("Updated!");
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  // };
 
   const viewTab = (event, newTab) => {
     setTab(newTab);
@@ -405,8 +445,8 @@ const QuestEditor = props => {
           <TabPanel value={tab} index={0}>
             <QuestDetails
               quest={quest}
-              updateDetails={onUpdateDetails}
-              publishQuest={onPublishQuest}
+              updateDetails={updateDetails}
+              publishQuest={publishQuest}
             ></QuestDetails>
           </TabPanel>
           <TabPanel value={tab} index={1}>
@@ -416,22 +456,22 @@ const QuestEditor = props => {
                   style={{ width: "100%", height: "400px" }}
                   mapStyle="mapbox://styles/mapbox/streets-v11"
                   accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
-                  updateCenter={onUpdateCenter}
+                  updateCenter={updateCenter}
                 />
               }
               region={quest.region}
-              updateRegion={onUpdateRegion}
-              updateCenter={onUpdateCenter}
-              publishQuest={onPublishQuest}
+              updateRegion={updateRegion}
+              updateCenter={updateCenter}
+              publishQuest={publishQuest}
             ></QuestRegion>
           </TabPanel>
           <TabPanel value={tab} index={2}>
             <QuestObjectives
               objectives={quest.objectives}
-              addObjective={onAddObjective}
-              updateObjective={onUpdateObjective}
-              removeObjective={onRemoveObjective}
-              publishQuest={onPublishQuest}
+              addObjective={addObjective}
+              updateObjective={updateObjective}
+              removeObjective={removeObjective}
+              publishQuest={publishQuest}
             ></QuestObjectives>
           </TabPanel>
           <TabPanel value={tab} index={3}>
@@ -454,11 +494,11 @@ const QuestEditor = props => {
               locations={quest.locations}
               locationIndex={locationIndex}
               location={location}
-              addLocation={onAddLocation}
-              updateLocation={onUpdateLocation}
-              removeLocation={onRemoveLocation}
-              clearLocation={onClearLocation}
-              publishQuest={onPublishQuest}
+              addLocation={addLocation}
+              updateLocation={updateLocation}
+              removeLocation={removeLocation}
+              clearLocation={clearLocation}
+              publishQuest={publishQuest}
             ></QuestLocations>
           </TabPanel>
           <TabPanel value={tab} index={4}>
@@ -485,20 +525,18 @@ const QuestEditor = props => {
               entries={quest.entries}
               entryIndex={entryIndex}
               entry={entry}
-              addEntry={onAddEntry}
-              updateEntry={onUpdateEntry}
-              removeEntry={onRemoveEntry}
-              clearEntry={onClearEntry}
-
+              addEntry={addEntry}
+              updateEntry={updateEntry}
+              removeEntry={removeEntry}
+              clearEntry={clearEntry}
               actions={quest.actions}
               actionIndex={actionIndex}
               action={action}
-              addAction={onAddAction}
-              updateAction={onUpdateAction}
-              removeAction={onRemoveAction}
-              clearAction={onClearAction}
-
-              publishQuest={onPublishQuest}
+              addAction={addAction}
+              updateAction={updateAction}
+              removeAction={removeAction}
+              clearAction={clearAction}
+              publishQuest={publishQuest}
             ></QuestEntries>
           </TabPanel>
           <TabPanel value={tab} index={5}>
@@ -525,17 +563,17 @@ const QuestEditor = props => {
               items={quest.items}
               itemIndex={itemIndex}
               item={item}
-              addItem={onAddItem}
-              updateItem={onUpdateItem}
-              removeItem={onRemoveItem}
-              clearItem={onClearItem}
-              publishQuest={onPublishQuest}
+              addItem={addItem}
+              updateItem={updateItem}
+              removeItem={removeItem}
+              clearItem={clearItem}
+              publishQuest={publishQuest}
             ></QuestItems>
           </TabPanel>
         </Grid>
       </Grid>
     </Paper>
   );
-}
+};
 
-export default QuestEditor
+export default QuestEditor;
