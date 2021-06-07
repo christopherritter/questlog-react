@@ -29,14 +29,14 @@ const rawTheme = createMuiTheme({
       dark: green[700],
     },
   },
-  // typography: {
-  //   fontFamily: "'Work Sans', sans-serif",
-  //   fontSize: 14,
-  //   fontWeightLight: 300, // Work Sans
-  //   fontWeightRegular: 400, // Work Sans
-  //   fontWeightMedium: 700, // Roboto Condensed
-  //   fontFamilySecondary: "'Roboto Condensed', sans-serif",
-  // },
+  typography: {
+    // fontFamily: "'Work Sans', sans-serif",
+    fontSize: 14,
+    fontWeightLight: 200, // Work Sans
+    fontWeightRegular: 300, // Work Sans
+    fontWeightMedium: 400, // Roboto Condensed
+    // fontFamilySecondary: "'Roboto Condensed', sans-serif",
+  },
 });
 
 const fontHeader = {
