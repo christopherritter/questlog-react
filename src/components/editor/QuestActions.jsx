@@ -5,6 +5,7 @@ import QuestContext from "../../contexts/QuestContext.jsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
+import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import List from "@material-ui/core/List";
@@ -85,8 +86,9 @@ const QuestActions = (props) => {
 
   const [selectedIndex, setSelectedIndex] = useState(false);
 
-  function handleListItemClick() {
-    console.log("Quest item click")
+  function handleViewAction(event) {
+    setAction(event)
+    setOpen(true);
   };
 
   function handleClickOpen() {
@@ -94,14 +96,26 @@ const QuestActions = (props) => {
   };
 
   function handleClose() {
+    setAction(initialActionState);
     setOpen(false);
   };
 
   function handleSaveAction() {
-    console.log("Handle save action");
     addAction({
       id: "action-" + id,
       ...action,
+    });
+    props.addActionToEntry("action-" + id);
+    setAction(initialActionState);
+    setOpen(false);
+  };
+
+  function handleRemoveAction() {
+    removeAction({
+      id: action.id,
+    });
+    props.removeActionFromEntry({
+      id: action.id,
     });
     setAction(initialActionState);
     setOpen(false);
@@ -154,12 +168,21 @@ const QuestActions = (props) => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Grid container>
+            <Grid item>
+            <Button onClick={handleRemoveAction}>
+            Remove
+          </Button>
+            </Grid>
+            <Grid item>
+            <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
           <Button onClick={handleSaveAction} color="primary">
             Save
           </Button>
+            </Grid>
+          </Grid>
         </DialogActions>
       </Dialog>
 
@@ -189,12 +212,15 @@ const QuestActions = (props) => {
 
         {quest.actions &&
           quest.actions
+            .filter((action) => {
+              return props.actions.includes(action.id)
+            })
             .map((action, index) => (
               <ListItem
                 button
-                key={action.id}
+                key={index}
                 selected={selectedIndex === action.id}
-                onClick={() => handleListItemClick(action, action.id)}
+                onClick={() => handleViewAction(action, action.id)}
               >
                 <ListItemText
                   primary={
@@ -215,23 +241,6 @@ const QuestActions = (props) => {
                 />
               </ListItem>
             ))}
-
-
-
-
-        {/* <ListItem button>
-          <ListItemIcon>
-            <SendIcon />
-          </ListItemIcon>
-          <ListItemText primary="Sent mail" />
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <DraftsIcon />
-          </ListItemIcon>
-          <ListItemText primary="Drafts" />
-        </ListItem> */}
-
 
 
 

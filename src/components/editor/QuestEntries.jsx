@@ -187,11 +187,20 @@ const QuestEntries = () => {
     setEntry(selectedEntry);
   };
 
-  function handleAddAction(event) {
-    console.log("Handle add action")
-    console.log(event)
-    // const { name, value } = event.target;
-    // setEntry({ ...entry, [name]: value });
+  function handleAddAction(id) {
+    const actionsArr = [ ...entry.actions ];
+    actionsArr.push(id)
+
+    setEntry({ ...entry, actions: actionsArr });
+  }
+
+  function handleRemoveAction(action) {
+    console.log("Handle remove action")
+    
+    const updatedActions = entry.actions.filter((a) => a !== action.id);
+
+    console.log(updatedActions)
+    setEntry({ ...entry, actions: updatedActions });
   }
 
   return (
@@ -294,8 +303,9 @@ const QuestEntries = () => {
 
             <QuestActions
               // action={props.action}
-              // actions={props.actions}
-              addAction={handleAddAction}
+              actions={entry.actions}
+              addActionToEntry={handleAddAction}
+              removeActionFromEntry={handleRemoveAction}
               // updateAction={updateAction}
               // removeAction={removeAction}
               // clearAction={clearAction}
