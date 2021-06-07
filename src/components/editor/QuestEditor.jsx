@@ -1,9 +1,6 @@
 import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 
-import MapGL, { Source, Layer } from "@urbica/react-map-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
-
 import QuestContext from "../../contexts/QuestContext.jsx";
 
 import QuestDetails from "./QuestDetails.jsx";
