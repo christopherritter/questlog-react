@@ -11,9 +11,9 @@ import QuestBackpack from "./QuestBackpack.jsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import MapIcon from "@material-ui/icons/Map";
-import BookIcon from "@material-ui/icons/Book";
-import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
+import MapIcon from "mdi-material-ui/Map";
+import NotebookIcon from "mdi-material-ui/Notebook";
+import BackpackIcon from "mdi-material-ui/BagPersonal";
 
 const sidebarWidth = 352;
 
@@ -444,7 +444,7 @@ function QuestReader(props) {
                 size="large"
                 aria-label="Journal"
                 className={classes.sidebarButton}
-                startIcon={<BookIcon />}
+                startIcon={<NotebookIcon />}
                 onClick={toggleJournal}
               />
               <Button
@@ -453,7 +453,7 @@ function QuestReader(props) {
                 size="large"
                 aria-label="Backpack"
                 className={classes.sidebarButton}
-                startIcon={<ShoppingBasketIcon />}
+                startIcon={<BackpackIcon />}
                 onClick={toggleBackpack}
               />
             </Box>
