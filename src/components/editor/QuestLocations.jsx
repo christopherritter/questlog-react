@@ -17,12 +17,15 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import ListAltIcon from "@material-ui/icons/ListAlt";
-import MapIcon from "@material-ui/icons/Map";
+import Select from "@material-ui/core/Select";
+
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
+
+import MapMarkerCircleIcon from "mdi-material-ui/MapMarkerCircle";
+import ListAltIcon from "mdi-material-ui/FormatListBulleted";
+import MapIcon from "mdi-material-ui/Map";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     marginTop: theme.spacing(3),
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
   },
 }));
 
@@ -50,31 +53,41 @@ const layerStyle = {
 
 function QuestLocations() {
   const classes = useStyles();
-  const { quest, addLocation, setLocationIndex, findWithAttr, updateLocation, locationIndex, clearLocation, removeLocation, publishQuest } =
-    useContext(QuestContext);
-    const geojson = {
-      type: "FeatureCollection",
-      features: quest.locations
-        ? quest.locations.map((location) => {
-            var feature = {
-              type: "Feature",
-              geometry: {
-                type: "Point",
-                coordinates: [location.longitude, location.latitude],
-              },
-              properties: {
-                id: location.id,
-                name: location.name,
-                bearing: location.bearing,
-                pitch: location.pitch,
-                zoom: location.zoom,
-                marker: location.marker,
-              },
-            };
-            return feature;
-          })
-        : [],
-    };
+  const {
+    quest,
+    addLocation,
+    setLocationIndex,
+    findWithAttr,
+    updateLocation,
+    locationIndex,
+    clearLocation,
+    removeLocation,
+    publishQuest,
+    markerTypes,
+  } = useContext(QuestContext);
+  const geojson = {
+    type: "FeatureCollection",
+    features: quest.locations
+      ? quest.locations.map((location) => {
+          var feature = {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [location.longitude, location.latitude],
+            },
+            properties: {
+              id: location.id,
+              name: location.name,
+              bearing: location.bearing,
+              pitch: location.pitch,
+              zoom: location.zoom,
+              marker: location.marker,
+            },
+          };
+          return feature;
+        })
+      : [],
+  };
   var id = 0;
 
   if (quest.locations && quest.locations.length > 0) {
@@ -128,12 +141,12 @@ function QuestLocations() {
   function handleChangeLocation(event) {
     const { name, value } = event.target;
     setLocation({ ...location, [name]: value });
-  };
+  }
 
   function handleToggleLocation(event) {
     const { name, checked } = event.target;
     setLocation({ ...location, [name]: checked });
-  };
+  }
 
   function handleAddLocation(e) {
     e.preventDefault();
@@ -153,7 +166,7 @@ function QuestLocations() {
     });
     setLocation(initialLocationState);
     setSelectedIndex(-1);
-  };
+  }
 
   function handleUpdateLocation(e) {
     e.preventDefault();
@@ -174,7 +187,7 @@ function QuestLocations() {
     clearLocation();
     setLocation(initialLocationState);
     setSelectedIndex(-1);
-  };
+  }
 
   const handleRemoveLocation = (e) => {
     e.preventDefault();
@@ -240,7 +253,7 @@ function QuestLocations() {
                     onClick={(event) => handleListItemClick(location, index)}
                   >
                     <ListItemIcon>
-                      <LocationOnIcon />
+                      <MapMarkerCircleIcon />
                     </ListItemIcon>
                     <ListItemText
                       primary={
@@ -255,24 +268,26 @@ function QuestLocations() {
           </List>
         );
       default:
-        return (<MapGL
-          latitude={quest.region.latitude}
-          longitude={quest.region.longitude}
-          bearing={quest.region.bearing}
-          pitch={quest.region.pitch}
-          zoom={quest.region.zoom}
-          onViewportChange={changeViewport}
-          style={{ width: "100%", height: "400px" }}
-          mapStyle="mapbox://styles/mapbox/streets-v11"
-          accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
-        >
-          <Source id="locationsData" type="geojson" data={geojson} />
-          <Layer
-            source="locationsData"
-            onClick={onMapPointClick}
-            {...layerStyle}
-          />
-        </MapGL>)
+        return (
+          <MapGL
+            latitude={quest.region.latitude}
+            longitude={quest.region.longitude}
+            bearing={quest.region.bearing}
+            pitch={quest.region.pitch}
+            zoom={quest.region.zoom}
+            onViewportChange={changeViewport}
+            style={{ width: "100%", height: "400px" }}
+            mapStyle="mapbox://styles/mapbox/streets-v11"
+            accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+          >
+            <Source id="locationsData" type="geojson" data={geojson} />
+            <Layer
+              source="locationsData"
+              onClick={onMapPointClick}
+              {...layerStyle}
+            />
+          </MapGL>
+        );
     }
   };
 
@@ -280,6 +295,12 @@ function QuestLocations() {
     const selectedLocation = { ...location };
     setSelectedIndex(index);
     setLocation(selectedLocation);
+  };
+
+  function handleSelectMarker(event) {
+    console.log(event.target)
+    const { name, value } = event.target;
+    setLocation({ ...location, [name]: value });
   };
 
   return (
@@ -304,7 +325,7 @@ function QuestLocations() {
               >
                 Create New
               </Button>
- 
+
               <ToggleButtonGroup
                 variant="contained"
                 value={view}
@@ -461,7 +482,29 @@ function QuestLocations() {
               </Grid>
             </Grid>
 
-            <TextField
+            <Select
+              native
+              value={location.marker}
+              onChange={handleSelectMarker}
+              fullWidth
+              label="Marker"
+              inputProps={{
+                name: "marker",
+                id: "locationMarker",
+              }}
+            >
+              <option value={undefined}></option>
+              {markerTypes &&
+                markerTypes.map((marker, index) => {
+                  return (
+                    <option value={marker.value} key={index}>
+                      {marker.name}
+                    </option>
+                  );
+                })}
+            </Select>
+
+            {/* <TextField
               variant="outlined"
               margin="normal"
               required
@@ -472,7 +515,7 @@ function QuestLocations() {
               type="text"
               value={location.marker}
               onChange={handleChangeLocation}
-            />
+            /> */}
           </form>
         </Grid>
         <Grid item md={8} sm={12}>
@@ -524,23 +567,23 @@ function QuestLocations() {
             Publish
           </Button>
           <Button
-          variant="contained"
-          color="default"
-          component={RouterLink}
-          to={`/quest/` + quest.questId + `/read`}
-          className={classes.button}
-        >
-          Read
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          component={RouterLink}
-          to={`/quest/` + quest.questId + `/play`}
-          className={classes.button}
-        >
-          Play
-        </Button>
+            variant="contained"
+            color="default"
+            component={RouterLink}
+            to={`/quest/` + quest.questId + `/read`}
+            className={classes.button}
+          >
+            Read
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            component={RouterLink}
+            to={`/quest/` + quest.questId + `/play`}
+            className={classes.button}
+          >
+            Play
+          </Button>
         </Box>
       </Box>
     </>

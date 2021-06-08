@@ -351,6 +351,55 @@ const Quest = (props) => {
       });
   };
 
+  // Misc
+
+  const markerTypes = [
+    {
+      name: "Home",
+      value: "home"
+    },
+    {
+      name: "Barn",
+      value: "barn"
+    },
+    {
+      name: "Tractor",
+      value: "tractor"
+    },
+    {
+      name: "Grass",
+      value: "grass"
+    },
+    {
+      name: "Corn",
+      value: "corn"
+    },
+    {
+      name: "Church",
+      value: "church"
+    },
+    {
+      name: "Road",
+      value: "road"
+    },
+    {
+      name: "Home (Outline)",
+      value: "home-outline"
+    },
+    {
+      name: "Routes",
+      value: "routes"
+    },
+    {
+      name: "Sign",
+      value: "sign"
+    },
+    {
+      name: "Campfire",
+      value: "campfire"
+    },
+  ]
+
   return (
     <QuestContext.Provider
       value={{
@@ -384,7 +433,8 @@ const Quest = (props) => {
         updateAction: handleUpdateAction,
         removeAction: handleRemoveAction,
         clearAction: handleClearAction,
-        publishQuest: handlePublishQuest
+        publishQuest: handlePublishQuest,
+        markerTypes,
       }}
     >
       {renderView(role)}
