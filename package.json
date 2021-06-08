@@ -13,6 +13,7 @@
     "@urbica/react-map-gl": "^1.14.3",
     "firebase": "^8.6.1",
     "mapbox-gl": "^2.2.0",
+    "mdi-material-ui": "^6.22.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-firebase-hooks": "^3.0.4",

@@ -20,14 +20,14 @@ import CreateQuest from "./editor/CreateQuest.jsx";
 import Quest from "./quests/Quest.jsx";
 
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
+import CompassOutline from 'mdi-material-ui/CompassOutline'
+import DotsVertical from "mdi-material-ui/DotsVertical";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
-import ExploreIcon from "@material-ui/icons/Explore";
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 
@@ -100,7 +100,7 @@ const App = () => {
             component={RouterLink}
             to="/"
           >
-            <ExploreIcon />
+            <CompassOutline />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
             QuestLog
@@ -119,7 +119,7 @@ const App = () => {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <AccountCircle />
+                <DotsVertical />
               </IconButton>
               <Menu
                 id="menu-appbar"
