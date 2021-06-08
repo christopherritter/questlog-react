@@ -1,5 +1,5 @@
 import React, { useRef, useState, useContext } from "react";
-import MapGL, { Source, Layer } from "@urbica/react-map-gl";
+import MapGL, { Source, Marker } from "@urbica/react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
@@ -9,19 +9,25 @@ import QuestJournal from "./QuestJournal.jsx";
 import QuestBackpack from "./QuestBackpack.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
+import { green, pink } from "@material-ui/core/colors";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
+import Avatar from "@material-ui/core/Avatar";
 import MapIcon from "mdi-material-ui/Map";
 import NotebookIcon from "mdi-material-ui/Notebook";
 import BackpackIcon from "mdi-material-ui/BagPersonal";
+import MapMarkerIcon from "mdi-material-ui/MapMarker";
 
 const sidebarWidth = 352;
 
-const useStyles = makeStyles({
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)",
+const useStyles = makeStyles((theme) => ({
+  pink: {
+    color: theme.palette.getContrastText(pink[500]),
+    backgroundColor: pink[500],
+  },
+  green: {
+    color: "#fff",
+    backgroundColor: green[500],
   },
   title: {
     fontSize: 14,
@@ -110,16 +116,19 @@ const useStyles = makeStyles({
       transform: "translateX(352px)",
     },
   },
-});
+}));
 
-const layerStyle = {
-  id: "point",
-  type: "circle",
-  paint: {
-    "circle-radius": 10,
-    "circle-color": "#007cbf",
-  },
-};
+// const layerStyle = {
+//   id: "point",
+//   type: "symbol",
+//   layout: {
+//     "text-field": ["get", "name"],
+//     "text-variable-anchor": ["top", "bottom", "left", "right"],
+//     "text-radial-offset": 1.25,
+//     "text-justify": "auto",
+//     "icon-image": ["get", "marker"],
+//   },
+// };
 
 function QuestReader(props) {
   const classes = useStyles(props);
@@ -136,29 +145,34 @@ function QuestReader(props) {
   const mapRef = useRef();
   const onLoad = () => setLoaded(true);
 
-  const geojson = {
-    type: "FeatureCollection",
-    features: quest.locations
-      ? quest.locations.map((location) => {
-          var feature = {
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: [location.longitude, location.latitude],
-            },
-            properties: {
-              id: location.id,
-              name: location.name,
-              bearing: location.bearing,
-              pitch: location.pitch,
-              zoom: location.zoom,
-              marker: location.marker,
-            },
-          };
-          return feature;
-        })
-      : [],
-  };
+  // const geojson = {
+  //   type: "FeatureCollection",
+  //   features: quest.locations
+  //     ? quest.locations.map((location) => {
+  //         var feature = {
+  //           type: "Feature",
+  //           geometry: {
+  //             type: "Point",
+  //             coordinates: [location.longitude, location.latitude],
+  //           },
+  //           properties: {
+  //             id: location.id,
+  //             name: location.name,
+  //             bearing: location.bearing,
+  //             pitch: location.pitch,
+  //             zoom: location.zoom,
+  //             marker: location.marker,
+  //           },
+  //         };
+  //         return feature;
+  //       })
+  //     : [],
+  // };
+
+  // const viewLocation = (event) => {
+  //   console.log(event)
+  //   event.stopPropagation();
+  // }
 
   function viewLocation(event) {
     var padding = {
@@ -354,6 +368,32 @@ function QuestReader(props) {
     console.log("Select backpack item");
   }
 
+  const QuestMarker = (props) => {
+    const { id, longitude, latitude, bearing, pitch, zoom } = props;
+
+    const onMarkerClick = () => {
+      const locationId = {
+        lngLat: {
+          lng: longitude,
+          lat: latitude,
+        },
+        features: [
+          {
+            properties: {
+              id,
+              bearing,
+              pitch,
+              zoom,
+            },
+          },
+        ],
+      };
+      viewLocation(locationId);
+    };
+
+    return <Marker onClick={onMarkerClick} {...props} />;
+  };
+
   return (
     <Box overflow="hidden">
       {quest.region && (
@@ -457,12 +497,27 @@ function QuestReader(props) {
                 onClick={toggleBackpack}
               />
             </Box>
-            <Source id="locationsData" type="geojson" data={geojson} />
-            <Layer
+            {/* <Source id="locationsData" type="geojson" data={geojson} /> */}
+            {/* <Layer
               source="locationsData"
               onClick={viewLocation}
               {...layerStyle}
-            />
+            /> */}
+            {quest.locations.map((location, index) => (
+              <QuestMarker
+                id={location.id}
+                longitude={location.longitude}
+                latitude={location.latitude}
+                bearing={location.bearing}
+                pitch={location.pitch}
+                zoom={location.zoom}
+                key={index}
+              >
+                <Avatar className={classes.pink}>
+                  <MapMarkerIcon />
+                </Avatar>
+              </QuestMarker>
+            ))}
           </MapGL>
         </React.Fragment>
       )}
