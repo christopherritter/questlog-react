@@ -6,9 +6,10 @@ import QuestContext from "../../contexts/QuestContext.jsx";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 
 const useStyles = makeStyles({
   title: {
@@ -26,7 +27,35 @@ const useStyles = makeStyles({
   },
 });
 
-const QuestSidebar = props => {
+const QuestActions = ({ quest, location }) => {
+  const localEntries = quest.entries.filter(
+    (entry) => entry.locationId === location.id
+  );
+  var localActions = [];
+
+  localEntries.forEach((entry) => {
+    entry.actions.map((action) => localActions.push(action))
+  })
+
+  return (
+    <List component="nav" aria-label="location actions">
+      {quest.actions
+        .filter((result) => {
+          return localActions.includes(result.id);
+        })
+        .map((action, index) => (
+          <ListItem button key={index}>
+            <ListItemText primary={action.text} />
+          </ListItem>
+        ))}
+        <>
+          
+        </>
+      </List>
+  );
+};
+
+const QuestSidebar = (props) => {
   const classes = useStyles(props);
   const { quest, location, updateCenter, selectLocation } =
     useContext(QuestContext);
@@ -54,12 +83,10 @@ const QuestSidebar = props => {
               .map((entry) => entry.text)}
         </Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions>
+      {quest.actions && <QuestActions quest={quest} location={location} />}
     </Card>
   );
-}
+};
 
 QuestSidebar.propTypes = {};
 
