@@ -19,6 +19,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Select from "@material-ui/core/Select";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
 
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
@@ -38,7 +40,10 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     marginTop: theme.spacing(3),
-    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1)
+  },
+  formControl: {
+    marginTop: theme.spacing(2),
   },
 }));
 
@@ -298,10 +303,9 @@ function QuestLocations() {
   };
 
   function handleSelectMarker(event) {
-    console.log(event.target)
     const { name, value } = event.target;
     setLocation({ ...location, [name]: value });
-  };
+  }
 
   return (
     <>
@@ -481,41 +485,29 @@ function QuestLocations() {
                 />
               </Grid>
             </Grid>
-
-            <Select
-              native
-              value={location.marker}
-              onChange={handleSelectMarker}
-              fullWidth
-              label="Marker"
-              inputProps={{
-                name: "marker",
-                id: "locationMarker",
-              }}
-            >
-              <option value={undefined}></option>
-              {markerTypes &&
-                markerTypes.map((marker, index) => {
-                  return (
-                    <option value={marker.value} key={index}>
-                      {marker.name}
-                    </option>
-                  );
-                })}
-            </Select>
-
-            {/* <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="locationMarker"
-              label="Marker"
-              name="marker"
-              type="text"
-              value={location.marker}
-              onChange={handleChangeLocation}
-            /> */}
+            <FormControl variant="outlined" className={classes.formControl} fullWidth>
+              <InputLabel htmlFor="locationMarker">Marker</InputLabel>
+              <Select
+                native
+                value={location.marker}
+                onChange={handleSelectMarker}
+                
+                inputProps={{
+                  name: "marker",
+                  id: "locationMarker",
+                }}
+              >
+                <option value={undefined}></option>
+                {markerTypes &&
+                  markerTypes.map((marker, index) => {
+                    return (
+                      <option value={marker.value} key={index}>
+                        {marker.name}
+                      </option>
+                    );
+                  })}
+              </Select>
+            </FormControl>
           </form>
         </Grid>
         <Grid item md={8} sm={12}>

@@ -398,7 +398,26 @@ const Quest = (props) => {
       name: "Campfire",
       value: "campfire"
     },
-  ]
+  ];
+
+  const actionTypes = [
+    {
+      name: "Move",
+      value: "move"
+    },
+    {
+      name: "Take",
+      value: "take"
+    },
+    {
+      name: "Open",
+      value: "open"
+    },
+    {
+      name: "Look",
+      value: "look"
+    },
+  ];
 
   return (
     <QuestContext.Provider
@@ -435,6 +454,7 @@ const Quest = (props) => {
         clearAction: handleClearAction,
         publishQuest: handlePublishQuest,
         markerTypes,
+        actionTypes,
       }}
     >
       {renderView(role)}

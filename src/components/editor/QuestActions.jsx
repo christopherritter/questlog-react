@@ -11,11 +11,15 @@ import ListSubheader from "@material-ui/core/ListSubheader";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Select from "@material-ui/core/Select";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,6 +47,7 @@ const QuestActions = (props) => {
     clearAction,
     removeAction,
     publishQuest,
+    actionTypes,
   } = useContext(QuestContext);
   var id = 0;
 
@@ -65,11 +70,11 @@ const QuestActions = (props) => {
     id: "action-" + id,
     text: "",
     targetId: "",
-    type: "" ,
+    type: "",
     marker: "",
   };
 
-  const [action, setAction ] = useState(initialActionState);
+  const [action, setAction] = useState(initialActionState);
 
   // useEffect(() => {
   //   if (props.action) {
@@ -80,25 +85,27 @@ const QuestActions = (props) => {
   function onChangeAction(event) {
     const { name, value } = event.target;
     setAction({ ...action, [name]: value });
-  };
+  }
 
   const [open, setOpen] = React.useState(false);
 
-  const [selectedIndex, setSelectedIndex] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
 
-  function handleViewAction(event) {
-    setAction(event)
+  function handleViewAction({ action, index }) {
+    setSelectedIndex(index);
+    setAction(action);
     setOpen(true);
-  };
+  }
 
   function handleClickOpen() {
     setOpen(true);
-  };
+  }
 
   function handleClose() {
+    setSelectedIndex(-1);
     setAction(initialActionState);
     setOpen(false);
-  };
+  }
 
   function handleSaveAction() {
     addAction({
@@ -106,9 +113,19 @@ const QuestActions = (props) => {
       ...action,
     });
     props.addActionToEntry("action-" + id);
+    setSelectedIndex(-1);
     setAction(initialActionState);
     setOpen(false);
-  };
+  }
+
+  function handleUpdateAction() {
+    updateAction({
+      ...action,
+    });
+    setSelectedIndex(-1);
+    setAction(initialActionState);
+    setOpen(false);
+  }
 
   function handleRemoveAction() {
     removeAction({
@@ -117,13 +134,24 @@ const QuestActions = (props) => {
     props.removeActionFromEntry({
       id: action.id,
     });
+    setSelectedIndex(-1);
     setAction(initialActionState);
     setOpen(false);
-  };
+  }
+
+  function handleSelectType(event) {
+    const { name, value } = event.target;
+    setAction({ ...action, [name]: value });
+  }
 
   return (
     <React.Fragment>
-      <Dialog open={open} onClose={handleClose} maxWidth="xs" aria-labelledby="form-dialog-title">
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        maxWidth="xs"
+        aria-labelledby="form-dialog-title"
+      >
         <DialogTitle id="form-dialog-title">Action</DialogTitle>
         <DialogContent>
           <TextField
@@ -133,7 +161,7 @@ const QuestActions = (props) => {
             type="text"
             name="text"
             fullWidth
-            value={action.title}
+            value={action.text}
             onChange={onChangeAction}
           />
           <TextField
@@ -156,7 +184,33 @@ const QuestActions = (props) => {
             value={action.targetId}
             onChange={onChangeAction}
           />
-          <TextField
+          <FormControl
+            variant="outlined"
+            className={classes.formControl}
+            fullWidth
+          >
+            <InputLabel htmlFor="actionType">Type</InputLabel>
+            <Select
+              native
+              value={action.type}
+              onChange={handleSelectType}
+              inputProps={{
+                name: "type",
+                id: "actionType",
+              }}
+            >
+              <option value={undefined}></option>
+              {actionTypes &&
+                actionTypes.map((action, index) => {
+                  return (
+                    <option value={action.value} key={index}>
+                      {action.name}
+                    </option>
+                  );
+                })}
+            </Select>
+          </FormControl>
+          {/* <TextField
             margin="normal"
             id="actionType"
             label="Type"
@@ -165,100 +219,96 @@ const QuestActions = (props) => {
             fullWidth
             value={action.type}
             onChange={onChangeAction}
-          />
+          /> */}
         </DialogContent>
         <DialogActions>
           <Grid container>
             <Grid item>
-            <Button onClick={handleRemoveAction}>
-            Remove
-          </Button>
+              <Button onClick={handleRemoveAction}>Remove</Button>
             </Grid>
             <Grid item>
-            <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleSaveAction} color="primary">
-            Save
-          </Button>
+              <Button onClick={handleClose} color="primary">
+                Cancel
+              </Button>
+              {selectedIndex > -1 ? (
+                <Button onClick={handleUpdateAction} color="primary">
+                  Update
+                </Button>
+              ) : (
+                <Button onClick={handleSaveAction} color="primary">
+                  Save
+                </Button>
+              )}
             </Grid>
           </Grid>
         </DialogActions>
       </Dialog>
 
       <Box
-      border={1}
-      borderRadius={4}
-      borderColor={"rgba(255,255,255,0.25)"}
-      className={classes.root}
-      style={{ marginTop: "1em" }}
-    >
-      <List
-        component="nav"
-        aria-labelledby="nested-list-subheader"
-        subheader={
-          <ListSubheader
-            component="div"
-            className={classes.actionListSubheader}
-            id="nested-list-subheader"
-          >
-            Actions
-          </ListSubheader>
-        }
-        className={classes.actionList}
+        border={1}
+        borderRadius={4}
+        borderColor={"rgba(255,255,255,0.25)"}
+        className={classes.root}
+        style={{ marginTop: "1em" }}
       >
+        <List
+          component="nav"
+          aria-labelledby="nested-list-subheader"
+          subheader={
+            <ListSubheader
+              component="div"
+              className={classes.actionListSubheader}
+              id="nested-list-subheader"
+            >
+              Actions
+            </ListSubheader>
+          }
+          className={classes.actionList}
+        >
+          {quest.actions &&
+            quest.actions
+              .filter((action) => {
+                return props.actions.includes(action.id);
+              })
+              .map((action, index) => (
+                <ListItem
+                  button
+                  key={index}
+                  selected={selectedIndex === action.id}
+                  onClick={() => handleViewAction({ action, index })}
+                >
+                  <ListItemText
+                    primary={
+                      <Typography variant="h6" gutterBottom>
+                        {action.text}
+                      </Typography>
+                    }
+                    secondary={
+                      <Typography
+                        style={{ whiteSpace: "pre-line" }}
+                        variant="body2"
+                        className={classes.inline}
+                        color="textPrimary"
+                      >
+                        {action.text}
+                      </Typography>
+                    }
+                  />
+                </ListItem>
+              ))}
+        </List>
 
-
-
-        {quest.actions &&
-          quest.actions
-            .filter((action) => {
-              return props.actions.includes(action.id)
-            })
-            .map((action, index) => (
-              <ListItem
-                button
-                key={index}
-                selected={selectedIndex === action.id}
-                onClick={() => handleViewAction(action, action.id)}
-              >
-                <ListItemText
-                  primary={
-                    <Typography variant="h6" gutterBottom>
-                      {action.text}
-                    </Typography>
-                  }
-                  secondary={
-                    <Typography
-                      style={{ whiteSpace: "pre-line" }}
-                      variant="body2"
-                      className={classes.inline}
-                      color="textPrimary"
-                    >
-                      {action.text}
-                    </Typography>
-                  }
-                />
-              </ListItem>
-            ))}
-
-
-
-      </List>
-
-      
-      <Button
-        color="secondary"
-        variant="contained"
-        fullWidth
-        className={classes.addActionButton}
-        onClick={handleClickOpen}
-      >
-        Add Action
-      </Button>
-    </Box>
+        <Button
+          color="secondary"
+          variant="contained"
+          fullWidth
+          className={classes.addActionButton}
+          onClick={handleClickOpen}
+        >
+          Add Action
+        </Button>
+      </Box>
     </React.Fragment>
-    
   );
 };
 
