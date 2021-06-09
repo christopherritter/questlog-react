@@ -33,27 +33,31 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const QuestMapMarker = (props) => {
+  // console.log("Quest map marker")
+  // console.log(props)
   const classes = useStyles(props);
-  const { location } = props;
+  const { location, selectLocation, viewLocation } = props;
 
-  const onMarkerClick = (event) => {
-    const locationId = {
-      lngLat: {
-        lng: location.longitude,
-        lat: location.latitude,
-      },
-      features: [
-        {
-          properties: {
-            id: location.id,
-            bearing: location.bearing,
-            pitch: location.pitch,
-            zoom: location.zoom,
-          },
-        },
-      ],
-    };
-    props.viewLocation(locationId);
+  const onMarkerClick = () => {
+    // const formattedLocation = {
+    //   lngLat: {
+    //     lng: location.longitude,
+    //     lat: location.latitude,
+    //   },
+    //   features: [
+    //     {
+    //       properties: {
+    //         id: location.id,
+    //         bearing: location.bearing,
+    //         pitch: location.pitch,
+    //         zoom: location.zoom,
+    //       },
+    //     },
+    //   ],
+    // };
+    console.log('View location id no. ' + location.id)
+    // selectLocation(location.id);
+    viewLocation(location);
   };
 
   const switchMarker = (marker) => {

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext } from "react";
+import React, { useRef, useState, useContext, useEffect } from "react";
 import MapGL, { Marker } from "@urbica/react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -120,7 +120,7 @@ const useStyles = makeStyles((theme) => ({
 
 function QuestReader(props) {
   const classes = useStyles(props);
-  const { quest, location, updateCenter, selectLocation } =
+  const { quest, location, updateCenter, selectLocation, setLocation } =
     useContext(QuestContext);
 
   const [isLoaded, setLoaded] = useState(false);
@@ -129,60 +129,80 @@ function QuestReader(props) {
   const [showJournal, setShowJournal] = useState(false);
   const [showBackpack, setShowBackpack] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [currentLocation, setCurrentLocation] = useState();
 
-  const mapRef = useRef();
-  const onLoad = () => setLoaded(true);
-
-  function viewLocation(event) {
+  useEffect(() => {
     var padding = {
       bottom: 50,
     };
 
-    selectLocation(event);
+    if (location) {
+      setCurrentLocation(location);
 
-    if (event.features[0].properties.id !== location.id) {
-      padding["left"] = 300;
+      if (currentLocation) {
 
-      setShowLocationSidebar(true);
+        if (location.id !== currentLocation.id) {
+          padding["left"] = 300;
 
-      mapRef.current.easeTo({
-        center: event.lngLat,
-        bearing: event.features[0].properties.bearing,
-        pitch: event.features[0].properties.pitch,
-        zoom: event.features[0].properties.zoom,
-        padding: padding,
-        duration: 1000,
-      });
-    } else {
-      if (showLocationSidebar) {
-        padding["left"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
+          setShowLocationSidebar(true);
 
-        setShowLocationSidebar(false);
+          mapRef.current.easeTo({
+            center: {
+              lat: location.latitude,
+              lng: location.longitude,
+            },
+            bearing: location.bearing,
+            pitch: location.pitch,
+            zoom: location.zoom,
+            padding: padding,
+            duration: 1000,
+          });
+        } else {
+          if (showLocationSidebar) {
+            padding["left"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
 
-        mapRef.current.easeTo({
-          center: event.lngLat,
-          bearing: event.features[0].properties.bearing,
-          pitch: event.features[0].properties.pitch,
-          zoom: event.features[0].properties.zoom,
-          padding: padding,
-          duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
-        });
-      } else {
-        padding["left"] = 300;
+            setShowLocationSidebar(false);
 
-        setShowLocationSidebar(true);
+            mapRef.current.easeTo({
+              center: {
+                lat: location.latitude,
+                lng: location.longitude,
+              },
+              bearing: location.bearing,
+              pitch: location.pitch,
+              zoom: location.zoom,
+              padding: padding,
+              duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
+            });
+          } else {
+            padding["left"] = 300;
 
-        mapRef.current.easeTo({
-          center: event.lngLat,
-          padding: padding,
-          bearing: event.features[0].properties.bearing,
-          pitch: event.features[0].properties.pitch,
-          zoom: event.features[0].properties.zoom,
-          duration: 1000,
-        });
-      }
+            setShowLocationSidebar(true);
+
+            mapRef.current.easeTo({
+              center: {
+                lat: location.latitude,
+                lng: location.longitude,
+              },
+              padding: padding,
+              bearing: location.bearing,
+              pitch: location.pitch,
+              zoom: location.zoom,
+              duration: 1000,
+            });
+          }
+        }
+      } 
     }
-  }
+  }, [location]);
+
+  const mapRef = useRef();
+  const onLoad = () => setLoaded(true);
+
+  const handleViewLocation = (selectedLocation) => {
+    selectLocation(selectedLocation.id);
+    setCurrentLocation((current) => ({ ...current, ...selectedLocation }));
+  };
 
   function toggleLegend() {
     var padding = {
@@ -331,7 +351,7 @@ function QuestReader(props) {
     mapRef.current.easeTo({
       center: {
         lng: location.longitude,
-        lat: location.latitude
+        lat: location.latitude,
       },
       bearing: location.bearing,
       pitch: location.pitch,
@@ -363,7 +383,12 @@ function QuestReader(props) {
                 classes.locationSidebar
               } ${showLocationSidebar ? "" : "collapsed"}`}
             >
-              {location && <QuestSidebar width={sidebarWidth} selectMoveAction={handleMoveAction} />}
+              {location && (
+                <QuestSidebar
+                  width={sidebarWidth}
+                  selectMoveAction={handleMoveAction}
+                />
+              )}
             </Box>
             <Box
               id="legendSidebar"
@@ -443,13 +468,13 @@ function QuestReader(props) {
                 onClick={toggleBackpack}
               />
             </Box>
-            {quest.locations.map((location, index) => (
+            {quest.locations.map((el, index) => (
               <QuestMapMarker
-                location={location}
+                location={el}
                 key={index}
-                viewLocation={viewLocation}
-              >
-              </QuestMapMarker>
+                selectLocation={selectLocation}
+                viewLocation={handleViewLocation}
+              ></QuestMapMarker>
             ))}
           </MapGL>
         </React.Fragment>
