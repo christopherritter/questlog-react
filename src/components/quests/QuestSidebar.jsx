@@ -56,6 +56,11 @@ const QuestActions = ({ quest, location }) => {
     entry.actions.map((action) => localActions.push(action))
   })
 
+  function selectAction(event) {
+    console.log("Action selected")
+    console.log(event.target.id)
+  }
+
   return (
     <List component="nav" aria-label="location actions">
       {quest.actions
@@ -63,12 +68,12 @@ const QuestActions = ({ quest, location }) => {
           return localActions.includes(result.id);
         })
         .map((action, index) => (
-          <ListItem button key={index}>
+          <ListItem button key={index} onClick={selectAction}>
             <ListItemIcon>
               { switchIcon(action.type) }
             </ListItemIcon>
             <ListItemText primary={
-              <Typography variant="subtitle1">
+              <Typography variant="subtitle1" id={action.id}>
                 {action.text}
               </Typography>
             } />
