@@ -10,6 +10,12 @@ import CardContent from "@material-ui/core/CardContent";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+
+import WalkIcon from "mdi-material-ui/Walk";
+import BackpackIcon from "mdi-material-ui/BagPersonal";
+import DoorOpenIcon from "mdi-material-ui/DoorOpen";
+import EyeIcon from "mdi-material-ui/Eye";
 
 const useStyles = makeStyles({
   title: {
@@ -26,6 +32,19 @@ const useStyles = makeStyles({
     overflowY: "auto",
   },
 });
+
+const switchIcon = (type) => {
+  switch(type) {
+    case "move":
+      return <WalkIcon />;
+    case "take":
+      return <BackpackIcon />;
+    case "open":
+      return <DoorOpenIcon />;
+    case "look":
+      return <EyeIcon />;
+  }
+}
 
 const QuestActions = ({ quest, location }) => {
   const localEntries = quest.entries.filter(
@@ -45,7 +64,14 @@ const QuestActions = ({ quest, location }) => {
         })
         .map((action, index) => (
           <ListItem button key={index}>
-            <ListItemText primary={action.text} />
+            <ListItemIcon>
+              { switchIcon(action.type) }
+            </ListItemIcon>
+            <ListItemText primary={
+              <Typography variant="subtitle1">
+                {action.text}
+              </Typography>
+            } />
           </ListItem>
         ))}
         <>
