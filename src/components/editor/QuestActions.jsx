@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
 
@@ -16,7 +16,6 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -39,16 +38,8 @@ const useStyles = makeStyles((theme) => ({
 
 const QuestActions = (props) => {
   const classes = useStyles();
-  const {
-    quest,
-    actionIndex,
-    addAction,
-    updateAction,
-    clearAction,
-    removeAction,
-    publishQuest,
-    actionTypes,
-  } = useContext(QuestContext);
+  const { quest, addAction, updateAction, removeAction, actionTypes } =
+    useContext(QuestContext);
   var id = 0;
 
   if (quest.actions && quest.actions.length > 0) {
@@ -210,16 +201,6 @@ const QuestActions = (props) => {
                 })}
             </Select>
           </FormControl>
-          {/* <TextField
-            margin="normal"
-            id="actionType"
-            label="Type"
-            type="text"
-            name="type"
-            fullWidth
-            value={action.type}
-            onChange={onChangeAction}
-          /> */}
         </DialogContent>
         <DialogActions>
           <Grid container>

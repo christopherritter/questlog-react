@@ -327,6 +327,20 @@ function QuestReader(props) {
     console.log("Select backpack item");
   }
 
+  function handleMoveAction(location) {
+    console.log("Move to " + location.name)
+    mapRef.current.easeTo({
+      center: {
+        lng: location.longitude,
+        lat: location.latitude
+      },
+      bearing: location.bearing,
+      pitch: location.pitch,
+      zoom: location.zoom,
+      duration: 1000,
+    });
+  }
+
   return (
     <Box overflow="hidden">
       {quest.region && (
@@ -350,7 +364,7 @@ function QuestReader(props) {
                 classes.locationSidebar
               } ${showLocationSidebar ? "" : "collapsed"}`}
             >
-              {location && <QuestSidebar width={sidebarWidth} />}
+              {location && <QuestSidebar width={sidebarWidth} selectMoveAction={handleMoveAction} />}
             </Box>
             <Box
               id="legendSidebar"

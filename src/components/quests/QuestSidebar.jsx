@@ -34,7 +34,7 @@ const useStyles = makeStyles({
 });
 
 const switchIcon = (type) => {
-  switch(type) {
+  switch (type) {
     case "move":
       return <WalkIcon />;
     case "take":
@@ -44,23 +44,44 @@ const switchIcon = (type) => {
     case "look":
       return <EyeIcon />;
   }
-}
+};
 
-const QuestActions = ({ quest, location }) => {
+const QuestActions = ({
+  quest,
+  location,
+  selectLocation,
+  selectMoveAction,
+}) => {
   const localEntries = quest.entries.filter(
     (entry) => entry.locationId === location.id
   );
   var localActions = [];
 
   localEntries.forEach((entry) => {
-    entry.actions.map((action) => localActions.push(action))
-  })
+    entry.actions.map((action) => localActions.push(action));
+  });
 
   function selectAction(event) {
-    console.log("Action selected")
-    console.log(event.target.id)
-    const index = findWithAttr(quest.actions, "id", event.target.id)
-    console.log(quest.actions[index])
+    const actionIndex = findWithAttr(quest.actions, "id", event.target.id);
+    const action = quest.actions[actionIndex];
+
+    switch (action.type) {
+      case "move":
+        const locationIndex = findWithAttr(
+          quest.locations,
+          "id",
+          action.targetId
+        );
+        selectLocation(action.targetId);
+        selectMoveAction(quest.locations[locationIndex]);
+        return console.log("Move");
+      case "take":
+        return console.log("Take");
+      case "open":
+        return console.log("Open");
+      case "look":
+        return console.log("Look");
+    }
   }
 
   function findWithAttr(array, attr, value) {
@@ -80,17 +101,21 @@ const QuestActions = ({ quest, location }) => {
         })
         .map((action, index) => (
           <ListItem button key={index} onClick={selectAction}>
-            <ListItemIcon>
-              { switchIcon(action.type) }
-            </ListItemIcon>
-            <ListItemText primary={
-              <Typography variant="subtitle1" id={action.id} christopher="ritter">
-                {action.text}
-              </Typography>
-            } />
+            <ListItemIcon>{switchIcon(action.type)}</ListItemIcon>
+            <ListItemText
+              primary={
+                <Typography
+                  variant="subtitle1"
+                  id={action.id}
+                  christopher="ritter"
+                >
+                  {action.text}
+                </Typography>
+              }
+            />
           </ListItem>
         ))}
-      </List>
+    </List>
   );
 };
 
@@ -122,7 +147,14 @@ const QuestSidebar = (props) => {
               .map((entry) => entry.text)}
         </Typography>
       </CardContent>
-      {quest.actions && <QuestActions quest={quest} location={location} />}
+      {quest.actions && (
+        <QuestActions
+          quest={quest}
+          location={location}
+          selectLocation={selectLocation}
+          selectMoveAction={props.selectMoveAction}
+        />
+      )}
     </Card>
   );
 };

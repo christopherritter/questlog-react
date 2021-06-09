@@ -162,8 +162,15 @@ const Quest = (props) => {
   const [location, setLocation] = useState(initialLocationState);
 
   function handleSelectLocation(event) {
-    const { id } = event.features[0].properties;
-    const index = findWithAttr(quest.locations, "id", id);
+    var index;
+    
+    if (event.features) {
+      const { id } = event.features[0].properties;
+      index = findWithAttr(quest.locations, "id", id);
+    } else {
+      index = findWithAttr(quest.locations, "id", event);
+    }
+    
     setLocationIndex(index);
     setLocation(quest.locations[index]);
   }
