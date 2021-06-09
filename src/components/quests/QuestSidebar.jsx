@@ -59,6 +59,17 @@ const QuestActions = ({ quest, location }) => {
   function selectAction(event) {
     console.log("Action selected")
     console.log(event.target.id)
+    const index = findWithAttr(quest.actions, "id", event.target.id)
+    console.log(quest.actions[index])
+  }
+
+  function findWithAttr(array, attr, value) {
+    for (var i = 0; i < array.length; i += 1) {
+      if (array[i][attr] === value) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   return (
@@ -73,15 +84,12 @@ const QuestActions = ({ quest, location }) => {
               { switchIcon(action.type) }
             </ListItemIcon>
             <ListItemText primary={
-              <Typography variant="subtitle1" id={action.id}>
+              <Typography variant="subtitle1" id={action.id} christopher="ritter">
                 {action.text}
               </Typography>
             } />
           </ListItem>
         ))}
-        <>
-          
-        </>
       </List>
   );
 };
