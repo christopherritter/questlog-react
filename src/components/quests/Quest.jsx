@@ -163,7 +163,7 @@ const Quest = (props) => {
 
   function handleSelectLocation(event) {
     var index;
-    
+
     if (event.features) {
       const { id } = event.features[0].properties;
       index = findWithAttr(quest.locations, "id", id);
@@ -311,7 +311,6 @@ const Quest = (props) => {
   const [action, setAction] = useState();
 
   function handleAddAction(action) {
-    console.log("The top add action!");
     if (quest.actions) {
       setQuest({ ...quest, actions: [...quest.actions, action] });
     } else {
