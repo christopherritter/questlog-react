@@ -328,7 +328,6 @@ function QuestReader(props) {
   }
 
   function handleMoveAction(location) {
-    console.log("Move to " + location.name)
     mapRef.current.easeTo({
       center: {
         lng: location.longitude,
