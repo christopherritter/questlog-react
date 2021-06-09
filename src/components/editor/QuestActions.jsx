@@ -34,6 +34,10 @@ const useStyles = makeStyles((theme) => ({
     marginRight: -8,
   },
   addActionButton: {},
+  formControl: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+  },
 }));
 
 const QuestActions = (props) => {
@@ -62,7 +66,6 @@ const QuestActions = (props) => {
     text: "",
     targetId: "",
     type: "",
-    marker: "",
   };
 
   const [action, setAction] = useState(initialActionState);
@@ -135,6 +138,48 @@ const QuestActions = (props) => {
     setAction({ ...action, [name]: value });
   }
 
+  const switchTarget = (type) => {
+    switch (type) {
+      case "move":
+        return (
+          <Select
+            native
+            value={action.targetId}
+            onChange={handleSelectType}
+            inputProps={{
+              name: "targetId",
+              id: "actionTarget",
+            }}
+          >
+            <option value={undefined}></option>
+            {quest.locations &&
+              quest.locations.map((loc, index) => {
+                return (
+                  <option value={loc.id} key={index}>
+                    {loc.name}
+                  </option>
+                );
+              })}
+          </Select>
+        );
+      default:
+        return (
+          <Select
+            native
+            value={action.targetId}
+            onChange={handleSelectType}
+            inputProps={{
+              name: "targetId",
+              id: "actionTarget",
+            }}
+            disabled
+          >
+            <option value={undefined}></option>
+          </Select>
+        );
+    }
+  };
+
   return (
     <React.Fragment>
       <Dialog
@@ -146,35 +191,17 @@ const QuestActions = (props) => {
         <DialogTitle id="form-dialog-title">Action</DialogTitle>
         <DialogContent>
           <TextField
+            variant="outlined"
             margin="normal"
             id="actionText"
-            label="Action"
+            label="Text"
             type="text"
             name="text"
             fullWidth
             value={action.text}
             onChange={onChangeAction}
           />
-          <TextField
-            margin="normal"
-            id="actionMarker"
-            label="Marker"
-            type="text"
-            name="marker"
-            fullWidth
-            value={action.marker}
-            onChange={onChangeAction}
-          />
-          <TextField
-            margin="normal"
-            id="actionTarget"
-            label="Target"
-            type="text"
-            name="targetId"
-            fullWidth
-            value={action.targetId}
-            onChange={onChangeAction}
-          />
+
           <FormControl
             variant="outlined"
             className={classes.formControl}
@@ -200,6 +227,15 @@ const QuestActions = (props) => {
                   );
                 })}
             </Select>
+          </FormControl>
+
+          <FormControl
+            variant="outlined"
+            className={classes.formControl}
+            fullWidth
+          >
+            <InputLabel htmlFor="actionTarget">Target</InputLabel>
+            {switchTarget(action.type)}
           </FormControl>
         </DialogContent>
         <DialogActions>

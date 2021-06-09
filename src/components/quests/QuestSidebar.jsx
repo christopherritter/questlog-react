@@ -74,7 +74,7 @@ const QuestActions = ({
         );
         selectLocation(action.targetId);
         selectMoveAction(quest.locations[locationIndex]);
-        return console.log("Move");
+        return;
       case "take":
         return console.log("Take");
       case "open":
