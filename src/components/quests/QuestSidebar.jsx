@@ -1,17 +1,18 @@
 import React, { useContext } from "react";
-import PropTypes from "prop-types";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "mdi-material-ui/Close";
 import WalkIcon from "mdi-material-ui/Walk";
 import BackpackIcon from "mdi-material-ui/BagPersonal";
 import DoorOpenIcon from "mdi-material-ui/DoorOpen";
@@ -64,6 +65,7 @@ const QuestActions = ({
   function selectAction(event) {
     const actionIndex = findWithAttr(quest.actions, "id", event.target.id);
     const action = quest.actions[actionIndex];
+    // console.log(action);
 
     switch (action.type) {
       case "move":
@@ -73,7 +75,7 @@ const QuestActions = ({
           action.targetId
         );
         selectLocation(action.targetId);
-        selectMoveAction(quest.locations[locationIndex]);
+        // selectMoveAction(quest.locations[locationIndex]);
         return;
       case "take":
         return console.log("Take");
@@ -127,18 +129,25 @@ const QuestSidebar = (props) => {
   return (
     <Card className={`${classes.sidebarContent}`} elevation={5}>
       <CardContent>
-        <Typography
-          className={classes.title}
-          color="textSecondary"
-          gutterBottom
-        >
-          Location
-        </Typography>
-        <Typography variant="h5" component="h2">
+        <Grid container>
+          <Grid item sm={11}>
+            <Typography className={classes.title} color="textSecondary">
+              Location
+            </Typography>
+          </Grid>
+          <Grid item sm={1}>
+            <IconButton
+              aria-label="delete"
+              className={classes.margin}
+              onClick={props.toggleSidebar}
+              size="small"
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          </Grid>
+        </Grid>
+        <Typography variant="h5" component="h2" gutterBottom>
           {location.name}
-        </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          adjective
         </Typography>
         <Typography variant="body2" component="p">
           {quest.entries &&
@@ -158,7 +167,5 @@ const QuestSidebar = (props) => {
     </Card>
   );
 };
-
-QuestSidebar.propTypes = {};
 
 export default QuestSidebar;

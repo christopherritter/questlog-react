@@ -162,29 +162,19 @@ const Quest = (props) => {
   const [location, setLocation] = useState(initialLocationState);
 
   function handleSelectLocation(event) {
-    console.log("handle select location")
     var index;
 
     if (event.features) {
-      console.log("Found features")
       const { id } = event.features[0].properties;
       index = findWithAttr(quest.locations, "id", id);
     } else {
-      console.log("No features found!")
       index = findWithAttr(quest.locations, "id", event);
     }
     
-    console.log("Selected location index: " + index)
     const selectedLocation = quest.locations[index];
-    
-    console.log("Selected location: ")
-    console.log(selectedLocation)
-    
+ 
     setLocationIndex(index);
     setLocation((prevLocation) => ({ ...prevLocation, ...selectedLocation }));
- 
-    console.log("Location set")
-    console.log(location)
   }
 
   function handleAddLocation(location) {

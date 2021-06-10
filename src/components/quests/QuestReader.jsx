@@ -138,13 +138,30 @@ function QuestReader(props) {
 
     if (location) {
       setCurrentLocation(location);
+    }
 
-      if (currentLocation) {
+    if (currentLocation) {
+      if (location.id !== currentLocation.id) {
+        padding["left"] = 300;
 
-        if (location.id !== currentLocation.id) {
-          padding["left"] = 300;
+        setShowLocationSidebar(true);
 
-          setShowLocationSidebar(true);
+        mapRef.current.easeTo({
+          center: {
+            lat: location.latitude,
+            lng: location.longitude,
+          },
+          bearing: location.bearing,
+          pitch: location.pitch,
+          zoom: location.zoom,
+          padding: padding,
+          duration: 1000,
+        });
+      } else {
+        if (showLocationSidebar === true) {
+          padding["left"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
+
+          setShowLocationSidebar(false);
 
           mapRef.current.easeTo({
             center: {
@@ -155,60 +172,37 @@ function QuestReader(props) {
             pitch: location.pitch,
             zoom: location.zoom,
             padding: padding,
-            duration: 1000,
+            duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
           });
         } else {
-          if (showLocationSidebar) {
-            padding["left"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
+          padding["left"] = 300;
 
-            setShowLocationSidebar(false);
+          setShowLocationSidebar(true);
 
-            mapRef.current.easeTo({
-              center: {
-                lat: location.latitude,
-                lng: location.longitude,
-              },
-              bearing: location.bearing,
-              pitch: location.pitch,
-              zoom: location.zoom,
-              padding: padding,
-              duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
-            });
-          } else {
-            padding["left"] = 300;
-
-            setShowLocationSidebar(true);
-
-            mapRef.current.easeTo({
-              center: {
-                lat: location.latitude,
-                lng: location.longitude,
-              },
-              padding: padding,
-              bearing: location.bearing,
-              pitch: location.pitch,
-              zoom: location.zoom,
-              duration: 1000,
-            });
-          }
+          mapRef.current.easeTo({
+            center: {
+              lat: location.latitude,
+              lng: location.longitude,
+            },
+            padding: padding,
+            bearing: location.bearing,
+            pitch: location.pitch,
+            zoom: location.zoom,
+            duration: 1000,
+          });
         }
-      } 
+      }
     }
   }, [location]);
 
   const mapRef = useRef();
   const onLoad = () => setLoaded(true);
 
-  const handleViewLocation = (selectedLocation) => {
-    selectLocation(selectedLocation.id);
-    setCurrentLocation((current) => ({ ...current, ...selectedLocation }));
-  };
-
   function toggleLegend() {
     var padding = {
       bottom: 50,
     };
-    if (showLegend) {
+    if (showLegend === true) {
       padding["right"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
 
       setShowLegend(false);
@@ -347,18 +341,27 @@ function QuestReader(props) {
     console.log("Select backpack item");
   }
 
-  function handleMoveAction(location) {
-    mapRef.current.easeTo({
-      center: {
-        lng: location.longitude,
-        lat: location.latitude,
-      },
-      bearing: location.bearing,
-      pitch: location.pitch,
-      zoom: location.zoom,
-      duration: 1000,
-    });
+  function toggleSidebar() {
+    handleViewLocation(location);
   }
+
+  const handleViewLocation = (selectedLocation) => {
+    selectLocation(selectedLocation.id);
+    setCurrentLocation((current) => ({ ...current, ...selectedLocation }));
+  };
+
+  // function handleMoveAction(selectedLocation) {
+  //   mapRef.current.easeTo({
+  //     center: {
+  //       lng: location.longitude,
+  //       lat: location.latitude,
+  //     },
+  //     bearing: location.bearing,
+  //     pitch: location.pitch,
+  //     zoom: location.zoom,
+  //     duration: 1000,
+  //   });
+  // }
 
   return (
     <Box overflow="hidden">
@@ -386,7 +389,8 @@ function QuestReader(props) {
               {location && (
                 <QuestSidebar
                   width={sidebarWidth}
-                  selectMoveAction={handleMoveAction}
+                  toggleSidebar={toggleSidebar}
+                  selectMoveAction={handleViewLocation}
                 />
               )}
             </Box>
