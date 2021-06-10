@@ -305,19 +305,37 @@ const Quest = (props) => {
     setItem(null);
   };
 
-  function handleTakeItem() {
-    console.log("Handle take item")
-    console.log("Take places item in backpack for later use")
+  function handleTakeItem(targetId) {
+    const index = findWithAttr(quest.items, "id", targetId);  
+    let updatedItems = [...quest.items];
+    let updatedItem = { ...quest.items[index] };
+
+    updatedItem = { ...updatedItem, isOwned: true };
+    updatedItems[index] = updatedItem;
+
+    setItemIndex(index)
+    setItem(updatedItem);
+    setQuest({ ...quest, items: updatedItems });
   };
 
-  function handleViewItem() {
-    console.log("Handle view item")
-    console.log("View shows the item description in a modal")
+  function handleViewItem(targetId) {
+    console.log("Handle view " + targetId)
+    console.log("Shows the item description in a modal")
+
+    const index = findWithAttr(quest.items, "id", targetId);  
+    const selectedItem = { ...quest.items[index] };
+
+    console.log(selectedItem);
   };
 
-  function handleOperateItem() {
-    console.log("Handle operate item")
+  function handleOperateItem(targetId) {
+    console.log("Handle operate " + targetId)
     console.log("Operate item sets a quest objective")
+
+    const index = findWithAttr(quest.items, "id", targetId);  
+    const selectedItem = { ...quest.items[index] };
+
+    console.log(selectedItem);
   }
 
   // Actions
@@ -480,6 +498,7 @@ const Quest = (props) => {
         removeAction: handleRemoveAction,
         clearAction: handleClearAction,
         publishQuest: handlePublishQuest,
+        findWithAttr,
         markerTypes,
         actionTypes,
       }}

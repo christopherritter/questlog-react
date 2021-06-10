@@ -49,7 +49,15 @@ const switchIcon = (type) => {
   }
 };
 
-const QuestActions = ({ quest, location, selectLocation, viewQuestItem, takeQuestItem, operateQuestItem }) => {
+const QuestActions = ({
+  quest,
+  location,
+  selectLocation,
+  viewQuestItem,
+  takeQuestItem,
+  operateQuestItem,
+  findWithAttr,
+}) => {
   const localEntries = quest.entries.filter(
     (entry) => entry.locationId === location.id
   );
@@ -59,23 +67,44 @@ const QuestActions = ({ quest, location, selectLocation, viewQuestItem, takeQues
     entry.actions.map((action) => localActions.push(action));
   });
 
+  const filteredActions = localActions.filter((action) => {
+    const actionIndex = findWithAttr(quest.actions, "id", action);
+    const selectedAction = quest.actions[actionIndex];
+
+    // only check "take items" return all the other items
+
+    if (
+      selectedAction &&
+      selectedAction.type === "take"
+    ) {
+      const targetIndex = findWithAttr(
+        quest.items,
+        "id",
+        selectedAction.targetId
+      );
+      const targetItem = quest.items[targetIndex];
+
+      if (!targetItem.isOwned) {
+        return action;
+      }
+    } else {
+      return action;
+    }
+  });
+
   function selectAction(event) {
     const actionIndex = findWithAttr(quest.actions, "id", event.target.id);
     const action = quest.actions[actionIndex];
 
     switch (action.type) {
       case "look":
-        viewQuestItem(action.targetId);
-        return console.log("Look");
+        return viewQuestItem(action.targetId);
       case "move":
-        selectLocation(action.targetId);
-        return;
+        return selectLocation(action.targetId);
       case "take":
-        takeQuestItem(action.targetId);
-        return console.log("Take");
+        return takeQuestItem(action.targetId);
       case "operate":
-        operateQuestItem();
-        return console.log("Operate");
+        return operateQuestItem(action.targetId);
       default:
         return;
     }
@@ -94,18 +123,14 @@ const QuestActions = ({ quest, location, selectLocation, viewQuestItem, takeQues
     <List component="nav" aria-label="location actions">
       {quest.actions
         .filter((result) => {
-          return localActions.includes(result.id);
+          return filteredActions.includes(result.id);
         })
         .map((action, index) => (
           <ListItem button key={index} onClick={selectAction}>
             <ListItemIcon>{switchIcon(action.type)}</ListItemIcon>
             <ListItemText
               primary={
-                <Typography
-                  variant="subtitle1"
-                  id={action.id}
-                  christopher="ritter"
-                >
+                <Typography variant="subtitle1" id={action.id}>
                   {action.text}
                 </Typography>
               }
@@ -118,8 +143,14 @@ const QuestActions = ({ quest, location, selectLocation, viewQuestItem, takeQues
 
 const QuestSidebar = (props) => {
   const classes = useStyles(props);
-  const { quest, location, selectLocation, viewQuestItem, takeQuestItem, operateQuestItem } =
-    useContext(QuestContext);
+  const {
+    quest,
+    location,
+    selectLocation,
+    viewQuestItem,
+    takeQuestItem,
+    operateQuestItem,
+  } = useContext(QuestContext);
 
   return (
     <Card className={`${classes.sidebarContent}`} elevation={5}>

@@ -140,6 +140,28 @@ const QuestActions = (props) => {
 
   const switchTarget = (type) => {
     switch (type) {
+      case "look":
+        return (
+          <Select
+            native
+            value={action.targetId}
+            onChange={handleSelectType}
+            inputProps={{
+              name: "targetId",
+              id: "actionTarget",
+            }}
+          >
+            <option value={undefined}></option>
+            {quest.items &&
+              quest.items.map((item, index) => {
+                return (
+                  <option value={item.id} key={index}>
+                    {item.name}
+                  </option>
+                );
+              })}
+          </Select>
+        );
       case "move":
         return (
           <Select
@@ -157,6 +179,50 @@ const QuestActions = (props) => {
                 return (
                   <option value={loc.id} key={index}>
                     {loc.name}
+                  </option>
+                );
+              })}
+          </Select>
+        );
+      case "take":
+        return (
+          <Select
+            native
+            value={action.targetId}
+            onChange={handleSelectType}
+            inputProps={{
+              name: "targetId",
+              id: "actionTarget",
+            }}
+          >
+            <option value={undefined}></option>
+            {quest.items &&
+              quest.items.map((item, index) => {
+                return (
+                  <option value={item.id} key={index}>
+                    {item.name}
+                  </option>
+                );
+              })}
+          </Select>
+        );
+      case "operate":
+        return (
+          <Select
+            native
+            value={action.targetId}
+            onChange={handleSelectType}
+            inputProps={{
+              name: "targetId",
+              id: "actionTarget",
+            }}
+          >
+            <option value={undefined}></option>
+            {quest.items &&
+              quest.items.map((item, index) => {
+                return (
+                  <option value={item.id} key={index}>
+                    {item.name}
                   </option>
                 );
               })}

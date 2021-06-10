@@ -1,5 +1,4 @@
-import React, { useContext } from 'react'
-import PropTypes from 'prop-types'
+import React, { useContext } from "react";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
 
@@ -14,7 +13,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityIcon from "@material-ui/icons/Visibility";
 
 const useStyles = makeStyles({
   title: {
@@ -29,10 +28,9 @@ const useStyles = makeStyles({
   },
 });
 
-const QuestBackpack = props => {
+const QuestBackpack = (props) => {
   const classes = useStyles(props);
-  const { quest, location, updateCenter, selectLocation, locationIndex } =
-    useContext(QuestContext);
+  const { quest, location } = useContext(QuestContext);
 
   return (
     <Card className={`${classes.sidebarContent}`} elevation={5}>
@@ -56,35 +54,31 @@ const QuestBackpack = props => {
         </Grid>
         <List component="nav">
           {quest.items &&
-            quest.items.map((i, index) => {
-              return (
-                <ListItem
-                  button
-                  key={i.id}
-                  selected={i.id === location.id}
-                  onClick={() => props.selectBackpackItem(i)}
-                >
-                  <ListItemIcon>
-                    <VisibilityIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <Typography variant="subtitle1">
-                        {i.name}
-                      </Typography>
-                    }
-                  />
-                </ListItem>
-              );
-            })}
+            quest.items
+              .filter((item) => item.isOwned === true)
+              .map((i, index) => {
+                return (
+                  <ListItem
+                    button
+                    key={index}
+                    selected={i.id === location.id}
+                    onClick={() => props.selectBackpackItem(i)}
+                  >
+                    <ListItemIcon>
+                      <VisibilityIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={
+                        <Typography variant="subtitle1">{i.name}</Typography>
+                      }
+                    />
+                  </ListItem>
+                );
+              })}
         </List>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-QuestBackpack.propTypes = {
-
-}
-
-export default QuestBackpack
+export default QuestBackpack;
