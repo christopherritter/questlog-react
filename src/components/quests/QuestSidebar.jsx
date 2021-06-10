@@ -15,7 +15,7 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "mdi-material-ui/Close";
 import WalkIcon from "mdi-material-ui/Walk";
 import BackpackIcon from "mdi-material-ui/BagPersonal";
-import DoorOpenIcon from "mdi-material-ui/DoorOpen";
+import HandPointingIcon from "mdi-material-ui/HandPointingRight";
 import EyeIcon from "mdi-material-ui/Eye";
 
 const useStyles = makeStyles({
@@ -36,20 +36,20 @@ const useStyles = makeStyles({
 
 const switchIcon = (type) => {
   switch (type) {
+    case "look":
+      return <EyeIcon />;
     case "move":
       return <WalkIcon />;
     case "take":
       return <BackpackIcon />;
-    case "open":
-      return <DoorOpenIcon />;
-    case "look":
-      return <EyeIcon />;
+    case "operate":
+      return <HandPointingIcon />;
     default:
       return;
   }
 };
 
-const QuestActions = ({ quest, location, selectLocation }) => {
+const QuestActions = ({ quest, location, selectLocation, viewQuestItem, takeQuestItem, operateQuestItem }) => {
   const localEntries = quest.entries.filter(
     (entry) => entry.locationId === location.id
   );
@@ -64,15 +64,18 @@ const QuestActions = ({ quest, location, selectLocation }) => {
     const action = quest.actions[actionIndex];
 
     switch (action.type) {
+      case "look":
+        viewQuestItem(action.targetId);
+        return console.log("Look");
       case "move":
         selectLocation(action.targetId);
         return;
       case "take":
+        takeQuestItem(action.targetId);
         return console.log("Take");
-      case "open":
-        return console.log("Open");
-      case "look":
-        return console.log("Look");
+      case "operate":
+        operateQuestItem();
+        return console.log("Operate");
       default:
         return;
     }
@@ -115,7 +118,8 @@ const QuestActions = ({ quest, location, selectLocation }) => {
 
 const QuestSidebar = (props) => {
   const classes = useStyles(props);
-  const { quest, location, selectLocation } = useContext(QuestContext);
+  const { quest, location, selectLocation, viewQuestItem, takeQuestItem, operateQuestItem } =
+    useContext(QuestContext);
 
   return (
     <Card className={`${classes.sidebarContent}`} elevation={5}>
@@ -152,7 +156,9 @@ const QuestSidebar = (props) => {
           quest={quest}
           location={location}
           selectLocation={selectLocation}
-          selectMoveAction={props.selectMoveAction}
+          viewQuestItem={viewQuestItem}
+          takeQuestItem={takeQuestItem}
+          operateQuestItem={operateQuestItem}
         />
       )}
     </Card>

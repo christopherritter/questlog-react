@@ -305,6 +305,21 @@ const Quest = (props) => {
     setItem(null);
   };
 
+  function handleTakeItem() {
+    console.log("Handle take item")
+    console.log("Take places item in backpack for later use")
+  };
+
+  function handleViewItem() {
+    console.log("Handle view item")
+    console.log("View shows the item description in a modal")
+  };
+
+  function handleOperateItem() {
+    console.log("Handle operate item")
+    console.log("Operate item sets a quest objective")
+  }
+
   // Actions
   // Actions may be taken by the user to move the story
   // They are associated with Entries and Items
@@ -411,6 +426,10 @@ const Quest = (props) => {
 
   const actionTypes = [
     {
+      name: "Look",
+      value: "look"
+    },
+    {
       name: "Move",
       value: "move"
     },
@@ -419,12 +438,8 @@ const Quest = (props) => {
       value: "take"
     },
     {
-      name: "Open",
-      value: "open"
-    },
-    {
-      name: "Look",
-      value: "look"
+      name: "Operate",
+      value: "operate"
     },
   ];
 
@@ -457,6 +472,9 @@ const Quest = (props) => {
         updateItem: handleUpdateItem,
         removeItem: handleRemoveItem,
         clearItem: handleClearItem,
+        takeQuestItem: handleTakeItem,
+        viewQuestItem: handleViewItem,
+        operateQuestItem: handleOperateItem,
         addAction: handleAddAction,
         updateAction: handleUpdateAction,
         removeAction: handleRemoveAction,
