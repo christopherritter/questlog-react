@@ -32,6 +32,13 @@ const useStyles = makeStyles({
     // position: "absolute",
     overflowY: "auto",
   },
+  entries: {
+    paddingBottom: "0.75em",
+    "&:last-child": {
+      paddingBottom: 0,
+    }
+
+  }
 });
 
 const switchIcon = (type) => {
@@ -73,10 +80,7 @@ const QuestActions = ({
 
     // only check "take items" return all the other items
 
-    if (
-      selectedAction &&
-      selectedAction.type === "take"
-    ) {
+    if (selectedAction && selectedAction.type === "take") {
       const targetIndex = findWithAttr(
         quest.items,
         "id",
@@ -175,12 +179,15 @@ const QuestSidebar = (props) => {
         <Typography variant="h5" component="h2" gutterBottom>
           {location.name}
         </Typography>
-        <Typography variant="body2" component="p">
-          {quest.entries &&
-            quest.entries
-              .filter((entry) => entry.locationId === location.id)
-              .map((entry) => entry.text)}
-        </Typography>
+
+        {quest.entries &&
+          quest.entries
+            .filter((entry) => entry.locationId === location.id)
+            .map((entry) => (
+              <Typography variant="body2" component="p" className={classes.entries}>
+                { entry.text }
+              </Typography>
+            ))}
       </CardContent>
       {quest.actions && (
         <QuestActions
