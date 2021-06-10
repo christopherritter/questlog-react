@@ -29,10 +29,14 @@ const useStyles = makeStyles({
   },
 });
 
-const QuestLegend = props => {
+const QuestLegend = (props) => {
   const classes = useStyles(props);
-  const { quest, location, updateCenter, selectLocation, locationIndex } =
-    useContext(QuestContext);
+  const { quest, location } = useContext(QuestContext);
+
+  function onListItemClick(loc) {
+    props.selectLocation(loc.id)
+    // props.viewLocation(loc);
+  };
 
   return (
     <Card className={`${classes.sidebarContent}`} elevation={5}>
@@ -60,18 +64,16 @@ const QuestLegend = props => {
               return (
                 <ListItem
                   button
-                  key={loc.id}
+                  key={index}
                   selected={loc.id === location.id}
-                  onClick={() => props.selectLegendItem(loc)}
+                  onClick={() => onListItemClick(loc)}
                 >
                   <ListItemIcon>
                     <LocationOnIcon />
                   </ListItemIcon>
                   <ListItemText
                     primary={
-                      <Typography variant="subtitle1">
-                        {loc.name}
-                      </Typography>
+                      <Typography variant="subtitle1">{loc.name}</Typography>
                     }
                   />
                 </ListItem>
@@ -81,7 +83,7 @@ const QuestLegend = props => {
       </CardContent>
     </Card>
   );
-}
+};
 
 QuestLegend.propTypes = {};
 

@@ -44,15 +44,12 @@ const switchIcon = (type) => {
       return <DoorOpenIcon />;
     case "look":
       return <EyeIcon />;
+    default:
+      return;
   }
 };
 
-const QuestActions = ({
-  quest,
-  location,
-  selectLocation,
-  selectMoveAction,
-}) => {
+const QuestActions = ({ quest, location, selectLocation }) => {
   const localEntries = quest.entries.filter(
     (entry) => entry.locationId === location.id
   );
@@ -65,17 +62,10 @@ const QuestActions = ({
   function selectAction(event) {
     const actionIndex = findWithAttr(quest.actions, "id", event.target.id);
     const action = quest.actions[actionIndex];
-    // console.log(action);
 
     switch (action.type) {
       case "move":
-        const locationIndex = findWithAttr(
-          quest.locations,
-          "id",
-          action.targetId
-        );
         selectLocation(action.targetId);
-        // selectMoveAction(quest.locations[locationIndex]);
         return;
       case "take":
         return console.log("Take");
@@ -83,6 +73,8 @@ const QuestActions = ({
         return console.log("Open");
       case "look":
         return console.log("Look");
+      default:
+        return;
     }
   }
 
@@ -123,8 +115,7 @@ const QuestActions = ({
 
 const QuestSidebar = (props) => {
   const classes = useStyles(props);
-  const { quest, location, updateCenter, selectLocation } =
-    useContext(QuestContext);
+  const { quest, location, selectLocation } = useContext(QuestContext);
 
   return (
     <Card className={`${classes.sidebarContent}`} elevation={5}>

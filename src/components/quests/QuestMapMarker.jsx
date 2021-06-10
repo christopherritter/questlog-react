@@ -34,9 +34,9 @@ const useStyles = makeStyles((theme) => ({
 
 const QuestMapMarker = (props) => {
   const classes = useStyles(props);
-  const { location, selectLocation, viewLocation } = props;
+  const { location, viewLocation } = props;
 
-  const onMarkerClick = () => {
+  function onMarkerClick() {
     viewLocation(location);
   };
 

@@ -345,23 +345,10 @@ function QuestReader(props) {
     handleViewLocation(location);
   }
 
-  const handleViewLocation = (selectedLocation) => {
+  function handleViewLocation(selectedLocation) {
     selectLocation(selectedLocation.id);
     setCurrentLocation((current) => ({ ...current, ...selectedLocation }));
   };
-
-  // function handleMoveAction(selectedLocation) {
-  //   mapRef.current.easeTo({
-  //     center: {
-  //       lng: location.longitude,
-  //       lat: location.latitude,
-  //     },
-  //     bearing: location.bearing,
-  //     pitch: location.pitch,
-  //     zoom: location.zoom,
-  //     duration: 1000,
-  //   });
-  // }
 
   return (
     <Box overflow="hidden">
@@ -405,6 +392,8 @@ function QuestReader(props) {
                 width={sidebarWidth}
                 toggleLegend={toggleLegend}
                 selectLegendItem={selectLegendItem}
+                viewLocation={handleViewLocation}
+                selectLocation={selectLocation}
               />
             </Box>
             <Box
@@ -476,7 +465,7 @@ function QuestReader(props) {
               <QuestMapMarker
                 location={el}
                 key={index}
-                selectLocation={selectLocation}
+
                 viewLocation={handleViewLocation}
               ></QuestMapMarker>
             ))}
