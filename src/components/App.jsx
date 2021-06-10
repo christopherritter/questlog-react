@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    textDecoration: "none"
   },
 }));
 
@@ -81,7 +82,12 @@ const App = () => {
     }
   }
 
+  const [questId, setQuestId] = React.useState(null)
   const [questTitle, setQuestTitle] = React.useState(null);
+
+  function handleSetQuestId(id) {
+    setQuestId(id);
+  }
 
   function handleSetQuestTitle(title) {
     setQuestTitle(title);
@@ -106,7 +112,7 @@ const App = () => {
             QuestLog
           </Typography>
           {questTitle && (
-            <Typography variant="h6" className={classes.title}>
+            <Typography variant="h6" className={classes.title} component={RouterLink} to={`/quest/` + questId}>
               { questTitle }
             </Typography>
           )}
@@ -169,7 +175,7 @@ const App = () => {
             exact
             path="/quest/:questId/:role?"
             render={(props) => (
-              <Quest {...props} setQuestTitle={handleSetQuestTitle} />
+              <Quest {...props} setQuestId={handleSetQuestId} setQuestTitle={handleSetQuestTitle} />
             )}
           />
           <Route path="/signup" component={Signup} />

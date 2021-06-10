@@ -47,6 +47,7 @@ const Quest = (props) => {
       .onSnapshot((snapshot) => {
         snapshot.docs.map((doc) => {
           var q = doc.data()
+          // props.setQuestId(q.id);
           props.setQuestTitle(q.title);
           setQuest(q)
         });
