@@ -74,7 +74,7 @@ const QuestActions = ({
 
       entry.requirements.map((objId) => {
         let i = findWithAttr(quest.objectives, "id", objId);
-        return required = quest.objectives[i].isComplete;
+        return (required = quest.objectives[i].isComplete);
       });
 
       if (required) return entry;
@@ -83,7 +83,7 @@ const QuestActions = ({
 
       entry.expirations.map((objId) => {
         let i = findWithAttr(quest.objectives, "id", objId);
-        return expired = quest.objectives[i].isComplete;
+        return (expired = quest.objectives[i].isComplete);
       });
 
       if (!expired) return entry;
@@ -120,17 +120,19 @@ const QuestActions = ({
     const actionIndex = findWithAttr(quest.actions, "id", event.target.id);
     const action = quest.actions[actionIndex];
 
-    switch (action.type) {
-      case "look":
-        return viewQuestItem(action.targetId);
-      case "move":
-        return selectLocation(action.targetId);
-      case "take":
-        return takeQuestItem(action);
-      case "operate":
-        return operateQuestItem(action);
-      default:
-        return;
+    if (action.type) {
+      switch (action.type) {
+        case "look":
+          return viewQuestItem(action.targetId);
+        case "move":
+          return selectLocation(action.targetId);
+        case "take":
+          return takeQuestItem(action);
+        case "operate":
+          return operateQuestItem(action);
+        default:
+          return;
+      }
     }
   }
 
