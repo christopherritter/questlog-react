@@ -19,6 +19,9 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
+import Input from "@material-ui/core/Input";
+import MenuItem from "@material-ui/core/MenuItem";
+import Checkbox from "@material-ui/core/Checkbox";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,8 +67,9 @@ const QuestActions = (props) => {
   const initialActionState = {
     id: "action-" + id,
     text: "",
-    targetId: "",
     type: "",
+    targetId: "",
+    effects: [],
   };
 
   const [action, setAction] = useState(initialActionState);
@@ -137,6 +141,22 @@ const QuestActions = (props) => {
     const { name, value } = event.target;
     setAction({ ...action, [name]: value });
   }
+
+  const handleChangeEffects = (event) => {
+    var { value } = event.target;
+    var effects = [];
+
+    for (let i = 0, l = value.length; i < l; i += 1) {
+      let index = effects.indexOf(value[i]);
+      if (index === -1) {
+        effects.push(value[i]);
+      } else {
+        effects.splice(index, 1);
+      }
+    }
+
+    setAction({ ...action, effects: effects })
+  };
 
   const switchTarget = (type) => {
     switch (type) {
@@ -302,6 +322,37 @@ const QuestActions = (props) => {
           >
             <InputLabel htmlFor="actionTarget">Target</InputLabel>
             {switchTarget(action.type)}
+          </FormControl>
+
+          <FormControl
+            variant="outlined"
+            className={classes.formControl}
+            fullWidth
+          >
+            <InputLabel id="effects-mutiple-checkbox-label">
+              Effects
+            </InputLabel>
+            <Select
+              labelId="effects-mutiple-checkbox-label"
+              id="demo-mutiple-checkbox"
+              multiple
+              value={action.effects}
+              onChange={handleChangeEffects}
+              input={<Input />}
+              inputProps={{
+                id: "effects-multi-select-label",
+              }}
+              renderValue={(selected) => selected.join(", ")}
+            >
+              {quest.objectives.map((objective, index) => (
+                <MenuItem key={index} value={objective.id}>
+                  <Checkbox
+                    checked={action.effects.indexOf(objective.id) > -1}
+                  />
+                  <ListItemText primary={objective.text} />
+                </MenuItem>
+              ))}
+            </Select>
           </FormControl>
         </DialogContent>
         <DialogActions>

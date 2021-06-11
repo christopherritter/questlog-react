@@ -78,8 +78,6 @@ const QuestActions = ({
     const actionIndex = findWithAttr(quest.actions, "id", action);
     const selectedAction = quest.actions[actionIndex];
 
-    // only check "take items" return all the other items
-
     if (selectedAction && selectedAction.type === "take") {
       const targetIndex = findWithAttr(
         quest.items,
@@ -180,11 +178,13 @@ const QuestSidebar = (props) => {
           {location.name}
         </Typography>
 
+        {/* hide entries after taking item */}
+
         {quest.entries &&
           quest.entries
             .filter((entry) => entry.locationId === location.id)
-            .map((entry) => (
-              <Typography variant="body2" component="p" className={classes.entries}>
+            .map((entry, index) => (
+              <Typography variant="body2" component="p" className={classes.entries} key={index}>
                 { entry.text }
               </Typography>
             ))}
