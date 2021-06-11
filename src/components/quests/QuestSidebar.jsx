@@ -104,7 +104,7 @@ const QuestActions = ({
       case "move":
         return selectLocation(action.targetId);
       case "take":
-        return takeQuestItem(action.targetId);
+        return takeQuestItem(action);
       case "operate":
         return operateQuestItem(action.targetId);
       default:

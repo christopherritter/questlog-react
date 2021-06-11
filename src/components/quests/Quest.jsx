@@ -305,17 +305,32 @@ const Quest = (props) => {
     setItem(null);
   };
 
-  function handleTakeItem(targetId) {
-    const index = findWithAttr(quest.items, "id", targetId);  
+  function handleTakeItem(action) {
+    console.log("Handle take item")
+    console.log(action)
+  
+    let updatedObjectives = [...quest.objectives];
+    
+    for (let i = 0; i < action.effects.length; i++) {
+      const objectiveIndex = findWithAttr(updatedObjectives, "id", action.effects[i]); 
+      console.log(objectiveIndex)
+      // let updatedItems = [...quest.items];
+      let updatedObjective = { ...updatedObjectives[objectiveIndex] };
+
+      updatedObjective = { ...updatedObjective, isComplete: true };
+      updatedObjectives[objectiveIndex] = updatedObjective;
+    }
+
+    const itemIndex = findWithAttr(quest.items, "id", action.targetId);   
     let updatedItems = [...quest.items];
-    let updatedItem = { ...quest.items[index] };
+    let updatedItem = { ...quest.items[itemIndex] };
 
     updatedItem = { ...updatedItem, isOwned: true };
-    updatedItems[index] = updatedItem;
+    updatedItems[itemIndex] = updatedItem;
 
-    setItemIndex(index)
+    setItemIndex(itemIndex)
     setItem(updatedItem);
-    setQuest({ ...quest, items: updatedItems });
+    setQuest({ ...quest, objectives: updatedObjectives, items: updatedItems });
   };
 
   function handleViewItem(targetId) {
