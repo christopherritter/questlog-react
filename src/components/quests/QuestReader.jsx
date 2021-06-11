@@ -125,7 +125,7 @@ const useStyles = makeStyles((theme) => ({
 
 function QuestDialog(props) {
   const classes = useStyles();
-  const { open, onClose } = props;
+  const { open, onClose, restartQuest } = props;
 
   return (
     <Dialog
@@ -143,10 +143,10 @@ function QuestDialog(props) {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="secondary">
-          Disagree
+          Keep Playing
         </Button>
-        <Button onClick={onClose} color="primary" autoFocus>
-          Agree
+        <Button onClick={restartQuest} color="primary" autoFocus>
+          Restart Quest
         </Button>
       </DialogActions>
     </Dialog>
@@ -155,8 +155,14 @@ function QuestDialog(props) {
 
 function QuestReader(props) {
   const classes = useStyles(props);
-  const { quest, location, updateCenter, selectLocation } =
-    useContext(QuestContext);
+  const {
+    quest,
+    location,
+    setQuest,
+    updateCenter,
+    selectLocation,
+    findWithAttr,
+  } = useContext(QuestContext);
 
   const [isLoaded, setLoaded] = useState(false);
   const [showLocationSidebar, setShowLocationSidebar] = useState(false);
@@ -395,6 +401,24 @@ function QuestReader(props) {
     setOpen(false);
   };
 
+  function handleRestartQuest() {
+    var updatedObjectives = [];
+    var updatedItems = [];
+
+    quest.objectives.map((objective) => {
+      objective.isComplete = false;
+      return updatedObjectives.push(objective);
+    });
+
+    quest.items.map((item) => {
+      item.isOwned = false;
+      return updatedItems.push(item);
+    });
+
+    setQuest({ ...quest, objectives: updatedObjectives, items: updatedItems });
+    setOpen(false);
+  }
+
   useEffect(() => {
     var questComplete = true;
 
@@ -415,7 +439,11 @@ function QuestReader(props) {
 
   return (
     <React.Fragment>
-      <QuestDialog open={open} onClose={handleClose} />
+      <QuestDialog
+        open={open}
+        onClose={handleClose}
+        restartQuest={handleRestartQuest}
+      />
       <Box overflow="hidden">
         {quest.region && (
           <React.Fragment>
