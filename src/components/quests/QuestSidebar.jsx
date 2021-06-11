@@ -69,7 +69,40 @@ const QuestActions = ({
   );
   var localActions = [];
 
-  localEntries.forEach((entry) => {
+  const filteredEntries = localEntries.filter((entry) => {
+    console.log("Filtered entries");
+    // console.log(entry)
+
+    if (entry.requirements && entry.requirements.length > 0) {
+      console.log("Entry requirements");
+      console.log(entry.requirements);
+      let required = true;
+
+      entry.requirements.map((objId) => {
+        console.log(objId);
+        let i = findWithAttr(quest.objectives, "id", objId);
+        required = quest.objectives[i].isComplete;
+      });
+
+      if (required) return entry;
+    } else if (entry.expirations && entry.expirations.length > 0) {
+      console.log("Entry expirations");
+      console.log(entry.expirations);
+      let expired = true;
+
+      entry.expirations.map((objId) => {
+        console.log(objId);
+        let i = findWithAttr(quest.objectives, "id", objId);
+        expired = quest.objectives[i].isComplete;
+      });
+
+      if (!expired) return entry;
+    } else {
+      return entry;
+    }
+  });
+
+  filteredEntries.forEach((entry) => {
     entry.actions.map((action) => localActions.push(action));
   });
 
@@ -88,22 +121,7 @@ const QuestActions = ({
       if (!targetItem.isOwned) {
         return action;
       }
-    } 
-    // else if (selectedAction && selectedAction.effects.length > 0) {
-    //   console.log(selectedAction.name + " has effects")
-    //   console.log(selectedAction.effects)
-    //   const targetIndex = findWithAttr(
-    //     quest.items,
-    //     "id",
-    //     selectedAction.targetId
-    //   );
-    //   const targetItem = quest.items[targetIndex];
-
-    //   if (!targetItem.isOwned) {
-    //     return action;
-    //   }
-    // } 
-    else {
+    } else {
       return action;
     }
   });
@@ -226,9 +244,6 @@ const QuestSidebar = (props) => {
         <Typography variant="h5" component="h2" gutterBottom>
           {location.name}
         </Typography>
-
-        {/* hide entries after taking item */}
-
         {filteredEntries &&
           filteredEntries.map((entry, index) => (
             <Typography
