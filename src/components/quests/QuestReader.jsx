@@ -143,7 +143,7 @@ function QuestDialog(props) {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button onClick={onClose} color="secondary">
           Disagree
         </Button>
         <Button onClick={onClose} color="primary" autoFocus>

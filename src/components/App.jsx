@@ -43,7 +43,8 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
-    textDecoration: "none"
+    textDecoration: "none",
+    color: theme.palette.common.white,
   },
 }));
 
@@ -96,7 +97,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar color="primary" className={classes.appBar}>
+      <AppBar className={classes.appBar}>
         <Toolbar>
           <IconButton
             edge="start"
