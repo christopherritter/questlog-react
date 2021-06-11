@@ -355,17 +355,10 @@ const Quest = (props) => {
   };
 
   function handleOperateItem(action) {
-    console.log("Handle operate " + action.text)
-    console.log(action)
-
     if (action.effects) {
       action.effects.forEach((effect) => {
         let objectiveIndex = findWithAttr(quest.objectives, "id", effect);  
         let selectedObjective = { ...quest.objectives[objectiveIndex] };
-
-        console.log("Selected objective")
-        console.log(selectedObjective)
-
         let updatedObjective = { ...quest.objectives[objectiveIndex], isComplete: true }
         let updatedObjectives = [ ...quest.objectives ]
 
@@ -375,12 +368,9 @@ const Quest = (props) => {
       })
     }
     
-
     const itemIndex = findWithAttr(quest.items, "id", action.targetId);  
     const selectedItem = { ...quest.items[itemIndex] };
 
-    console.log("Selected Item")
-    console.log(selectedItem);
   }
 
   // Actions

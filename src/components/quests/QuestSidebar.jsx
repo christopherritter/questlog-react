@@ -70,28 +70,19 @@ const QuestActions = ({
   var localActions = [];
 
   const filteredEntries = localEntries.filter((entry) => {
-    console.log("Filtered entries");
-    // console.log(entry)
-
     if (entry.requirements && entry.requirements.length > 0) {
-      console.log("Entry requirements");
-      console.log(entry.requirements);
       let required = true;
 
       entry.requirements.map((objId) => {
-        console.log(objId);
         let i = findWithAttr(quest.objectives, "id", objId);
         required = quest.objectives[i].isComplete;
       });
 
       if (required) return entry;
     } else if (entry.expirations && entry.expirations.length > 0) {
-      console.log("Entry expirations");
-      console.log(entry.expirations);
       let expired = true;
 
       entry.expirations.map((objId) => {
-        console.log(objId);
         let i = findWithAttr(quest.objectives, "id", objId);
         expired = quest.objectives[i].isComplete;
       });
