@@ -406,6 +406,7 @@ function QuestReader(props) {
   return (
     <React.Fragment>
       <QuestDialog
+        quest={quest}
         open={open}
         onClose={handleClose}
         restartQuest={handleRestartQuest}
