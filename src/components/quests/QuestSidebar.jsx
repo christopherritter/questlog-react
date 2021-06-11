@@ -62,7 +62,6 @@ const QuestActions = ({
   viewQuestItem,
   takeQuestItem,
   operateQuestItem,
-  findWithAttr,
 }) => {
   const localEntries = quest.entries.filter(
     (entry) => entry.locationId === location.id
@@ -75,7 +74,7 @@ const QuestActions = ({
 
       entry.requirements.map((objId) => {
         let i = findWithAttr(quest.objectives, "id", objId);
-        required = quest.objectives[i].isComplete;
+        return required = quest.objectives[i].isComplete;
       });
 
       if (required) return entry;
@@ -84,7 +83,7 @@ const QuestActions = ({
 
       entry.expirations.map((objId) => {
         let i = findWithAttr(quest.objectives, "id", objId);
-        expired = quest.objectives[i].isComplete;
+        return expired = quest.objectives[i].isComplete;
       });
 
       if (!expired) return entry;
