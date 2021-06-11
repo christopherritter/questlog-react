@@ -13,11 +13,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import { green, pink } from "@material-ui/core/colors";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 import MapIcon from "mdi-material-ui/Map";
 import NotebookIcon from "mdi-material-ui/Notebook";
@@ -133,14 +133,13 @@ function QuestDialog(props) {
       onClose={onClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
-      >
+    >
       <DialogTitle id="alert-dialog-title">
-        {"Use Google's location service?"}
+        {"Quest complete!"}
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Let Google help apps determine location. This means sending anonymous
-          location data to Google, even when no apps are running.
+          Congradulations you have accomplished all of the objects and completed the quest. Would you like to start the quest over and play it again? 
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -397,12 +396,25 @@ function QuestReader(props) {
     setOpen(false);
   };
 
+  useEffect(() => {
+    var questComplete = true;
+
+    if (quest.objectives) {
+      quest.objectives.forEach((objective) => {
+        if (objective.isComplete === false) questComplete = false;
+      });
+
+      if (questComplete) {
+        setOpen(true);
+      } else {
+        setOpen(false);
+      }
+    }
+  }, [quest.objectives]);
+
   return (
     <React.Fragment>
-      <QuestDialog
-        open={open}
-        onClose={handleClose}
-      />
+      <QuestDialog open={open} onClose={handleClose} />
       <Box overflow="hidden">
         {quest.region && (
           <React.Fragment>
