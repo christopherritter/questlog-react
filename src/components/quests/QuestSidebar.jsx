@@ -152,7 +152,27 @@ const QuestSidebar = (props) => {
     viewQuestItem,
     takeQuestItem,
     operateQuestItem,
+    findWithAttr
   } = useContext(QuestContext);
+
+  const localEntries = quest.entries.filter(
+    (entry) => entry.locationId === location.id
+  );
+
+  const filteredEntries = localEntries.filter((entry) => {
+    if (entry.expirations && entry.expirations.length > 0) {
+      for (let i = 0; i < entry.expirations.length; i++) {
+        const objectiveIndex = findWithAttr(quest.objectives, "id", entry.expirations[i]); 
+
+        if (quest.objectives[objectiveIndex].isComplete !== true) {
+          return entry;
+        }
+      }
+
+    } else {
+      return entry;
+    } 
+  })
 
   return (
     <Card className={`${classes.sidebarContent}`} elevation={5}>
@@ -180,10 +200,8 @@ const QuestSidebar = (props) => {
 
         {/* hide entries after taking item */}
 
-        {quest.entries &&
-          quest.entries
-            .filter((entry) => entry.locationId === location.id)
-            .map((entry, index) => (
+        {filteredEntries &&
+          filteredEntries.map((entry, index) => (
               <Typography variant="body2" component="p" className={classes.entries} key={index}>
                 { entry.text }
               </Typography>
