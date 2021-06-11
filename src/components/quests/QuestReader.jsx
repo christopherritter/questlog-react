@@ -315,8 +315,8 @@ function QuestReader(props) {
     }
   }
 
-  function selectJournalItem() {
-    console.log("Select journal item");
+  function handleSelectJournalItem() {
+    setOpen(true);
   }
 
   function toggleBackpack() {
@@ -407,6 +407,7 @@ function QuestReader(props) {
     <React.Fragment>
       <QuestDialog
         quest={quest}
+        location={location}
         open={open}
         onClose={handleClose}
         restartQuest={handleRestartQuest}
@@ -466,7 +467,7 @@ function QuestReader(props) {
                 <QuestJournal
                   width={sidebarWidth}
                   toggleJournal={toggleJournal}
-                  selectJournalItem={selectJournalItem}
+                  selectJournalItem={handleSelectJournalItem}
                 />
               </Box>
               <Box

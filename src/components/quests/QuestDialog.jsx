@@ -1,12 +1,19 @@
 import React from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import CheckBox from '@material-ui/icons/CheckBox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -14,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function toggleView({ quest, open, onClose, restartQuest, type }) {
+function toggleView({ quest, location, open, onClose, restartQuest, type }) {
   if (type) {
     switch (type) {
       default:
@@ -65,6 +72,37 @@ function toggleView({ quest, open, onClose, restartQuest, type }) {
             <DialogContentText id="alert-dialog-description">
               Complete these objectives to finish the quest.
             </DialogContentText>
+            <List component="nav">
+              {quest.objectives &&
+                quest.objectives
+                  .filter((obj) => {
+                    return obj.isPrimary === true;
+                  })
+                  .map((obj) => {
+                    return (
+                      <ListItem
+                        button
+                        key={obj.id}
+                        selected={obj.id === location.id}
+                      >
+                        <ListItemIcon>
+                          {obj.isComplete ? (
+                            <CheckBox />
+                          ) : (
+                            <CheckBoxOutlineBlankIcon />
+                          )}
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={
+                            <Typography variant="subtitle1">
+                              {obj.text}
+                            </Typography>
+                          }
+                        />
+                      </ListItem>
+                    );
+                  })}
+            </List>
           </DialogContent>
           <DialogActions>
             <Button onClick={onClose} color="secondary">
@@ -106,9 +144,9 @@ function toggleView({ quest, open, onClose, restartQuest, type }) {
 }
 
 function QuestDialog(props) {
-  const { quest, open, onClose, restartQuest } = props;
+  const { quest, location, open, onClose, restartQuest } = props;
 
-  return toggleView({ quest, open, onClose, restartQuest });
+  return toggleView({ quest, location, open, onClose, restartQuest });
 }
 
 export default QuestDialog;
