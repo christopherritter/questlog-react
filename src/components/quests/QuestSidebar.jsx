@@ -36,9 +36,8 @@ const useStyles = makeStyles({
     paddingBottom: "0.75em",
     "&:last-child": {
       paddingBottom: 0,
-    }
-
-  }
+    },
+  },
 });
 
 const switchIcon = (type) => {
@@ -89,7 +88,22 @@ const QuestActions = ({
       if (!targetItem.isOwned) {
         return action;
       }
-    } else {
+    } 
+    // else if (selectedAction && selectedAction.effects.length > 0) {
+    //   console.log(selectedAction.name + " has effects")
+    //   console.log(selectedAction.effects)
+    //   const targetIndex = findWithAttr(
+    //     quest.items,
+    //     "id",
+    //     selectedAction.targetId
+    //   );
+    //   const targetItem = quest.items[targetIndex];
+
+    //   if (!targetItem.isOwned) {
+    //     return action;
+    //   }
+    // } 
+    else {
       return action;
     }
   });
@@ -152,7 +166,7 @@ const QuestSidebar = (props) => {
     viewQuestItem,
     takeQuestItem,
     operateQuestItem,
-    findWithAttr
+    findWithAttr,
   } = useContext(QuestContext);
 
   const localEntries = quest.entries.filter(
@@ -160,19 +174,34 @@ const QuestSidebar = (props) => {
   );
 
   const filteredEntries = localEntries.filter((entry) => {
-    if (entry.expirations && entry.expirations.length > 0) {
+    if (entry.requirements && entry.requirements.length > 0) {
+      for (let i = 0; i < entry.requirements.length; i++) {
+        const objectiveIndex = findWithAttr(
+          quest.objectives,
+          "id",
+          entry.requirements[i]
+        );
+
+        if (quest.objectives[objectiveIndex].isComplete === true) {
+          return entry;
+        }
+      }
+    } else if (entry.expirations && entry.expirations.length > 0) {
       for (let i = 0; i < entry.expirations.length; i++) {
-        const objectiveIndex = findWithAttr(quest.objectives, "id", entry.expirations[i]); 
+        const objectiveIndex = findWithAttr(
+          quest.objectives,
+          "id",
+          entry.expirations[i]
+        );
 
         if (quest.objectives[objectiveIndex].isComplete !== true) {
           return entry;
         }
       }
-
     } else {
       return entry;
-    } 
-  })
+    }
+  });
 
   return (
     <Card className={`${classes.sidebarContent}`} elevation={5}>
@@ -202,10 +231,15 @@ const QuestSidebar = (props) => {
 
         {filteredEntries &&
           filteredEntries.map((entry, index) => (
-              <Typography variant="body2" component="p" className={classes.entries} key={index}>
-                { entry.text }
-              </Typography>
-            ))}
+            <Typography
+              variant="body2"
+              component="p"
+              className={classes.entries}
+              key={index}
+            >
+              {entry.text}
+            </Typography>
+          ))}
       </CardContent>
       {quest.actions && (
         <QuestActions

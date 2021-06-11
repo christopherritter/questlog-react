@@ -163,6 +163,7 @@ const Quest = (props) => {
   const [location, setLocation] = useState(initialLocationState);
 
   function handleSelectLocation(event) {
+    console.log("handle select location")
     var index;
 
     if (event.features) {
@@ -173,6 +174,22 @@ const Quest = (props) => {
     }
     
     const selectedLocation = quest.locations[index];
+
+    const filteredEntries = quest.entries.filter((entry) => entry.locationId === selectedLocation.id);
+
+    filteredEntries.forEach((entry) => {
+      if (entry.objectives.length > 0) {
+        entry.objectives.map((objectiveId) => {
+          const objectiveIndex = findWithAttr(quest.objectives, "id", objectiveId);
+          const updatedObjective = { ...quest.objectives[objectiveIndex], isComplete: true }
+          const updatedObjectives = [ ...quest.objectives ]
+
+          updatedObjectives[objectiveIndex] = updatedObjective;
+
+          setQuest({ ...quest, objectives: updatedObjectives })
+        })
+      }
+    })
  
     setLocationIndex(index);
     setLocation((prevLocation) => ({ ...prevLocation, ...selectedLocation }));
@@ -484,6 +501,7 @@ const Quest = (props) => {
         entry,
         item,
         action,
+        setQuest,
         setLocation,
         setLocationIndex,
         addLocation: handleAddLocation,

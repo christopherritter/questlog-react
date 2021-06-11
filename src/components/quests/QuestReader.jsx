@@ -1,5 +1,5 @@
 import React, { useRef, useState, useContext, useEffect } from "react";
-import MapGL, { Marker } from "@urbica/react-map-gl";
+import MapGL from "@urbica/react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
@@ -120,7 +120,7 @@ const useStyles = makeStyles((theme) => ({
 
 function QuestReader(props) {
   const classes = useStyles(props);
-  const { quest, location, updateCenter, selectLocation, setLocation } =
+  const { quest, location, updateCenter, selectLocation } =
     useContext(QuestContext);
 
   const [isLoaded, setLoaded] = useState(false);
@@ -348,7 +348,7 @@ function QuestReader(props) {
   function handleViewLocation(selectedLocation) {
     selectLocation(selectedLocation.id);
     setCurrentLocation((current) => ({ ...current, ...selectedLocation }));
-  };
+  }
 
   return (
     <Box overflow="hidden">
@@ -465,7 +465,6 @@ function QuestReader(props) {
               <QuestMapMarker
                 location={el}
                 key={index}
-
                 viewLocation={handleViewLocation}
               ></QuestMapMarker>
             ))}
