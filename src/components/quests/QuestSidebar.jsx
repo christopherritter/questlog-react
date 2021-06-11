@@ -120,7 +120,7 @@ const QuestActions = ({
       case "take":
         return takeQuestItem(action);
       case "operate":
-        return operateQuestItem(action.targetId);
+        return operateQuestItem(action);
       default:
         return;
     }

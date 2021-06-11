@@ -163,7 +163,6 @@ const Quest = (props) => {
   const [location, setLocation] = useState(initialLocationState);
 
   function handleSelectLocation(event) {
-    console.log("handle select location")
     var index;
 
     if (event.features) {
@@ -323,15 +322,10 @@ const Quest = (props) => {
   };
 
   function handleTakeItem(action) {
-    console.log("Handle take item")
-    console.log(action)
-  
     let updatedObjectives = [...quest.objectives];
     
     for (let i = 0; i < action.effects.length; i++) {
       const objectiveIndex = findWithAttr(updatedObjectives, "id", action.effects[i]); 
-      console.log(objectiveIndex)
-      // let updatedItems = [...quest.items];
       let updatedObjective = { ...updatedObjectives[objectiveIndex] };
 
       updatedObjective = { ...updatedObjective, isComplete: true };
@@ -360,13 +354,32 @@ const Quest = (props) => {
     console.log(selectedItem);
   };
 
-  function handleOperateItem(targetId) {
-    console.log("Handle operate " + targetId)
-    console.log("Operate item sets a quest objective")
+  function handleOperateItem(action) {
+    console.log("Handle operate " + action.text)
+    console.log(action)
 
-    const index = findWithAttr(quest.items, "id", targetId);  
-    const selectedItem = { ...quest.items[index] };
+    if (action.effects) {
+      action.effects.forEach((effect) => {
+        let objectiveIndex = findWithAttr(quest.objectives, "id", effect);  
+        let selectedObjective = { ...quest.objectives[objectiveIndex] };
 
+        console.log("Selected objective")
+        console.log(selectedObjective)
+
+        let updatedObjective = { ...quest.objectives[objectiveIndex], isComplete: true }
+        let updatedObjectives = [ ...quest.objectives ]
+
+        updatedObjectives[objectiveIndex] = updatedObjective;
+
+        setQuest({ ...quest, objectives: updatedObjectives })
+      })
+    }
+    
+
+    const itemIndex = findWithAttr(quest.items, "id", action.targetId);  
+    const selectedItem = { ...quest.items[itemIndex] };
+
+    console.log("Selected Item")
     console.log(selectedItem);
   }
 
