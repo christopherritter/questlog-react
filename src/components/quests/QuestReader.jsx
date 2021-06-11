@@ -134,12 +134,11 @@ function QuestDialog(props) {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">
-        {"Quest complete!"}
-      </DialogTitle>
+      <DialogTitle id="alert-dialog-title">{"Quest complete!"}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Congradulations you have accomplished all of the objects and completed the quest. Would you like to start the quest over and play it again? 
+          Congradulations you have accomplished all of the objects and completed
+          the quest. Would you like to start the quest over and play it again?
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -400,9 +399,11 @@ function QuestReader(props) {
     var questComplete = true;
 
     if (quest.objectives) {
-      quest.objectives.forEach((objective) => {
-        if (objective.isComplete === false) questComplete = false;
-      });
+      quest.objectives
+        .filter((objective) => objective.isPrimary === true)
+        .forEach((objective) => {
+          if (objective.isComplete === false) questComplete = false;
+        });
 
       if (questComplete) {
         setOpen(true);
