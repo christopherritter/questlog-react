@@ -87,7 +87,7 @@ const CreateQuest = (props) => {
     QuestDataService.create(data)
       .then((response) => {
         QuestDataService.update(response.id, { questId: response.id });
-        history.push("/quests");
+        history.push("/quest/" + response.id + "/edit");
       })
       .catch((e) => {
         console.log(e);
