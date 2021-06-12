@@ -72,17 +72,7 @@ const CreateQuest = (props) => {
 
   const saveQuest = (e) => {
     e.preventDefault();
-    var data = {
-      title: quest.title,
-      author: author,
-      authorId: quest.authorId,
-      description: quest.description,
-      // categories: quest.categories,
-      // image: quest.image,
-      isFeatured: false,
-      isAnonymous: false,
-      // startingPoint: quest.startingPoint,
-    };
+    var data = { ...quest };
 
     QuestDataService.create(data)
       .then((response) => {
