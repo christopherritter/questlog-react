@@ -39,12 +39,17 @@ const CreateQuest = (props) => {
   const [author, setAuthor] = useState("");
 
   const initialQuestState = {
-    title: "",
-    authorId: currentUser.uid,
-    description: "",
+    author: "",
+    authorId: "",
     categories: [],
+    description: "",
+    featured: false,
     image: "",
+    isAnonymous: false,
+    isFeatured: false,
+    questId: "",
     startingPoint: "",
+    title: "",
   };
 
   const [quest, setQuest] = useState(initialQuestState);
