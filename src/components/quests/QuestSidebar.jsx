@@ -243,6 +243,7 @@ const QuestSidebar = (props) => {
               component="p"
               className={classes.entries}
               key={index}
+              style={{whiteSpace: 'pre-line'}}
             >
               {entry.text}
             </Typography>

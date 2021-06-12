@@ -53,7 +53,7 @@ const QuestViewer = () => {
               >
                 {quest.title}
               </Typography>
-              <Typography variant="subtitle1" className={classes.headerText}>
+              <Typography variant="subtitle1" component="p" style={{whiteSpace: 'pre-line'}} paragraph className={classes.headerText}>
                 {quest.description}
               </Typography>
               <Box className={classes.headerButtonBar}>

@@ -157,7 +157,7 @@ function toggleView({
               {item.name}
             </DialogTitle>
             <DialogContent>
-              <DialogContentText id="item-dialog-description">
+              <DialogContentText id="item-dialog-description" style={{whiteSpace: 'pre-line'}}>
                 {item.description}
               </DialogContentText>
               <DialogQuestActions
@@ -272,7 +272,7 @@ function toggleView({
         >
           <DialogTitle id="alert-dialog-title">{"Quest complete!"}</DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
+            <DialogContentText id="alert-dialog-description" >
               You have finished all of the objectives and completed the quest.
               Would you like to start the quest over and play it again?
             </DialogContentText>
