@@ -47,6 +47,9 @@ const QuestRegion = () => {
               value={quest.region.latitude}
               onChange={updateRegion}
               required
+              InputProps={{
+                readOnly: true,
+              }}
             />
             <TextField
               variant="outlined"
@@ -59,6 +62,9 @@ const QuestRegion = () => {
               value={quest.region.longitude}
               onChange={updateRegion}
               required
+              InputProps={{
+                readOnly: true,
+              }}
             />
             <TextField
               variant="outlined"
@@ -70,6 +76,9 @@ const QuestRegion = () => {
               type="number"
               value={quest.region.bearing}
               onChange={updateRegion}
+              InputProps={{
+                readOnly: true,
+              }}
             />
             <TextField
               variant="outlined"
@@ -81,6 +90,9 @@ const QuestRegion = () => {
               type="number"
               value={quest.region.pitch}
               onChange={updateRegion}
+              InputProps={{
+                readOnly: true,
+              }}
             />
             <TextField
               variant="outlined"
@@ -92,6 +104,9 @@ const QuestRegion = () => {
               type="number"
               value={quest.region.zoom}
               onChange={updateRegion}
+              InputProps={{
+                readOnly: true,
+              }}
             />
           </form>
         </Grid>
