@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   jumboContent: {
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(8, 0, 6),
-    marginBottom: theme.spacing(6)
+    marginBottom: theme.spacing(6),
   },
   jumboIcon: {
     fontSize: 60,
@@ -94,11 +94,13 @@ const Home = () => {
           {loading && <span>Loading...</span>}
           {!loading &&
             quests &&
-            quests.docs.map((quest, index) => (
-              <Grid item key={index} xs={12} sm={6} md={4} key={index}>
-                <QuestCard quest={quest} />
-              </Grid>
-            ))}
+            quests.docs
+              .filter((quest) => quest.data().isFeatured === true)
+              .map((quest, index) => (
+                <Grid item key={index} xs={12} sm={6} md={4} key={index}>
+                  <QuestCard quest={quest} />
+                </Grid>
+              ))}
         </Grid>
       </Container>
       <Footer />
