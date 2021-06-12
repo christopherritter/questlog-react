@@ -4,6 +4,7 @@ import { useAuth } from "../../contexts/AuthContext.jsx";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
 import QuestMap from "./QuestMap.jsx";
+import Footer from "../Footer.jsx"
 
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -40,63 +41,62 @@ const QuestViewer = () => {
   const { currentUser } = useAuth();
 
   return (
-    <Paper elevation={0} className={classes.root} square>
-      <Container>
-        <Grid container>
-          <Grid sm={12} item>
-            <Typography
-              variant="h2"
-              gutterBottom
-              className={classes.headerTitle}
-            >
-              {quest.title}
-            </Typography>
-            <Typography variant="subtitle1" className={classes.headerText}>
-              {quest.description}
-            </Typography>
-            <Box className={classes.headerButtonBar}>
-              <Button
-                variant="contained"
-                className={classes.headerButtons}
-                color="primary"
-                component={RouterLink}
-                to={"/quest/" + quest.questId + "/play"}
-                disabled
+    <>
+      <Paper elevation={0} className={classes.root} square>
+        <Container>
+          <Grid container>
+            <Grid sm={12} item>
+              <Typography
+                variant="h2"
+                gutterBottom
+                className={classes.headerTitle}
               >
-                Play
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                className={classes.headerButtons}
-                component={RouterLink}
-                to={"/quest/" + quest.questId + "/read"}
-              >
-                Read
-              </Button>
-              {currentUser.uid === quest.authorId && (
+                {quest.title}
+              </Typography>
+              <Typography variant="subtitle1" className={classes.headerText}>
+                {quest.description}
+              </Typography>
+              <Box className={classes.headerButtonBar}>
                 <Button
                   variant="contained"
                   className={classes.headerButtons}
+                  color="primary"
                   component={RouterLink}
-                  to={"/quest/" + quest.questId + "/edit"}
+                  to={"/quest/" + quest.questId + "/play"}
+                  disabled
                 >
-                  Edit
+                  Play
                 </Button>
-              )}
-            </Box>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.headerButtons}
+                  component={RouterLink}
+                  to={"/quest/" + quest.questId + "/read"}
+                >
+                  Read
+                </Button>
+                {currentUser.uid === quest.authorId && (
+                  <Button
+                    variant="contained"
+                    className={classes.headerButtons}
+                    component={RouterLink}
+                    to={"/quest/" + quest.questId + "/edit"}
+                  >
+                    Edit
+                  </Button>
+                )}
+              </Box>
+            </Grid>
+            <Grid sm={12} item></Grid>
           </Grid>
-          <Grid sm={12} item></Grid>
-        </Grid>
-      </Container>
-      {quest.region && (
-        <QuestMap
-          quest={quest}
-          width={"100vw"}
-          height={"400px"}
-        />
-      )}
-    </Paper>
+        </Container>
+        {quest.region && (
+          <QuestMap quest={quest} width={"100vw"} height={"400px"} />
+        )}
+      </Paper>
+      <Footer />
+    </>
   );
 };
 
