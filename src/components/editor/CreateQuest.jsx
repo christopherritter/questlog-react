@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 const CreateQuest = (props) => {
   const classes = useStyles();
   const { currentUser } = useAuth();
-  const [author, setAuthor] = useState("");
+  // const [author, setAuthor] = useState("");
 
   const initialQuestState = {
     questId: "",
@@ -69,7 +69,7 @@ const CreateQuest = (props) => {
     const unsubscribe = UserDataService.getAll()
       .where("uid", "==", currentUser.uid)
       .onSnapshot((snapshot) => {
-        snapshot.docs.map((doc) => setAuthor(doc.data().username));
+        snapshot.docs.map((doc) => setQuest({ ...quest, author: doc.data().username, authorId: currentUser.uid }));
       });
 
     return unsubscribe;
@@ -125,7 +125,7 @@ const CreateQuest = (props) => {
                 id="questAuthor"
                 label="Author"
                 name="author"
-                value={author}
+                value={quest.author}
                 InputProps={{
                   readOnly: true,
                 }}
