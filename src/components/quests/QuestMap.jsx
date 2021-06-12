@@ -32,9 +32,6 @@ const QuestMap = (props) => {
       bearing={props.bearing}
       pitch={props.pitch}
       zoom={props.zoom}
-      onViewportChange={props.updateCenter}
-      onClick={onClick}
-      onDragEnd={onDragEnd}
     />
   );
 };

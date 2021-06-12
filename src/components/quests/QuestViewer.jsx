@@ -1,7 +1,9 @@
 import React, { useContext } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext.jsx";
+
 import QuestContext from "../../contexts/QuestContext.jsx";
+import QuestMap from "./QuestMap.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -85,6 +87,17 @@ const QuestViewer = () => {
           <Grid sm={12} item></Grid>
         </Grid>
       </Container>
+      {quest.region && (
+        <QuestMap
+          width={"100vw"}
+          height={"400px"}
+          latitude={quest.region.latitude}
+          longitude={quest.region.longitude}
+          bearing={quest.region.bearing}
+          pitch={quest.region.pitch}
+          zoom={quest.region.zoom}
+        />
+      )}
     </Paper>
   );
 };
