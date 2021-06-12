@@ -1,18 +1,14 @@
 import React from "react";
-import { Link as RouterLink } from "react-router-dom";
 import { useCollection } from "react-firebase-hooks/firestore";
 
 import QuestDataService from "../services/QuestService";
+import QuestCard from "./quests/QuestCard.jsx";
 import Footer from "./Footer.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
 
 import CompassOutlineIcon from "mdi-material-ui/CompassOutline";
 
@@ -40,17 +36,6 @@ const useStyles = makeStyles((theme) => ({
   cardGrid: {
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
-  },
-  card: {
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
-  },
-  cardMedia: {
-    paddingTop: "56.25%", // 16:9
-  },
-  cardContent: {
-    flexGrow: 1,
   },
 }));
 
@@ -110,27 +95,8 @@ const Home = () => {
           {!loading &&
             quests &&
             quests.docs.map((quest, index) => (
-              <Grid item key={index} xs={12} sm={6} md={4}>
-                <Card className={classes.card} key={index}>
-                  <CardContent>
-                    <Typography variant="h5" component="h2">
-                      {quest.data().title}
-                    </Typography>
-                    <Typography variant="body2" component="p">
-                      {quest.data().description}
-                    </Typography>
-                    <CardActions>
-                      <Button
-                        color="primary"
-                        component={RouterLink}
-                        to={`/quest/${quest.data().questId}`}
-                        className="btn btn-primary"
-                      >
-                        View Quest
-                      </Button>
-                    </CardActions>
-                  </CardContent>
-                </Card>
+              <Grid item key={index} xs={12} sm={6} md={4} key={index}>
+                <QuestCard quest={quest} />
               </Grid>
             ))}
         </Grid>
