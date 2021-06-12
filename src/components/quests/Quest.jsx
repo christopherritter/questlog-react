@@ -378,9 +378,12 @@ const Quest = (props) => {
 
         updatedObjectives[objectiveIndex] = updatedObjective;
       });
-      setItem(null);
-      setItemIndex(-1);
+
       setQuest({ ...quest, objectives: updatedObjectives });
+      setTimeout(() => {
+        setItem(null);
+        setItemIndex(-1);
+      }, 150);
     }
   }
 

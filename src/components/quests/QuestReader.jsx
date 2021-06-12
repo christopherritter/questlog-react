@@ -377,19 +377,24 @@ function QuestReader(props) {
   function handleRestartQuest() {
     var updatedObjectives = [];
     var updatedItems = [];
-
-    quest.objectives.map((objective) => {
-      objective.isComplete = false;
-      return updatedObjectives.push(objective);
-    });
-
-    quest.items.map((item) => {
-      item.isOwned = false;
-      return updatedItems.push(item);
-    });
-
-    setQuest({ ...quest, objectives: updatedObjectives, items: updatedItems });
     setOpen(false);
+
+    setTimeout(() => {
+      quest.objectives.map((objective) => {
+        objective.isComplete = false;
+        return updatedObjectives.push(objective);
+      });
+
+      quest.items.map((item) => {
+        item.isOwned = false;
+        return updatedItems.push(item);
+      });
+      setQuest({
+        ...quest,
+        objectives: updatedObjectives,
+        items: updatedItems,
+      });
+    }, 150);
   }
 
   const [dialogType, setDialogType] = React.useState();
