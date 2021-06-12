@@ -75,7 +75,7 @@ const Jumbotron = () => {
           A storytelling platform for playing text-based adventures on an
           interactive map.
         </Typography>
-        <div className={classes.jumboButtons}>
+        {/* <div className={classes.jumboButtons}>
           <Grid container spacing={2} justify="center">
             <Grid item>
               <Button variant="contained" color="primary">
@@ -88,7 +88,7 @@ const Jumbotron = () => {
               </Button>
             </Grid>
           </Grid>
-        </div>
+        </div> */}
       </Container>
     </div>
   );
