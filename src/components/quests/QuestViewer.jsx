@@ -4,7 +4,7 @@ import { useAuth } from "../../contexts/AuthContext.jsx";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
 import QuestMap from "./QuestMap.jsx";
-import Footer from "../Footer.jsx"
+import Footer from "../Footer.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -53,7 +53,13 @@ const QuestViewer = () => {
               >
                 {quest.title}
               </Typography>
-              <Typography variant="subtitle1" component="p" style={{whiteSpace: 'pre-line'}} paragraph className={classes.headerText}>
+              <Typography
+                variant="subtitle1"
+                component="p"
+                style={{ whiteSpace: "pre-line" }}
+                paragraph
+                className={classes.headerText}
+              >
                 {quest.description}
               </Typography>
               <Box className={classes.headerButtonBar}>
@@ -92,7 +98,7 @@ const QuestViewer = () => {
           </Grid>
         </Container>
         {quest.region && (
-          <QuestMap quest={quest} width={"100vw"} height={"400px"} />
+          <QuestMap quest={quest} width={"100%"} height={"400px"} />
         )}
       </Paper>
       <Footer />
