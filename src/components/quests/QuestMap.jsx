@@ -2,37 +2,33 @@ import React, { useRef } from "react";
 import MapGL from "@urbica/react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-const QuestMap = (props) => {
+import QuestMapMarker from "./QuestMapMarker.jsx";
+
+const QuestMap = ({ width, height, quest }) => {
   const mapRef = useRef();
 
-  const onClick = (event) => {
-    // const { lngLat } = event;
-
-    // const mapCoords = {
-    //   latitude: lngLat.lat,
-    //   longitude: lngLat.lng,
-    // };
-
-    // console.log(event)
-    props.mapClick(event);
-  };
-
-  const onDragEnd = (event) => {
-    console.log(event)
-  };
+  function handleViewLocation() {}
 
   return (
     <MapGL
       ref={mapRef}
-      style={{ width: props.width, height: props.height }}
+      style={{ width: width, height: height }}
       mapStyle="mapbox://styles/mapbox/streets-v11"
       accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
-      latitude={props.latitude}
-      longitude={props.longitude}
-      bearing={props.bearing}
-      pitch={props.pitch}
-      zoom={props.zoom}
-    />
+      latitude={quest.region.latitude}
+      longitude={quest.region.longitude}
+      bearing={quest.region.bearing}
+      pitch={quest.region.pitch}
+      zoom={quest.region.zoom}
+    >
+      {quest.locations.map((el, index) => (
+        <QuestMapMarker
+          location={el}
+          key={index}
+          viewLocation={handleViewLocation}
+        ></QuestMapMarker>
+      ))}
+    </MapGL>
   );
 };
 

@@ -89,13 +89,9 @@ const QuestViewer = () => {
       </Container>
       {quest.region && (
         <QuestMap
+          quest={quest}
           width={"100vw"}
           height={"400px"}
-          latitude={quest.region.latitude}
-          longitude={quest.region.longitude}
-          bearing={quest.region.bearing}
-          pitch={quest.region.pitch}
-          zoom={quest.region.zoom}
         />
       )}
     </Paper>
