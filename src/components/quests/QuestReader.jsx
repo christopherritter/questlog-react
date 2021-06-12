@@ -130,6 +130,7 @@ function QuestReader(props) {
     selectLocation,
     clearItem,
     viewQuestItem,
+    operateQuestItem,
   } = useContext(QuestContext);
 
   const [isLoaded, setLoaded] = useState(false);
@@ -419,6 +420,7 @@ function QuestReader(props) {
         item={item}
         dialogType={dialogType}
         open={open}
+        operateQuestItem={operateQuestItem}
         onClose={handleClose}
         restartQuest={handleRestartQuest}
       />

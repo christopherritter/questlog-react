@@ -203,11 +203,8 @@ const QuestEntries = () => {
   }
 
   function handleRemoveAction(action) {
-    console.log("Handle remove action")
-    
     const updatedActions = entry.actions.filter((a) => a !== action.id);
 
-    console.log(updatedActions)
     setEntry({ ...entry, actions: updatedActions });
   }
 

@@ -46,10 +46,10 @@ const Quest = (props) => {
       .where("questId", "==", props.match.params.questId)
       .onSnapshot((snapshot) => {
         snapshot.docs.map((doc) => {
-          var q = doc.data()
+          var q = doc.data();
           // props.setQuestId(q.id);
           props.setQuestTitle(q.title);
-          setQuest(q)
+          setQuest(q);
         });
       });
 
@@ -171,25 +171,34 @@ const Quest = (props) => {
     } else {
       index = findWithAttr(quest.locations, "id", event);
     }
-    
+
     const selectedLocation = quest.locations[index];
 
-    const filteredEntries = quest.entries.filter((entry) => entry.locationId === selectedLocation.id);
+    const filteredEntries = quest.entries.filter(
+      (entry) => entry.locationId === selectedLocation.id
+    );
 
     filteredEntries.forEach((entry) => {
       if (entry.objectives.length > 0) {
         entry.objectives.map((objectiveId) => {
-          const objectiveIndex = findWithAttr(quest.objectives, "id", objectiveId);
-          const updatedObjective = { ...quest.objectives[objectiveIndex], isComplete: true }
-          const updatedObjectives = [ ...quest.objectives ]
+          const objectiveIndex = findWithAttr(
+            quest.objectives,
+            "id",
+            objectiveId
+          );
+          const updatedObjective = {
+            ...quest.objectives[objectiveIndex],
+            isComplete: true,
+          };
+          const updatedObjectives = [...quest.objectives];
 
           updatedObjectives[objectiveIndex] = updatedObjective;
 
-          setQuest({ ...quest, objectives: updatedObjectives })
-        })
+          setQuest({ ...quest, objectives: updatedObjectives });
+        });
       }
-    })
- 
+    });
+
     setLocationIndex(index);
     setLocation((prevLocation) => ({ ...prevLocation, ...selectedLocation }));
   }
@@ -200,7 +209,7 @@ const Quest = (props) => {
     } else {
       setQuest({ ...quest, locations: [location] });
     }
-  };
+  }
 
   function handleUpdateLocation(location) {
     const selectedLocation = quest.locations.findIndex(function (loc) {
@@ -223,7 +232,7 @@ const Quest = (props) => {
     updatedLocations[selectedLocation] = updatedLocation;
 
     setQuest({ ...quest, locations: updatedLocations });
-  };
+  }
 
   function handleRemoveLocation(location) {
     const updatedLocations = quest.locations.filter(
@@ -232,12 +241,12 @@ const Quest = (props) => {
     setQuest({ ...quest, locations: updatedLocations });
     setLocationIndex(-1);
     setLocation(null);
-  };
+  }
 
   function handleClearLocation() {
     setLocationIndex(-1);
     setLocation(null);
-  };
+  }
 
   // Entries
   // Short text entries that are displayed at a location
@@ -253,7 +262,7 @@ const Quest = (props) => {
     } else {
       setQuest({ ...quest, entries: [entry] });
     }
-  };
+  }
 
   function handleUpdateEntry(entry) {
     const selectedEntry = quest.entries.findIndex(function (ent) {
@@ -266,19 +275,19 @@ const Quest = (props) => {
     updatedEntries[selectedEntry] = updatedEntry;
 
     setQuest({ ...quest, entries: updatedEntries });
-  };
+  }
 
   function handleRemoveEntry(entry) {
     const updatedEntries = quest.entries.filter((ent) => ent.id !== entry.id);
     setQuest({ ...quest, entries: updatedEntries });
     setEntryIndex(-1);
     setEntry(null);
-  };
+  }
 
   function handleClearEntry() {
     setEntryIndex(-1);
     setEntry(null);
-  };
+  }
 
   // Items
   // Objects that are small enough to fit inside a backpack
@@ -288,13 +297,13 @@ const Quest = (props) => {
 
   const [item, setItem] = useState();
 
-  function handleAddItem (item) {
+  function handleAddItem(item) {
     if (quest.items) {
       setQuest({ ...quest, items: [...quest.items, item] });
     } else {
       setQuest({ ...quest, items: [item] });
     }
-  };
+  }
 
   function handleUpdateItem(item) {
     const selectedItem = quest.items.findIndex(function (i) {
@@ -307,67 +316,72 @@ const Quest = (props) => {
     updatedItems[selectedItem] = updatedItem;
 
     setQuest({ ...quest, items: updatedItems });
-  };
+  }
 
   function handleRemoveItem(item) {
     const updatedItems = quest.items.filter((i) => i.id !== item.id);
     setQuest({ ...quest, items: updatedItems });
     setItemIndex(-1);
     setItem(null);
-  };
+  }
 
   function handleClearItem() {
     setItemIndex(-1);
     setItem(null);
-  };
+  }
 
   function handleTakeItem(action) {
     let updatedObjectives = [...quest.objectives];
-    
+
     for (let i = 0; i < action.effects.length; i++) {
-      const objectiveIndex = findWithAttr(updatedObjectives, "id", action.effects[i]); 
+      const objectiveIndex = findWithAttr(
+        updatedObjectives,
+        "id",
+        action.effects[i]
+      );
       let updatedObjective = { ...updatedObjectives[objectiveIndex] };
 
       updatedObjective = { ...updatedObjective, isComplete: true };
       updatedObjectives[objectiveIndex] = updatedObjective;
     }
 
-    const itemIndex = findWithAttr(quest.items, "id", action.targetId);   
+    const itemIndex = findWithAttr(quest.items, "id", action.targetId);
     let updatedItems = [...quest.items];
     let updatedItem = { ...quest.items[itemIndex] };
 
     updatedItem = { ...updatedItem, isOwned: true };
     updatedItems[itemIndex] = updatedItem;
 
-    setItemIndex(itemIndex)
+    setItemIndex(itemIndex);
     setItem(updatedItem);
     setQuest({ ...quest, objectives: updatedObjectives, items: updatedItems });
-  };
+  }
 
   function handleViewItem(item) {
-    const index = findWithAttr(quest.items, "id", item.id);  
+    const index = findWithAttr(quest.items, "id", item.id);
     const selectedItem = { ...quest.items[index] };
 
-    setItemIndex(itemIndex)
+    setItemIndex(itemIndex);
     setItem(selectedItem);
-  };
+  }
 
   function handleOperateItem(action) {
     if (action.effects) {
+      let updatedObjectives = [...quest.objectives];
+
       action.effects.forEach((effect) => {
-        let objectiveIndex = findWithAttr(quest.objectives, "id", effect);  
-        let updatedObjective = { ...quest.objectives[objectiveIndex], isComplete: true }
-        let updatedObjectives = [ ...quest.objectives ]
+        let objectiveIndex = findWithAttr(quest.objectives, "id", effect);
+        let updatedObjective = {
+          ...quest.objectives[objectiveIndex],
+          isComplete: true,
+        };
 
         updatedObjectives[objectiveIndex] = updatedObjective;
-
-        setQuest({ ...quest, objectives: updatedObjectives })
-      })
+      });
+      setItem(null);
+      setItemIndex(-1);
+      setQuest({ ...quest, objectives: updatedObjectives });
     }
-    
-    const itemIndex = findWithAttr(quest.items, "id", action.targetId);  
-    const selectedItem = { ...quest.items[itemIndex] };
-
   }
 
   // Actions
@@ -384,7 +398,7 @@ const Quest = (props) => {
     } else {
       setQuest({ ...quest, actions: [action] });
     }
-  };
+  }
 
   function handleUpdateAction(action) {
     const selectedAction = quest.actions.findIndex(function (a) {
@@ -397,22 +411,22 @@ const Quest = (props) => {
     updatedActions[selectedAction] = updatedAction;
 
     setQuest({ ...quest, actions: updatedActions });
-  };
+  }
 
   function handleRemoveAction(action) {
-    console.log(action.id)
-    console.log(quest.actions.filter((a) => a.id !== action.id))
-    quest.actions.map(a => console.log(a))
+    console.log(action.id);
+    console.log(quest.actions.filter((a) => a.id !== action.id));
+    quest.actions.map((a) => console.log(a));
     const updatedActions = quest.actions.filter((a) => a.id !== action.id);
     setQuest({ ...quest, actions: updatedActions });
     setActionIndex(-1);
     setAction(null);
-  };
+  }
 
   function handleClearAction() {
     setActionIndex(-1);
     setAction(null);
-  };
+  }
 
   function handlePublishQuest() {
     console.log("Publish quest");
@@ -423,73 +437,73 @@ const Quest = (props) => {
       .catch((e) => {
         console.log(e);
       });
-  };
+  }
 
   // Misc
 
   const markerTypes = [
     {
       name: "Home",
-      value: "home"
+      value: "home",
     },
     {
       name: "Barn",
-      value: "barn"
+      value: "barn",
     },
     {
       name: "Tractor",
-      value: "tractor"
+      value: "tractor",
     },
     {
       name: "Grass",
-      value: "grass"
+      value: "grass",
     },
     {
       name: "Corn",
-      value: "corn"
+      value: "corn",
     },
     {
       name: "Church",
-      value: "church"
+      value: "church",
     },
     {
       name: "Road",
-      value: "road"
+      value: "road",
     },
     {
       name: "Home (Outline)",
-      value: "home-outline"
+      value: "home-outline",
     },
     {
       name: "Routes",
-      value: "routes"
+      value: "routes",
     },
     {
       name: "Sign",
-      value: "sign"
+      value: "sign",
     },
     {
       name: "Campfire",
-      value: "campfire"
+      value: "campfire",
     },
   ];
 
   const actionTypes = [
     {
       name: "Look",
-      value: "look"
+      value: "look",
     },
     {
       name: "Move",
-      value: "move"
+      value: "move",
     },
     {
       name: "Take",
-      value: "take"
+      value: "take",
     },
     {
       name: "Operate",
-      value: "operate"
+      value: "operate",
     },
   ];
 

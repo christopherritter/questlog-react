@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
+import QuestActions from "./QuestActions.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -105,42 +106,48 @@ const QuestItems = () => {
   }
 
   function handleChangeObjectives(event) {
-    const currentValue = event.target.value[0];
-    const objectives = [...item.objectives];
-    const index = objectives.indexOf(currentValue);
+    const { value } = event.target;
+    const objectives = [];
 
-    if (index === -1) {
-      objectives.push(currentValue);
-    } else {
-      objectives.splice(index, 1);
+    for (let i = 0, l = value.length; i < l; i += 1) {
+      let index = objectives.indexOf(value[i]);
+      if (index === -1) {
+        objectives.push(value[i]);
+      } else {
+        objectives.splice(index, 1);
+      }
     }
 
     setItem({ ...item, objectives: objectives });
   }
 
   function handleChangeRequirements(event) {
-    const currentValue = event.target.value[0];
-    const requirements = [...item.requirements];
-    const index = requirements.indexOf(currentValue);
+    const { value } = event.target;
+    const requirements = [];
 
-    if (index === -1) {
-      requirements.push(currentValue);
-    } else {
-      requirements.splice(index, 1);
+    for (let i = 0, l = value.length; i < l; i += 1) {
+      let index = requirements.indexOf(value[i]);
+      if (index === -1) {
+        requirements.push(value[i]);
+      } else {
+        requirements.splice(index, 1);
+      }
     }
 
     setItem({ ...item, requirements: requirements });
   }
 
   function handleChangeExpirations(event) {
-    const currentValue = event.target.value[0];
-    const expirations = [...item.expirations];
-    const index = expirations.indexOf(currentValue);
+    const { value } = event.target;
+    const expirations = [];
 
-    if (index === -1) {
-      expirations.push(currentValue);
-    } else {
-      expirations.splice(index, 1);
+    for (let i = 0, l = value.length; i < l; i += 1) {
+      let index = expirations.indexOf(value[i]);
+      if (index === -1) {
+        expirations.push(value[i]);
+      } else {
+        expirations.splice(index, 1);
+      }
     }
 
     setItem({ ...item, expirations: expirations });
@@ -187,6 +194,19 @@ const QuestItems = () => {
     setSelectedIndex(index);
     setItem(selectedItem);
   };
+
+  function handleAddAction(id) {
+    const actionsArr = [ ...item.actions ];
+    actionsArr.push(id)
+
+    setItem({ ...item, actions: actionsArr });
+  }
+
+  function handleRemoveAction(action) {   
+    const updatedActions = item.actions.filter((i) => i !== action.id);
+
+    setItem({ ...item, actions: updatedActions });
+  }
 
   return (
     <>
@@ -284,6 +304,16 @@ const QuestItems = () => {
               rows={8}
               value={item.description}
               onChange={handleChangeItem}
+            />
+
+            <QuestActions
+              // action={props.action}
+              actions={item.actions}
+              addActionToEntry={handleAddAction}
+              removeActionFromEntry={handleRemoveAction}
+              // updateAction={updateAction}
+              // removeAction={removeAction}
+              // clearAction={clearAction}
             />
 
             <FormControl
