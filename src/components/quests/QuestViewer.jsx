@@ -61,11 +61,13 @@ const QuestViewer = () => {
                 color="primary"
                 component={RouterLink}
                 to={"/quest/" + quest.questId + "/play"}
+                disabled
               >
                 Play
               </Button>
               <Button
                 variant="contained"
+                color="primary"
                 className={classes.headerButtons}
                 component={RouterLink}
                 to={"/quest/" + quest.questId + "/read"}
