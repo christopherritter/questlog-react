@@ -402,7 +402,7 @@ function QuestReader(props) {
   useEffect(() => {
     var questComplete = true;
 
-    if (quest.objectives) {
+    if (quest.objectives.length > 0) {
       quest.objectives
         .filter((objective) => objective.isPrimary === true)
         .forEach((objective) => {
@@ -414,6 +414,8 @@ function QuestReader(props) {
       } else {
         setOpen(false);
       }
+    } else {
+      setOpen(false)
     }
   }, [quest.objectives]);
 
