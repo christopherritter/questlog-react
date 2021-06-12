@@ -41,6 +41,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(1)
   },
+  topRowButton: {
+    marginRight: theme.spacing(1),
+    height: "2.90em"
+  },
 }));
 
 const QuestItems = () => {
@@ -218,11 +222,13 @@ const QuestItems = () => {
         </Grid>
         <Grid item md={8} sm={12}>
           <Button
+            variant="outlined"
             onClick={() => {
               clearItem();
               setItem(initialItemState);
               setSelectedIndex(-1);
             }}
+            className={ classes.topRowButton }
           >
             Create New
           </Button>

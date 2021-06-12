@@ -42,8 +42,15 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     marginRight: theme.spacing(1)
   },
+  topRowButton: {
+    marginRight: theme.spacing(1),
+    height: "2.90em"
+  },
   formControl: {
     marginTop: theme.spacing(2),
+  },
+  viewHandler: {
+    verticalAlign: "middle",
   },
 }));
 
@@ -319,8 +326,9 @@ function QuestLocations() {
           <Grid container alignItems="center" justify="flex-start">
             <Grid item>
               <Button
-                variant="contained"
+                variant="outlined"
                 disableElevation
+                className={ classes.topRowButton}
                 onClick={() => {
                   clearLocation();
                   setLocation(initialLocationState);
@@ -337,6 +345,7 @@ function QuestLocations() {
                 onChange={handleView}
                 aria-label="location view"
                 size="small"
+                className={ classes.viewHandler }
               >
                 <ToggleButton value="list" aria-label="list view">
                   <ListAltIcon />

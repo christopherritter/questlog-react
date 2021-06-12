@@ -37,6 +37,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-end",
   },
+  topRowButton: {
+    marginRight: theme.spacing(1),
+    height: "2.90em"
+  },
   button: {
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(1)
@@ -218,11 +222,13 @@ const QuestEntries = () => {
         </Grid>
         <Grid item md={8} sm={12}>
           <Button
+            variant="outlined"
             onClick={() => {
               clearEntry();
               setEntry(initialEntryState);
               setSelectedIndex(-1);
             }}
+            className={ classes.topRowButton }
           >
             Create New
           </Button>
