@@ -4,6 +4,7 @@ import {
   Switch,
   Route,
   useHistory,
+  useRouteMatch,
 } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import theme from "./theme.jsx";
@@ -55,6 +56,14 @@ const App = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
+  let match = useRouteMatch("/quest/");
+
+  useEffect(() => {
+    if (!match) {
+      clearQuest();
+    } 
+  }, [match]);
+
   useEffect(() => {
     if (currentUser) {
       setLoggedIn(true);
@@ -91,6 +100,11 @@ const App = () => {
 
   function handleSetQuestTitle(title) {
     setQuestTitle(title);
+  }
+
+  function clearQuest() {
+    setQuestId(null);
+    setQuestTitle(null);
   }
 
   return (

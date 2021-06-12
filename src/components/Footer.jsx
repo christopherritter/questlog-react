@@ -22,7 +22,7 @@ const Footer = () => {
   const classes = useStyles();
 
   return (
-    <Paper square elevation="0" className={classes.root}>
+    <Paper square elevation={0} className={classes.root}>
       <Container>
         <Typography variant="body2" color="textSecondary" align="center" className={classes.copy}>
           {"Copyright © " + new Date().getFullYear() + " " }
