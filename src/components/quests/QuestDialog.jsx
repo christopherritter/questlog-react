@@ -12,8 +12,8 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import CheckBox from '@material-ui/icons/CheckBox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBox from "@material-ui/icons/CheckBox";
+import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -21,9 +21,45 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function toggleView({ quest, location, open, onClose, restartQuest, type }) {
-  if (type) {
-    switch (type) {
+function toggleView({
+  quest,
+  location,
+  item,
+  open,
+  onClose,
+  restartQuest,
+  dialogType,
+}) {
+  if (item && dialogType) {
+    console.log(dialogType);
+
+    switch (dialogType) {
+      case "item":
+        return (
+          <Dialog
+            open={open}
+            onClose={onClose}
+            aria-labelledby="unknown-dialog-title"
+            aria-describedby="unknown-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              { item.name }
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                { item.description }
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={onClose} color="secondary">
+                Close dialog
+              </Button>
+              <Button onClick={onClose} color="primary">
+                Use item
+              </Button>
+            </DialogActions>
+          </Dialog>
+        );
       default:
         return (
           <Dialog
@@ -33,11 +69,11 @@ function toggleView({ quest, location, open, onClose, restartQuest, type }) {
             aria-describedby="unknown-dialog-description"
           >
             <DialogTitle id="alert-dialog-title">
-              {"Type not recognized"}
+              {"Action type not recognized"}
             </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                That is not a valid dialog type.
+                That is not a valid action type.
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -144,9 +180,17 @@ function toggleView({ quest, location, open, onClose, restartQuest, type }) {
 }
 
 function QuestDialog(props) {
-  const { quest, location, open, onClose, restartQuest } = props;
+  const { quest, location, item, open, onClose, restartQuest, dialogType } = props;
 
-  return toggleView({ quest, location, open, onClose, restartQuest });
+  return toggleView({
+    quest,
+    location,
+    item,
+    open,
+    onClose,
+    restartQuest,
+    dialogType,
+  });
 }
 
 export default QuestDialog;

@@ -124,10 +124,12 @@ function QuestReader(props) {
   const {
     quest,
     location,
+    item,
     setQuest,
     updateCenter,
     selectLocation,
-    findWithAttr,
+    clearItem,
+    viewQuestItem,
   } = useContext(QuestContext);
 
   const [isLoaded, setLoaded] = useState(false);
@@ -316,6 +318,7 @@ function QuestReader(props) {
   }
 
   function handleSelectJournalItem() {
+    setDialogType(null);
     setOpen(true);
   }
 
@@ -344,8 +347,10 @@ function QuestReader(props) {
     }
   }
 
-  function selectBackpackItem() {
-    console.log("Select backpack item");
+  function handleSelectBackpackItem(item) {
+    viewQuestItem(item);
+    setDialogType("item");
+    setOpen(true);
   }
 
   function toggleSidebar() {
@@ -353,6 +358,7 @@ function QuestReader(props) {
   }
 
   function handleViewLocation(selectedLocation) {
+    setDialogType(null);
     selectLocation(selectedLocation.id);
     setCurrentLocation((current) => ({ ...current, ...selectedLocation }));
   }
@@ -385,6 +391,8 @@ function QuestReader(props) {
     setOpen(false);
   }
 
+  const [dialogType, setDialogType] = React.useState();
+
   useEffect(() => {
     var questComplete = true;
 
@@ -408,6 +416,8 @@ function QuestReader(props) {
       <QuestDialog
         quest={quest}
         location={location}
+        item={item}
+        dialogType={dialogType}
         open={open}
         onClose={handleClose}
         restartQuest={handleRestartQuest}
@@ -480,7 +490,7 @@ function QuestReader(props) {
                 <QuestBackpack
                   width={sidebarWidth}
                   toggleBackpack={toggleBackpack}
-                  selectBackpackItem={selectBackpackItem}
+                  selectBackpackItem={handleSelectBackpackItem}
                 />
               </Box>
               <Box

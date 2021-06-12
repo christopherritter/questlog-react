@@ -344,21 +344,18 @@ const Quest = (props) => {
     setQuest({ ...quest, objectives: updatedObjectives, items: updatedItems });
   };
 
-  function handleViewItem(targetId) {
-    console.log("Handle view " + targetId)
-    console.log("Shows the item description in a modal")
-
-    const index = findWithAttr(quest.items, "id", targetId);  
+  function handleViewItem(item) {
+    const index = findWithAttr(quest.items, "id", item.id);  
     const selectedItem = { ...quest.items[index] };
 
-    console.log(selectedItem);
+    setItemIndex(itemIndex)
+    setItem(selectedItem);
   };
 
   function handleOperateItem(action) {
     if (action.effects) {
       action.effects.forEach((effect) => {
         let objectiveIndex = findWithAttr(quest.objectives, "id", effect);  
-        let selectedObjective = { ...quest.objectives[objectiveIndex] };
         let updatedObjective = { ...quest.objectives[objectiveIndex], isComplete: true }
         let updatedObjectives = [ ...quest.objectives ]
 
