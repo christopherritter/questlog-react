@@ -16,6 +16,7 @@ import UpdateProfile from "./user/UpdateProfile.jsx";
 import QuestLibrary from "./quests/QuestLibrary.jsx";
 import CreateQuest from "./editor/CreateQuest.jsx";
 import Quest from "./quests/Quest.jsx";
+import Home from "./Home.jsx";
 
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -172,7 +173,7 @@ const App = () => {
       </AppBar>
       <main className={classes.root}>
         <Switch>
-          <Route exact path="/" component={QuestLibrary} />
+          <Route exact path="/" component={Home} />
           <Route path="/quests" component={QuestLibrary} />
           <Route path="/create-quest" component={CreateQuest} />
           <Route
