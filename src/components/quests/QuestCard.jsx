@@ -22,17 +22,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function truncate(input) {
+  if (input.length > 300) {
+     return input.substring(0, 300) + '...';
+  }
+  return input;
+};
+
 const QuestCard = ({ quest }) => {
   const classes = useStyles();
 
   return (
     <Card className={classes.card}>
       <CardContent>
-        <Typography variant="h5" component="h2">
+        <Typography variant="h5" component="h2" gutterBottom>
           {quest.data().title}
         </Typography>
         <Typography variant="body2" component="p">
-          {quest.data().description.substring(0, 300) + '...'}
+          { truncate(quest.data().description) }
         </Typography>
         <CardActions>
           <Button
