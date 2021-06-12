@@ -9,19 +9,15 @@ import { useAuth } from "../contexts/AuthContext.jsx";
 import theme from "./theme.jsx";
 
 import PrivateRoute from "./utils/PrivateRoute.jsx";
-// import Home from "./Home.jsx";
 import Signup from "./auth/Signup.jsx";
 import Login from "./auth/Login.jsx";
 import Profile from "./user/Profile.jsx";
 import UpdateProfile from "./user/UpdateProfile.jsx";
 import QuestLibrary from "./quests/QuestLibrary.jsx";
 import CreateQuest from "./editor/CreateQuest.jsx";
-// import QuestEditor from "./editor/QuestEditor.jsx";
 import Quest from "./quests/Quest.jsx";
 
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
-import CompassOutline from 'mdi-material-ui/CompassOutline'
-import DotsVertical from "mdi-material-ui/DotsVertical";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -30,6 +26,8 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import CompassOutline from "mdi-material-ui/CompassOutline";
+import DotsVertical from "mdi-material-ui/DotsVertical";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -83,7 +81,7 @@ const App = () => {
     }
   }
 
-  const [questId, setQuestId] = React.useState(null)
+  const [questId, setQuestId] = React.useState(null);
   const [questTitle, setQuestTitle] = React.useState(null);
 
   function handleSetQuestId(id) {
@@ -113,8 +111,13 @@ const App = () => {
             QuestLog
           </Typography>
           {questTitle && (
-            <Typography variant="h6" className={classes.title} component={RouterLink} to={`/quest/` + questId}>
-              { questTitle }
+            <Typography
+              variant="h6"
+              className={classes.title}
+              component={RouterLink}
+              to={`/quest/` + questId}
+            >
+              {questTitle}
             </Typography>
           )}
           {loggedIn ? (
@@ -176,7 +179,11 @@ const App = () => {
             exact
             path="/quest/:questId/:role?"
             render={(props) => (
-              <Quest {...props} setQuestId={handleSetQuestId} setQuestTitle={handleSetQuestTitle} />
+              <Quest
+                {...props}
+                setQuestId={handleSetQuestId}
+                setQuestTitle={handleSetQuestTitle}
+              />
             )}
           />
           <Route path="/signup" component={Signup} />
