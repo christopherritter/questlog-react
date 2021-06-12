@@ -95,10 +95,13 @@ const App = () => {
   const [questTitle, setQuestTitle] = React.useState(null);
 
   function handleSetQuestId(id) {
+    console.log("set id " + id)
     setQuestId(id);
   }
 
-  function handleSetQuestTitle(title) {
+  function handleSetQuestTitle({title, id}) {
+    console.log("set title " + title)
+    setQuestId(id);
     setQuestTitle(title);
   }
 
