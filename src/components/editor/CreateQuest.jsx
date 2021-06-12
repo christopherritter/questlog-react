@@ -50,6 +50,13 @@ const CreateQuest = (props) => {
     questId: "",
     startingPoint: "",
     title: "",
+    region: {
+      latitude: 0,
+      longitude: 0,
+      bearing: 0,
+      pitch: 0,
+      zoom: 0,
+    }
   };
 
   const [quest, setQuest] = useState(initialQuestState);
