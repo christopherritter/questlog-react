@@ -119,11 +119,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const geolocateControlStyle = {
-  right: 10,
-  bottom: 10,
-};
-
 function QuestPlayer(props) {
   const classes = useStyles(props);
   const {
@@ -211,7 +206,30 @@ function QuestPlayer(props) {
   }, [location]);
 
   const mapRef = useRef();
-  const onLoad = () => setLoaded(true);
+
+  const geolocateRef = useRef();
+
+  console.log("Geolocation");
+  console.log(geolocateRef);
+
+  const onLoad = () => {
+    console.log("Is loaded");
+    setLoaded(true);
+    beginQuest();
+  };
+
+  function beginQuest() {
+    if (geolocateRef.current) {
+      geolocateRef.current.trigger();
+    }
+  }
+
+  useEffect(() => {
+    if (geolocateRef.current) {
+      console.log("trigger");
+      geolocateRef.current.trigger();
+    }
+  }, []);
 
   function toggleLegend() {
     var padding = {
@@ -546,12 +564,17 @@ function QuestPlayer(props) {
                   onClick={toggleBackpack}
                 />
               </Box>
-              <GeolocateControl
-                position="bottom-right"
-                positionOptions={{ enableHighAccuracy: true }}
-                trackUserLocation={true}
-                auto
-              />
+              {isLoaded && (
+                <GeolocateControl
+                  ref={(ref) =>
+                    (geolocateRef.current = ref && ref.getControl())
+                  }
+                  position="bottom-right"
+                  positionOptions={{ enableHighAccuracy: true }}
+                  trackUserLocation={true}
+                  auto
+                />
+              )}
               {quest.locations.map((el, index) => (
                 <QuestMapMarker
                   location={el}

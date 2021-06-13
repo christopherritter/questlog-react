@@ -14,11 +14,12 @@
     "@testing-library/user-event": "^12.1.10",
     "@urbica/react-map-gl": "^1.14.3",
     "firebase": "^8.6.1",
-    "mapbox-gl": "^2.0.0",
+    "mapbox-gl": "^2.3.0",
     "mdi-material-ui": "^6.22.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-firebase-hooks": "^3.0.4",
+    "react-map-gl": "^6.1.16",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "typescript": "^4.3.2",
@@ -49,5 +50,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {}
 }

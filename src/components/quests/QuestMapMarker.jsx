@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Marker } from "@urbica/react-map-gl";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 const QuestMapMarker = (props) => {
   const classes = useStyles(props);
   const { location, viewLocation } = props;
+  const markerRef = useRef();
 
   function onMarkerClick() {
     viewLocation(location);
@@ -71,6 +72,7 @@ const QuestMapMarker = (props) => {
 
   return (
     <Marker
+      ref={markerRef}
       id={location.id}
       longitude={location.longitude}
       latitude={location.latitude}
