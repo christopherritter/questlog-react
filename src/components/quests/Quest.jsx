@@ -3,14 +3,14 @@ import { Redirect } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 import QuestDataService from "../../services/QuestService";
 import QuestContext from "../../contexts/QuestContext.jsx";
+import QuestPlayer from "./QuestPlayer.jsx";
 import QuestViewer from "./QuestViewer.jsx";
 import QuestReader from "./QuestReader.jsx";
 import QuestEditor from "../editor/QuestEditor.jsx";
 
 function renderView({ role, currentUser, authorId }) {
   if (role === "play") {
-    console.log("Player role.");
-    return <h1>Quest Player</h1>;
+    return <QuestPlayer />;
   } else if (role === "read") {
     return <QuestReader />;
   } else if (role === "edit") {
