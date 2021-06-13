@@ -82,7 +82,7 @@ const QuestViewer = () => {
                 >
                   Read
                 </Button>
-                {currentUser.uid === quest.authorId && (
+                {currentUser && currentUser.uid === quest.authorId && (
                   <Button
                     variant="contained"
                     className={classes.headerButtons}

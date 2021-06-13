@@ -61,14 +61,16 @@ const App = () => {
   useEffect(() => {
     if (!match) {
       clearQuest();
-    } 
+    }
   }, [match]);
 
   useEffect(() => {
     if (currentUser) {
       setLoggedIn(true);
     } else {
-      setLoggedIn(false);
+      return function cleanup() {
+        setLoggedIn(false);
+      };
     }
   }, [currentUser]);
 
@@ -98,7 +100,7 @@ const App = () => {
     setQuestId(id);
   }
 
-  function handleSetQuestTitle({title, id}) {
+  function handleSetQuestTitle({ title, id }) {
     setQuestId(id);
     setQuestTitle(title);
   }
@@ -136,7 +138,7 @@ const App = () => {
               {questTitle}
             </Typography>
           )}
-          {loggedIn ? (
+          {currentUser ? (
             <div>
               <IconButton
                 aria-label="account of current user"
@@ -190,7 +192,7 @@ const App = () => {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/quests" component={QuestLibrary} />
-          <Route path="/create-quest" component={CreateQuest} />
+          <PrivateRoute path="/create-quest" component={CreateQuest} />
           <Route
             exact
             path="/quest/:questId/:role?"
