@@ -196,13 +196,15 @@ const App = () => {
           <Route
             exact
             path="/quest/:questId/:role?"
-            render={(props) => (
-              <Quest
-                {...props}
-                setQuestId={handleSetQuestId}
-                setQuestTitle={handleSetQuestTitle}
-              />
-            )}
+            render={(props) => {
+              return (
+                <Quest
+                  {...props}
+                  setQuestId={handleSetQuestId}
+                  setQuestTitle={handleSetQuestTitle}
+                />
+              )
+            }}
           />
           <Route path="/signup" component={Signup} />
           <Route path="/login" component={Login} />
