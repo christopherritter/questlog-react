@@ -209,11 +209,7 @@ function QuestPlayer(props) {
 
   const geolocateRef = useRef();
 
-  // console.log("Geolocation");
-  // console.log(geolocateRef);
-
   const onLoad = () => {
-    console.log("Is loaded");
     setLoaded(true);
     beginQuest();
   };
@@ -224,12 +220,11 @@ function QuestPlayer(props) {
     }
   }
 
-  useEffect(() => {
-    if (geolocateRef.current) {
-      console.log("trigger");
-      geolocateRef.current.trigger();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (geolocateRef.current) {
+  //     geolocateRef.current.trigger();
+  //   }
+  // }, [geolocateRef]);
 
   function toggleLegend() {
     var padding = {
