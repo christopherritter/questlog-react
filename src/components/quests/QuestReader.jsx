@@ -14,8 +14,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { green, pink } from "@material-ui/core/colors";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import BottomNavigation from "@material-ui/core/BottomNavigation";
+import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 
 import MapIcon from "mdi-material-ui/Map";
 import NotebookIcon from "mdi-material-ui/Notebook";
@@ -60,11 +60,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   questMap: {
-    width: "100%", 
+    width: "100%",
     height: "calc(100vh - 64px)",
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down("sm")]: {
       height: "calc(100vh - 64px - 56px)",
-    }
+    },
   },
   sidebar: {
     transition: "transform 900ms",
@@ -82,9 +82,9 @@ const useStyles = makeStyles((theme) => ({
     "&.collapsed": {
       transform: "translateX(-68px)",
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down("sm")]: {
       display: "none",
-    }
+    },
   },
   sidebarButton: {
     marginTop: 16,
@@ -130,10 +130,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   actionBar: {
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up("md")]: {
       display: "none",
-    }
-  }
+    },
+  },
 }));
 
 function QuestReader(props) {
@@ -432,7 +432,7 @@ function QuestReader(props) {
         setOpen(false);
       }
     } else {
-      setOpen(false)
+      setOpen(false);
     }
   }, [quest.objectives]);
 
@@ -571,14 +571,23 @@ function QuestReader(props) {
       </Box>
       <BottomNavigation
         onChange={(event, option) => {
-          switch(option){
-            case "map": 
+          switch (option) {
+            case "map":
+              setShowLegend(true);
+              setShowJournal(false);
+              setShowBackpack(false);
               return toggleLegend();
-            case "notebook": 
+            case "notebook":
+              setShowLegend(false);
+              setShowJournal(true);
+              setShowBackpack(false);
               return toggleJournal();
-            case "backpack": 
+            case "backpack":
+              setShowLegend(false);
+              setShowJournal(false);
+              setShowBackpack(true);
               return toggleBackpack();
-            default: 
+            default:
               return;
           }
         }}
@@ -586,8 +595,16 @@ function QuestReader(props) {
         className={classes.actionBar}
       >
         <BottomNavigationAction label="Map" value="map" icon={<MapIcon />} />
-        <BottomNavigationAction label="Journal" value="notebook" icon={<NotebookIcon />} />
-        <BottomNavigationAction label="Backpack" value="backpack" icon={<BackpackIcon />} />
+        <BottomNavigationAction
+          label="Journal"
+          value="notebook"
+          icon={<NotebookIcon />}
+        />
+        <BottomNavigationAction
+          label="Backpack"
+          value="backpack"
+          icon={<BackpackIcon />}
+        />
       </BottomNavigation>
     </React.Fragment>
   );

@@ -603,14 +603,23 @@ function QuestPlayer(props) {
       </Box>
       <BottomNavigation
         onChange={(event, option) => {
-          switch(option){
-            case "map": 
+          switch (option) {
+            case "map":
+              setShowLegend(true);
+              setShowJournal(false);
+              setShowBackpack(false);
               return toggleLegend();
-            case "notebook": 
+            case "notebook":
+              setShowLegend(false);
+              setShowJournal(true);
+              setShowBackpack(false);
               return toggleJournal();
-            case "backpack": 
+            case "backpack":
+              setShowLegend(false);
+              setShowJournal(false);
+              setShowBackpack(true);
               return toggleBackpack();
-            default: 
+            default:
               return;
           }
         }}
