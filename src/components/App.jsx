@@ -20,7 +20,9 @@ import Quest from "./quests/Quest.jsx";
 import Home from "./Home.jsx";
 
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
+import { display } from "@material-ui/system";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import Box from "@material-ui/core/Box";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -43,9 +45,17 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
-    textDecoration: "none",
     color: theme.palette.common.white,
   },
+  questTitle: {
+    flexGrow: 1,
+    textDecoration: "none",
+    color: theme.palette.common.white,
+
+    [theme.breakpoints.down('sm')]: {
+      display: "none",
+    }
+  }
 }));
 
 const App = () => {
@@ -129,14 +139,16 @@ const App = () => {
             QuestLog
           </Typography>
           {questTitle && (
-            <Typography
-              variant="h6"
-              className={classes.title}
-              component={RouterLink}
-              to={`/quest/` + questId}
-            >
-              {questTitle}
-            </Typography>
+
+              <Typography
+                variant="h6"
+                className={classes.questTitle}
+                component={RouterLink}
+                to={`/quest/` + questId}
+              >
+                {questTitle}
+              </Typography>
+      
           )}
           {currentUser ? (
             <div>
@@ -203,7 +215,7 @@ const App = () => {
                   setQuestId={handleSetQuestId}
                   setQuestTitle={handleSetQuestTitle}
                 />
-              )
+              );
             }}
           />
           <Route path="/signup" component={Signup} />

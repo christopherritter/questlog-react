@@ -14,6 +14,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { green, pink } from "@material-ui/core/colors";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 
 import MapIcon from "mdi-material-ui/Map";
 import NotebookIcon from "mdi-material-ui/Notebook";
@@ -117,6 +119,9 @@ const useStyles = makeStyles((theme) => ({
       transform: "translateX(352px)",
     },
   },
+  bottomActionbar: {
+    height: 72
+  }
 }));
 
 function QuestPlayer(props) {
@@ -437,6 +442,8 @@ function QuestPlayer(props) {
     }
   }, [quest.objectives]);
 
+  const [value, setValue] = React.useState(0);
+
   return (
     <React.Fragment>
       <QuestDialog
@@ -454,7 +461,7 @@ function QuestPlayer(props) {
           <React.Fragment>
             <MapGL
               ref={(ref) => (mapRef.current = ref && ref.getMap())}
-              style={{ width: "100%", height: "calc(100vh - 64px)" }}
+              style={{ width: "100%", height: "calc(100vh - 64px - 72px)" }}
               mapStyle="mapbox://styles/mapbox/streets-v11"
               accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
               latitude={quest.region.latitude}
@@ -566,7 +573,7 @@ function QuestPlayer(props) {
                   }
                   position="bottom-right"
                   positionOptions={{ enableHighAccuracy: true, maximumAge: 0 }}
-                  trackUserLocation={ true }
+                  trackUserLocation={true}
                   fitBoundsOptions={{ maxZoom: 20 }}
                   onError={(err) => console.log(err)}
                 />
@@ -582,6 +589,18 @@ function QuestPlayer(props) {
           </React.Fragment>
         )}
       </Box>
+      <BottomNavigation
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue);
+        }}
+        showLabels
+        className={classes.bottomActionbar}
+      >
+        <BottomNavigationAction label="Recents" icon={<MapIcon />} />
+        <BottomNavigationAction label="Favorites" icon={<NotebookIcon />} />
+        <BottomNavigationAction label="Nearby" icon={<BackpackIcon />} />
+      </BottomNavigation>
     </React.Fragment>
   );
 }
