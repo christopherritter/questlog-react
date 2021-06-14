@@ -209,8 +209,8 @@ function QuestPlayer(props) {
 
   const geolocateRef = useRef();
 
-  console.log("Geolocation");
-  console.log(geolocateRef);
+  // console.log("Geolocation");
+  // console.log(geolocateRef);
 
   const onLoad = () => {
     console.log("Is loaded");
@@ -570,9 +570,10 @@ function QuestPlayer(props) {
                     (geolocateRef.current = ref && ref.getControl())
                   }
                   position="bottom-right"
-                  positionOptions={{ enableHighAccuracy: true }}
-                  trackUserLocation={true}
-                  auto
+                  positionOptions={{ enableHighAccuracy: true, maximumAge: 0 }}
+                  trackUserLocation={ true }
+                  fitBoundsOptions={{ maxZoom: 20 }}
+                  onError={(err) => console.log(err)}
                 />
               )}
               {quest.locations.map((el, index) => (
