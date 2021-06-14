@@ -59,6 +59,13 @@ const useStyles = makeStyles((theme) => ({
       right: 0,
     },
   },
+  questMap: {
+    width: "100%", 
+    height: "calc(100vh - 64px)",
+    [theme.breakpoints.down('sm')]: {
+      height: "calc(100vh - 64px - 56px)",
+    }
+  },
   sidebar: {
     transition: "transform 900ms",
     zIndex: 100,
@@ -75,6 +82,9 @@ const useStyles = makeStyles((theme) => ({
     "&.collapsed": {
       transform: "translateX(-68px)",
     },
+    [theme.breakpoints.down('sm')]: {
+      display: "none",
+    }
   },
   sidebarButton: {
     marginTop: 16,
@@ -119,8 +129,10 @@ const useStyles = makeStyles((theme) => ({
       transform: "translateX(352px)",
     },
   },
-  bottomActionbar: {
-    height: 72
+  actionBar: {
+    [theme.breakpoints.up('md')]: {
+      display: "none",
+    }
   }
 }));
 
@@ -148,7 +160,7 @@ function QuestPlayer(props) {
 
   useEffect(() => {
     var padding = {
-      bottom: 50,
+      // bottom: 50,
     };
 
     if (location) {
@@ -233,7 +245,7 @@ function QuestPlayer(props) {
 
   function toggleLegend() {
     var padding = {
-      bottom: 50,
+      // bottom: 50,
     };
     if (showLegend === true) {
       padding["right"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
@@ -267,7 +279,7 @@ function QuestPlayer(props) {
       ],
     };
     var padding = {
-      bottom: 50,
+      // bottom: 50,
     };
 
     selectLocation(formattedLocation);
@@ -318,7 +330,7 @@ function QuestPlayer(props) {
 
   function toggleJournal() {
     var padding = {
-      bottom: 50,
+      // bottom: 50,
     };
     if (showJournal) {
       padding["right"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
@@ -348,7 +360,7 @@ function QuestPlayer(props) {
 
   function toggleBackpack() {
     var padding = {
-      bottom: 50,
+      // bottom: 50,
     };
     if (showBackpack) {
       padding["right"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
@@ -461,7 +473,7 @@ function QuestPlayer(props) {
           <React.Fragment>
             <MapGL
               ref={(ref) => (mapRef.current = ref && ref.getMap())}
-              style={{ width: "100%", height: "calc(100vh - 64px - 72px)" }}
+              className={classes.questMap}
               mapStyle="mapbox://styles/mapbox/streets-v11"
               accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
               latitude={quest.region.latitude}
@@ -590,16 +602,24 @@ function QuestPlayer(props) {
         )}
       </Box>
       <BottomNavigation
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
+        onChange={(event, option) => {
+          switch(option){
+            case "map": 
+              return toggleLegend();
+            case "notebook": 
+              return toggleJournal();
+            case "backpack": 
+              return toggleBackpack();
+            default: 
+              return;
+          }
         }}
         showLabels
-        className={classes.bottomActionbar}
+        className={classes.actionBar}
       >
-        <BottomNavigationAction label="Recents" icon={<MapIcon />} />
-        <BottomNavigationAction label="Favorites" icon={<NotebookIcon />} />
-        <BottomNavigationAction label="Nearby" icon={<BackpackIcon />} />
+        <BottomNavigationAction label="Map" value="map" icon={<MapIcon />} />
+        <BottomNavigationAction label="Journal" value="notebook" icon={<NotebookIcon />} />
+        <BottomNavigationAction label="Backpack" value="backpack" icon={<BackpackIcon />} />
       </BottomNavigation>
     </React.Fragment>
   );

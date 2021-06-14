@@ -14,6 +14,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { green, pink } from "@material-ui/core/colors";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 
 import MapIcon from "mdi-material-ui/Map";
 import NotebookIcon from "mdi-material-ui/Notebook";
@@ -57,6 +59,13 @@ const useStyles = makeStyles((theme) => ({
       right: 0,
     },
   },
+  questMap: {
+    width: "100%", 
+    height: "calc(100vh - 64px)",
+    [theme.breakpoints.down('sm')]: {
+      height: "calc(100vh - 64px - 56px)",
+    }
+  },
   sidebar: {
     transition: "transform 900ms",
     zIndex: 100,
@@ -73,6 +82,9 @@ const useStyles = makeStyles((theme) => ({
     "&.collapsed": {
       transform: "translateX(-68px)",
     },
+    [theme.breakpoints.down('sm')]: {
+      display: "none",
+    }
   },
   sidebarButton: {
     marginTop: 16,
@@ -117,6 +129,11 @@ const useStyles = makeStyles((theme) => ({
       transform: "translateX(352px)",
     },
   },
+  actionBar: {
+    [theme.breakpoints.up('md')]: {
+      display: "none",
+    }
+  }
 }));
 
 function QuestReader(props) {
@@ -143,7 +160,7 @@ function QuestReader(props) {
 
   useEffect(() => {
     var padding = {
-      bottom: 50,
+      // bottom: 50,
     };
 
     if (location) {
@@ -210,7 +227,7 @@ function QuestReader(props) {
 
   function toggleLegend() {
     var padding = {
-      bottom: 50,
+      // bottom: 50,
     };
     if (showLegend === true) {
       padding["right"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
@@ -244,7 +261,7 @@ function QuestReader(props) {
       ],
     };
     var padding = {
-      bottom: 50,
+      // bottom: 50,
     };
 
     selectLocation(formattedLocation);
@@ -295,7 +312,7 @@ function QuestReader(props) {
 
   function toggleJournal() {
     var padding = {
-      bottom: 50,
+      // bottom: 50,
     };
     if (showJournal) {
       padding["right"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
@@ -325,7 +342,7 @@ function QuestReader(props) {
 
   function toggleBackpack() {
     var padding = {
-      bottom: 50,
+      // bottom: 50,
     };
     if (showBackpack) {
       padding["right"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
@@ -436,7 +453,7 @@ function QuestReader(props) {
           <React.Fragment>
             <MapGL
               ref={(ref) => (mapRef.current = ref && ref.getMap())}
-              style={{ width: "100%", height: "calc(100vh - 64px)" }}
+              className={classes.questMap}
               mapStyle="mapbox://styles/mapbox/streets-v11"
               accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
               latitude={quest.region.latitude}
@@ -552,6 +569,26 @@ function QuestReader(props) {
           </React.Fragment>
         )}
       </Box>
+      <BottomNavigation
+        onChange={(event, option) => {
+          switch(option){
+            case "map": 
+              return toggleLegend();
+            case "notebook": 
+              return toggleJournal();
+            case "backpack": 
+              return toggleBackpack();
+            default: 
+              return;
+          }
+        }}
+        showLabels
+        className={classes.actionBar}
+      >
+        <BottomNavigationAction label="Map" value="map" icon={<MapIcon />} />
+        <BottomNavigationAction label="Journal" value="notebook" icon={<NotebookIcon />} />
+        <BottomNavigationAction label="Backpack" value="backpack" icon={<BackpackIcon />} />
+      </BottomNavigation>
     </React.Fragment>
   );
 }
