@@ -231,6 +231,8 @@ function QuestReader(props) {
   };
 
   function handleBeginQuest() {
+    const sortedLocations = quest.locations.sort((a, b) => (a.order > b.order) ? 1 : -1)
+    selectLocation(sortedLocations[0].id);
     setOpen(false);
   }
 
