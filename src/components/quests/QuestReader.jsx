@@ -594,7 +594,7 @@ function QuestReader(props) {
         showLabels
         className={classes.actionBar}
       >
-        <BottomNavigationAction label="Map" value="map" icon={<MapIcon />} />
+        <BottomNavigationAction label="Legend" value="map" icon={<MapIcon />} />
         <BottomNavigationAction
           label="Journal"
           value="notebook"

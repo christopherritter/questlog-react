@@ -626,7 +626,7 @@ function QuestPlayer(props) {
         showLabels
         className={classes.actionBar}
       >
-        <BottomNavigationAction label="Map" value="map" icon={<MapIcon />} />
+        <BottomNavigationAction label="Legend" value="map" icon={<MapIcon />} />
         <BottomNavigationAction label="Journal" value="notebook" icon={<NotebookIcon />} />
         <BottomNavigationAction label="Backpack" value="backpack" icon={<BackpackIcon />} />
       </BottomNavigation>
