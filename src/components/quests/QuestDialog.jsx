@@ -1,5 +1,7 @@
 import React from "react";
 
+import { Link as RouterLink } from "react-router-dom";
+
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Dialog from "@material-ui/core/Dialog";
@@ -135,6 +137,7 @@ function toggleView({
   item,
   open,
   onClose,
+  beginQuest,
   restartQuest,
   dialogType,
   operateQuestItem,
@@ -143,11 +146,11 @@ function toggleView({
   takeQuestItem,
   findWithAttr,
 }) {
-  if (item && dialogType) {
+  if (dialogType) {
     switch (dialogType) {
       case "item":
         return (
-          <Dialog
+          item && <Dialog
             open={open}
             onClose={onClose}
             aria-labelledby="item-dialog-title"
@@ -170,6 +173,32 @@ function toggleView({
                 findWithAttr={findWithAttr}
               />
             </DialogContent>
+          </Dialog>
+        );
+      case "begin": 
+        return (
+          <Dialog
+            open={open}
+            onClose={onClose}
+            aria-labelledby="invalid-dialog-title"
+            aria-describedby="invalid-dialog-description"
+          >
+            <DialogTitle id="invalid-dialog-title">
+              {quest.title}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="invalid-dialog-description">
+                {quest.description}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={onClose} color="secondary">
+                Close
+              </Button>
+              <Button onClick={beginQuest} color="primary">
+                Begin Quest
+              </Button>
+            </DialogActions>
           </Dialog>
         );
       default:
@@ -256,7 +285,7 @@ function toggleView({
             <Button onClick={onClose} color="secondary">
               Keep Playing
             </Button>
-            <Button onClick={restartQuest} color="primary" autoFocus>
+            <Button onClick={restartQuest} color="primary">
               Restart Quest
             </Button>
           </DialogActions>
@@ -281,7 +310,7 @@ function toggleView({
             <Button onClick={onClose} color="secondary">
               Keep Playing
             </Button>
-            <Button onClick={restartQuest} color="primary" autoFocus>
+            <Button onClick={restartQuest} color="primary">
               Restart Quest
             </Button>
           </DialogActions>
@@ -313,6 +342,7 @@ function QuestDialog(props) {
     item,
     open,
     onClose,
+    beginQuest,
     restartQuest,
     dialogType,
     operateQuestItem,
@@ -328,6 +358,7 @@ function QuestDialog(props) {
     item,
     open,
     onClose,
+    beginQuest,
     restartQuest,
     dialogType,
     operateQuestItem,

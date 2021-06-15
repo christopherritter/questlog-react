@@ -227,21 +227,17 @@ function QuestPlayer(props) {
   const geolocateRef = useRef();
 
   const onLoad = () => {
+    setDialogType("begin")
     setLoaded(true);
-    beginQuest();
+    setOpen(true)
   };
 
-  function beginQuest() {
+  function handleBeginQuest() {
     if (geolocateRef.current) {
       geolocateRef.current.trigger();
     }
+    setOpen(false);
   }
-
-  // useEffect(() => {
-  //   if (geolocateRef.current) {
-  //     geolocateRef.current.trigger();
-  //   }
-  // }, [geolocateRef]);
 
   function toggleLegend() {
     var padding = {
@@ -401,10 +397,6 @@ function QuestPlayer(props) {
 
   const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -454,8 +446,6 @@ function QuestPlayer(props) {
     }
   }, [quest.objectives]);
 
-  const [value, setValue] = React.useState(0);
-
   return (
     <React.Fragment>
       <QuestDialog
@@ -466,6 +456,7 @@ function QuestPlayer(props) {
         open={open}
         operateQuestItem={operateQuestItem}
         onClose={handleClose}
+        beginQuest={handleBeginQuest}
         restartQuest={handleRestartQuest}
       />
       <Box overflow="hidden">

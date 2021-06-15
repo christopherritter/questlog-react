@@ -223,7 +223,16 @@ function QuestReader(props) {
   }, [location]);
 
   const mapRef = useRef();
-  const onLoad = () => setLoaded(true);
+
+  const onLoad = () => {
+    setDialogType("begin")
+    setLoaded(true);
+    setOpen(true)
+  };
+
+  function handleBeginQuest() {
+    setOpen(false);
+  }
 
   function toggleLegend() {
     var padding = {
@@ -383,10 +392,6 @@ function QuestReader(props) {
 
   const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
   const handleClose = () => {
     setOpen(false);
   };
@@ -446,6 +451,7 @@ function QuestReader(props) {
         open={open}
         operateQuestItem={operateQuestItem}
         onClose={handleClose}
+        beginQuest={handleBeginQuest}
         restartQuest={handleRestartQuest}
       />
       <Box overflow="hidden">
