@@ -604,16 +604,19 @@ function QuestPlayer(props) {
               setShowLegend(true);
               setShowJournal(false);
               setShowBackpack(false);
+              setShowLocationSidebar(false);
               return toggleLegend();
             case "notebook":
               setShowLegend(false);
               setShowJournal(true);
               setShowBackpack(false);
+              setShowLocationSidebar(false);
               return toggleJournal();
             case "backpack":
               setShowLegend(false);
               setShowJournal(false);
               setShowBackpack(true);
+              setShowLocationSidebar(false);
               return toggleBackpack();
             default:
               return;
