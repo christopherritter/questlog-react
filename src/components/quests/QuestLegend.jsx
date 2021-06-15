@@ -42,7 +42,7 @@ const QuestLegend = (props) => {
     <Card className={`${classes.sidebarContent}`} elevation={5}>
       <CardContent>
         <Grid container>
-          <Grid item sm={11}>
+          <Grid item xs={11}>
             <Typography className={classes.title} color="textSecondary">
               Legend
             </Typography>

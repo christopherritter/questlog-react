@@ -217,12 +217,12 @@ const QuestSidebar = (props) => {
     <Card className={`${classes.sidebarContent}`} elevation={5}>
       <CardContent>
         <Grid container>
-          <Grid item sm={11}>
+          <Grid item xs={11}>
             <Typography className={classes.title} color="textSecondary">
               Location
             </Typography>
           </Grid>
-          <Grid item sm={1}>
+          <Grid item xs={1}>
             <IconButton
               aria-label="delete"
               className={classes.margin}
