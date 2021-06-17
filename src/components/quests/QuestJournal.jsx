@@ -17,18 +17,21 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import CheckBox from '@material-ui/icons/CheckBox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: 14,
   },
   sidebarContent: {
-    margin: 16,
+    // margin: 16,
     width: "100%",
     maxHeight: "calc(100vh - 120px)",
     // position: "absolute",
     overflowY: "auto",
+    [theme.breakpoints.down("xs")]: {
+      height: "calc(100vh - 64px - 56px - 175px)",
+    },
   },
-});
+}));
 
 const QuestJournal = (props) => {
   const classes = useStyles(props);

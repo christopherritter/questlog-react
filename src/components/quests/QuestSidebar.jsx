@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
 
+import { useTheme } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -18,7 +19,7 @@ import BackpackIcon from "mdi-material-ui/BagPersonal";
 import HandPointingIcon from "mdi-material-ui/HandPointingRight";
 import EyeIcon from "mdi-material-ui/Eye";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: 14,
   },
@@ -26,11 +27,14 @@ const useStyles = makeStyles({
     marginBottom: 12,
   },
   sidebarContent: {
-    margin: 16,
+    // margin: 16,
     width: "100%",
     maxHeight: "calc(100vh - 120px)",
     // position: "absolute",
     overflowY: "auto",
+    [theme.breakpoints.down("xs")]: {
+      height: "calc(100vh - 64px - 56px - 175px)",
+    },
   },
   entries: {
     paddingBottom: "0.75em",
@@ -38,7 +42,7 @@ const useStyles = makeStyles({
       paddingBottom: 0,
     },
   },
-});
+}));
 
 const switchIcon = (type) => {
   switch (type) {
@@ -168,6 +172,7 @@ const QuestActions = ({
 };
 
 const QuestSidebar = (props) => {
+  const theme = useTheme();
   const classes = useStyles(props);
   const {
     quest,

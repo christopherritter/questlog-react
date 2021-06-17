@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
 
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -15,22 +17,27 @@ import CloseIcon from "@material-ui/icons/Close";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: 14,
   },
   sidebarContent: {
-    margin: 16,
+    // margin: 16,
     width: "100%",
     maxHeight: "calc(100vh - 120px)",
     // position: "absolute",
     overflowY: "auto",
+    [theme.breakpoints.down("xs")]: {
+      height: "calc(100vh - 64px - 56px - 175px)",
+    },
   },
-});
+}));
 
 const QuestBackpack = (props) => {
+  const theme = useTheme();
   const classes = useStyles(props);
   const { quest, location } = useContext(QuestContext);
+  const isMediumAndUp = useMediaQuery(theme.breakpoints.up("md"));
 
   return (
     <Card className={`${classes.sidebarContent}`} elevation={5}>
@@ -45,7 +52,7 @@ const QuestBackpack = (props) => {
             <IconButton
               aria-label="delete"
               className={classes.margin}
-              onClick={props.toggleBackpack}
+              onClick={ props.toggleBackpack }
               size="small"
             >
               <CloseIcon fontSize="inherit" />

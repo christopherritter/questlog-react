@@ -10,8 +10,11 @@ import QuestBackpack from "./QuestBackpack.jsx";
 import QuestMapMarker from "./QuestMapMarker.jsx";
 import QuestDialog from "./QuestDialog.jsx";
 
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core/styles";
 import { green, pink } from "@material-ui/core/colors";
+import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import BottomNavigation from "@material-ui/core/BottomNavigation";
@@ -21,6 +24,7 @@ import MapIcon from "mdi-material-ui/Map";
 import NotebookIcon from "mdi-material-ui/Notebook";
 import BackpackIcon from "mdi-material-ui/BagPersonal";
 
+const mapHeight = 175;
 const sidebarWidth = 352;
 
 const useStyles = makeStyles((theme) => ({
@@ -63,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "calc(100vh - 64px)",
     [theme.breakpoints.down("sm")]: {
-      height: "calc(100vh - 64px - 56px)",
+      height: `calc(100vh - 64px - 56px )`,
     },
   },
   sidebar: {
@@ -71,6 +75,12 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 100,
     width: sidebarWidth,
     // maxHeight: "calc(100vh - 188px)",
+    padding: 16,
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+      marginTop: mapHeight,
+      padding: 0,
+    },
   },
   sidebarControlPanel: {
     display: "flex",
@@ -90,7 +100,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 16,
     borderTopRightRadius: 0,
     borderBottomRightRadius: 0,
-
     "&.MuiButton-containedSizeLarge": {
       padding: 16,
       paddingLeft: 20,
@@ -102,31 +111,52 @@ const useStyles = makeStyles((theme) => ({
       fontSize: 36,
     },
   },
-  sidebarContent: {
-    margin: 16,
-    width: "100%",
-    maxHeight: "calc(100vh - 120px)",
-    // position: "absolute",
-    overflowY: "auto",
-  },
   locationSidebar: {
-    "&.collapsed": {
-      transform: "translateX(-352px)",
+    [theme.breakpoints.up("sm")]: {
+      "&.collapsed": {
+        transform: "translateX(-352px)",
+      },
+    },
+    [theme.breakpoints.down("xs")]: {
+      "&.collapsed": {
+        transform: "translateY(calc(100vh - 120px))",
+      },
     },
   },
   legendSidebar: {
-    "&.collapsed": {
-      transform: "translateX(352px)",
+    [theme.breakpoints.up("sm")]: {
+      "&.collapsed": {
+        transform: "translateX(352px)",
+      },
+    },
+    [theme.breakpoints.down("xs")]: {
+      "&.collapsed": {
+        transform: "translateY(calc(100vh - 120px))",
+      },
     },
   },
   journalSidebar: {
-    "&.collapsed": {
-      transform: "translateX(352px)",
+    [theme.breakpoints.up("sm")]: {
+      "&.collapsed": {
+        transform: "translateX(352px)",
+      },
+    },
+    [theme.breakpoints.down("xs")]: {
+      "&.collapsed": {
+        transform: "translateY(calc(100vh - 120px))",
+      },
     },
   },
   backpackSidebar: {
-    "&.collapsed": {
-      transform: "translateX(352px)",
+    [theme.breakpoints.up("sm")]: {
+      "&.collapsed": {
+        transform: "translateX(352px)",
+      },
+    },
+    [theme.breakpoints.down("xs")]: {
+      "&.collapsed": {
+        transform: "translateY(calc(100vh - 120px))",
+      },
     },
   },
   actionBar: {
@@ -137,6 +167,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function QuestReader(props) {
+  const theme = useTheme();
   const classes = useStyles(props);
   const {
     quest,
@@ -149,6 +180,7 @@ function QuestReader(props) {
     viewQuestItem,
     operateQuestItem,
   } = useContext(QuestContext);
+  const isMediumAndUp = useMediaQuery(theme.breakpoints.up("md"));
 
   const [isLoaded, setLoaded] = useState(false);
   const [showLocationSidebar, setShowLocationSidebar] = useState(false);
@@ -159,6 +191,8 @@ function QuestReader(props) {
   const [currentLocation, setCurrentLocation] = useState();
 
   useEffect(() => {
+    const bottomOffset = size.y - 64 - 56 - mapHeight;
+    
     var padding = {
       // bottom: 50,
     };
@@ -168,8 +202,19 @@ function QuestReader(props) {
     }
 
     if (currentLocation) {
+      console.log("current location found!");
+      console.log("is medium and up? " + isMediumAndUp);
+      if (!isMediumAndUp) {
+        console.log("set show legend false");
+        setShowLegend(false);
+      }
+
       if (location.id !== currentLocation.id) {
-        padding["left"] = 300;
+        if (isMediumAndUp) {
+          padding["left"] = 300;
+        } else {
+          padding["bottom"] = bottomOffset;
+        }
 
         setShowLocationSidebar(true);
 
@@ -186,7 +231,11 @@ function QuestReader(props) {
         });
       } else {
         if (showLocationSidebar === true) {
-          padding["left"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
+          if (isMediumAndUp) {
+            padding["left"] = 0;
+          } else {
+            padding["bottom"] = 0;
+          }
 
           setShowLocationSidebar(false);
 
@@ -202,7 +251,11 @@ function QuestReader(props) {
             duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
           });
         } else {
-          padding["left"] = 300;
+          if (isMediumAndUp) {
+            padding["left"] = 300;
+          } else {
+            padding["bottom"] = bottomOffset;
+          }
 
           setShowLocationSidebar(true);
 
@@ -225,13 +278,15 @@ function QuestReader(props) {
   const mapRef = useRef();
 
   const onLoad = () => {
-    setDialogType("begin")
+    setDialogType("begin");
     setLoaded(true);
-    setOpen(true)
+    setOpen(true);
   };
 
   function handleBeginQuest() {
-    const sortedLocations = quest.locations.sort((a, b) => (a.order > b.order) ? 1 : -1)
+    const sortedLocations = quest.locations.sort((a, b) =>
+      a.order > b.order ? 1 : -1
+    );
     selectLocation(sortedLocations[0].id);
     setOpen(false);
   }
@@ -241,7 +296,11 @@ function QuestReader(props) {
       // bottom: 50,
     };
     if (showLegend === true) {
-      padding["right"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
+      if (isMediumAndUp) {
+        padding["right"] = 0;
+      } else {
+        padding["bottom"] = 0;
+      }
 
       setShowLegend(false);
 
@@ -250,7 +309,11 @@ function QuestReader(props) {
         duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
       });
     } else {
-      padding["right"] = 300;
+      if (isMediumAndUp) {
+        padding["right"] = 300;
+      } else {
+        padding["bottom"] = bottomOffset;
+      }
 
       setShowLegend(true);
 
@@ -278,7 +341,11 @@ function QuestReader(props) {
     selectLocation(formattedLocation);
 
     if (item.id !== location.id) {
-      padding["left"] = 300;
+      if (isMediumAndUp) {
+        padding["left"] = 300;
+      } else {
+        padding["bottom"] = bottomOffset;
+      }
 
       setShowLocationSidebar(true);
 
@@ -292,7 +359,11 @@ function QuestReader(props) {
       });
     } else {
       if (showLocationSidebar) {
-        padding["left"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
+        if (isMediumAndUp) {
+          padding["left"] = 0;
+        } else {
+          padding["bottom"] = 0;
+        }
 
         setShowLocationSidebar(false);
 
@@ -305,7 +376,11 @@ function QuestReader(props) {
           duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
         });
       } else {
-        padding["left"] = 300;
+        if (isMediumAndUp) {
+          padding["left"] = 300;
+        } else {
+          padding["bottom"] = bottomOffset;
+        }
 
         setShowLocationSidebar(true);
 
@@ -326,7 +401,11 @@ function QuestReader(props) {
       // bottom: 50,
     };
     if (showJournal) {
-      padding["right"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
+      if (isMediumAndUp) {
+        padding["right"] = 0;
+      } else {
+        padding["bottom"] = 0;
+      }
 
       setShowJournal(false);
 
@@ -335,7 +414,11 @@ function QuestReader(props) {
         duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
       });
     } else {
-      padding["right"] = 300;
+      if (isMediumAndUp) {
+        padding["right"] = 300;
+      } else {
+        padding["bottom"] = bottomOffset;
+      }
 
       setShowJournal(true);
 
@@ -356,7 +439,11 @@ function QuestReader(props) {
       // bottom: 50,
     };
     if (showBackpack) {
-      padding["right"] = 0; // In px, matches the width of the sidebars set in .sidebar CSS class
+      if (isMediumAndUp) {
+        padding["right"] = 0;
+      } else {
+        padding["bottom"] = 0;
+      }
 
       setShowBackpack(false);
 
@@ -365,7 +452,11 @@ function QuestReader(props) {
         duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
       });
     } else {
-      padding["right"] = 300;
+      if (isMediumAndUp) {
+        padding["right"] = 300;
+      } else {
+        padding["bottom"] = bottomOffset;
+      }
 
       setShowBackpack(true);
 
@@ -443,6 +534,19 @@ function QuestReader(props) {
     }
   }, [quest.objectives]);
 
+  const [size, setSize] = useState({
+    x: window.innerWidth,
+    y: window.innerHeight,
+  });
+  const updateSize = () =>
+    setSize({
+      x: window.innerWidth,
+      y: window.innerHeight,
+    });
+  useEffect(() => (window.onresize = updateSize), []);
+
+  const bottomOffset = size.y - 64 - 56 - mapHeight;
+
   return (
     <React.Fragment>
       <QuestDialog
@@ -456,164 +560,179 @@ function QuestReader(props) {
         beginQuest={handleBeginQuest}
         restartQuest={handleRestartQuest}
       />
-      <Box overflow="hidden">
-        {quest.region && (
-          <React.Fragment>
-            <MapGL
-              ref={(ref) => (mapRef.current = ref && ref.getMap())}
-              className={classes.questMap}
-              mapStyle="mapbox://styles/mapbox/streets-v11"
-              accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
-              latitude={quest.region.latitude}
-              longitude={quest.region.longitude}
-              bearing={quest.region.bearing}
-              pitch={quest.region.pitch}
-              zoom={quest.region.zoom}
-              onViewportChange={updateCenter}
-              onLoad={onLoad}
-            >
-              <Box
-                id="locationSidebar"
-                className={`${classes.sidebar} ${classes.flexCenter} ${
-                  classes.locationSidebar
-                } ${showLocationSidebar ? "" : "collapsed"}`}
-              >
-                {location && (
-                  <QuestSidebar
-                    width={sidebarWidth}
-                    toggleSidebar={toggleSidebar}
-                    selectMoveAction={handleViewLocation}
-                  />
-                )}
-              </Box>
-              <Box
-                id="legendSidebar"
-                className={`${classes.sidebar}
+      <Grid container direction="column">
+        <Grid item>
+          <Box overflow="hidden">
+            {quest.region && (
+              <React.Fragment>
+                <MapGL
+                  ref={(ref) => (mapRef.current = ref && ref.getMap())}
+                  className={classes.questMap}
+                  mapStyle="mapbox://styles/mapbox/streets-v11"
+                  accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+                  latitude={quest.region.latitude}
+                  longitude={quest.region.longitude}
+                  bearing={quest.region.bearing}
+                  pitch={quest.region.pitch}
+                  zoom={quest.region.zoom}
+                  onViewportChange={updateCenter}
+                  onLoad={onLoad}
+                >
+                  <Box
+                    id="locationSidebar"
+                    className={`${classes.sidebar} ${classes.flexCenter} ${
+                      classes.locationSidebar
+                    } ${showLocationSidebar ? "" : "collapsed"}`}
+                  >
+                    {location && (
+                      <QuestSidebar
+                        width={sidebarWidth}
+                        toggleSidebar={toggleSidebar}
+                        selectMoveAction={handleViewLocation}
+                      />
+                    )}
+                  </Box>
+                  <Box
+                    id="legendSidebar"
+                    className={`${classes.sidebar}
                 ${classes.flexCenter}
                 ${classes.legendSidebar}
                 ${showLegend ? "" : "collapsed"}`}
-              >
-                <QuestLegend
-                  width={sidebarWidth}
-                  toggleLegend={toggleLegend}
-                  selectLegendItem={selectLegendItem}
-                  viewLocation={handleViewLocation}
-                  selectLocation={selectLocation}
-                />
-              </Box>
-              <Box
-                id="journalSidebar"
-                className={`${classes.sidebar}
+                  >
+                    <QuestLegend
+                      width={sidebarWidth}
+                      toggleLegend={toggleLegend}
+                      selectLegendItem={selectLegendItem}
+                      viewLocation={handleViewLocation}
+                      selectLocation={selectLocation}
+                    />
+                  </Box>
+                  <Box
+                    id="journalSidebar"
+                    className={`${classes.sidebar}
                 ${classes.flexCenter}
                 ${classes.journalSidebar}
                 ${showJournal ? "" : "collapsed"}`}
-              >
-                <QuestJournal
-                  width={sidebarWidth}
-                  toggleJournal={toggleJournal}
-                  selectJournalItem={handleSelectJournalItem}
-                />
-              </Box>
-              <Box
-                id="backpackSidebar"
-                className={`${classes.sidebar}
+                  >
+                    <QuestJournal
+                      width={sidebarWidth}
+                      toggleJournal={toggleJournal}
+                      selectJournalItem={handleSelectJournalItem}
+                    />
+                  </Box>
+                  <Box
+                    id="backpackSidebar"
+                    className={`${classes.sidebar}
                 ${classes.flexCenter}
                 ${classes.backpackSidebar}
                 ${showBackpack ? "" : "collapsed"}`}
-              >
-                <QuestBackpack
-                  width={sidebarWidth}
-                  toggleBackpack={toggleBackpack}
-                  selectBackpackItem={handleSelectBackpackItem}
-                />
-              </Box>
-              <Box
-                id="sidebarControlPanel"
-                className={
-                  classes.sidebarControlPanel +
-                  " " +
-                  classes.flexCenter +
-                  ` ${
-                    showLegend || showJournal || showBackpack ? "" : "collapsed"
-                  }`
-                }
-              >
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  size="large"
-                  aria-label="Legend"
-                  className={classes.sidebarButton}
-                  startIcon={<MapIcon />}
-                  onClick={toggleLegend}
-                />
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  size="large"
-                  aria-label="Journal"
-                  className={classes.sidebarButton}
-                  startIcon={<NotebookIcon />}
-                  onClick={toggleJournal}
-                />
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  size="large"
-                  aria-label="Backpack"
-                  className={classes.sidebarButton}
-                  startIcon={<BackpackIcon />}
-                  onClick={toggleBackpack}
-                />
-              </Box>
-              {quest.locations.map((el, index) => (
-                <QuestMapMarker
-                  location={el}
-                  key={index}
-                  viewLocation={handleViewLocation}
-                ></QuestMapMarker>
-              ))}
-            </MapGL>
-          </React.Fragment>
-        )}
-      </Box>
-      <BottomNavigation
-        onChange={(event, option) => {
-          switch (option) {
-            case "map":
-              setShowLegend(true);
-              setShowJournal(false);
-              setShowBackpack(false);
-              return toggleLegend();
-            case "notebook":
-              setShowLegend(false);
-              setShowJournal(true);
-              setShowBackpack(false);
-              return toggleJournal();
-            case "backpack":
-              setShowLegend(false);
-              setShowJournal(false);
-              setShowBackpack(true);
-              return toggleBackpack();
-            default:
-              return;
-          }
-        }}
-        showLabels
-        className={classes.actionBar}
-      >
-        <BottomNavigationAction label="Legend" value="map" icon={<MapIcon />} />
-        <BottomNavigationAction
-          label="Journal"
-          value="notebook"
-          icon={<NotebookIcon />}
-        />
-        <BottomNavigationAction
-          label="Backpack"
-          value="backpack"
-          icon={<BackpackIcon />}
-        />
-      </BottomNavigation>
+                  >
+                    <QuestBackpack
+                      width={sidebarWidth}
+                      toggleBackpack={toggleBackpack}
+                      selectBackpackItem={handleSelectBackpackItem}
+                    />
+                  </Box>
+                  <Box
+                    id="sidebarControlPanel"
+                    className={
+                      classes.sidebarControlPanel +
+                      " " +
+                      classes.flexCenter +
+                      ` ${
+                        showLegend || showJournal || showBackpack
+                          ? ""
+                          : "collapsed"
+                      }`
+                    }
+                  >
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      size="large"
+                      aria-label="Legend"
+                      className={classes.sidebarButton}
+                      startIcon={<MapIcon />}
+                      onClick={toggleLegend}
+                    />
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      size="large"
+                      aria-label="Journal"
+                      className={classes.sidebarButton}
+                      startIcon={<NotebookIcon />}
+                      onClick={toggleJournal}
+                    />
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      size="large"
+                      aria-label="Backpack"
+                      className={classes.sidebarButton}
+                      startIcon={<BackpackIcon />}
+                      onClick={toggleBackpack}
+                    />
+                  </Box>
+                  {quest.locations.map((el, index) => (
+                    <QuestMapMarker
+                      location={el}
+                      key={index}
+                      viewLocation={handleViewLocation}
+                    ></QuestMapMarker>
+                  ))}
+                </MapGL>
+              </React.Fragment>
+            )}
+          </Box>
+        </Grid>
+        <Grid item>
+          <BottomNavigation
+            onChange={(event, option) => {
+              switch (option) {
+                case "map":
+                  setShowLegend(true);
+                  setShowJournal(false);
+                  setShowBackpack(false);
+                  setShowLocationSidebar(false);
+                  return toggleLegend();
+                case "notebook":
+                  setShowLegend(false);
+                  setShowJournal(true);
+                  setShowBackpack(false);
+                  setShowLocationSidebar(false);
+                  return toggleJournal();
+                case "backpack":
+                  setShowLegend(false);
+                  setShowJournal(false);
+                  setShowBackpack(true);
+                  setShowLocationSidebar(false);
+                  return toggleBackpack();
+                default:
+                  return;
+              }
+            }}
+            showLabels
+            className={classes.actionBar}
+          >
+            <BottomNavigationAction
+              label="Legend"
+              value="map"
+              icon={<MapIcon />}
+            />
+            <BottomNavigationAction
+              label="Journal"
+              value="notebook"
+              icon={<NotebookIcon />}
+            />
+            <BottomNavigationAction
+              label="Backpack"
+              value="backpack"
+              icon={<BackpackIcon />}
+            />
+          </BottomNavigation>
+        </Grid>
+      </Grid>
     </React.Fragment>
   );
 }

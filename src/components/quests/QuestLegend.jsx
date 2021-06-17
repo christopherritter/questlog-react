@@ -16,18 +16,21 @@ import CloseIcon from "@material-ui/icons/Close";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: 14,
   },
   sidebarContent: {
-    margin: 16,
+    // margin: 16,
     width: "100%",
     maxHeight: "calc(100vh - 120px)",
     // position: "absolute",
     overflowY: "auto",
+    [theme.breakpoints.down("xs")]: {
+      height: "calc(100vh - 64px - 56px - 175px)",
+    },
   },
-});
+}));
 
 const QuestLegend = (props) => {
   const classes = useStyles(props);
