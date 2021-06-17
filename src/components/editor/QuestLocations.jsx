@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import MapGL, { Source, Layer } from "@urbica/react-map-gl";
-import 'mapbox-gl/dist/mapbox-gl.css';
+import "mapbox-gl/dist/mapbox-gl.css";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
+import QuestMapMarker from "../quests/QuestMapMarker.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -40,11 +41,11 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     marginTop: theme.spacing(3),
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1),
   },
   topRowButton: {
     marginRight: theme.spacing(1),
-    height: "2.90em"
+    height: "2.90em",
   },
   formControl: {
     marginTop: theme.spacing(2),
@@ -177,7 +178,7 @@ function QuestLocations() {
       isStartingPoint: location.isStartingPoint,
     });
     setLocation(initialLocationState);
-    setSelectedIndex(-1);
+    updateSelectedIndex(-1);
   }
 
   function handleUpdateLocation(e) {
@@ -198,14 +199,14 @@ function QuestLocations() {
     });
     clearLocation();
     setLocation(initialLocationState);
-    setSelectedIndex(-1);
+    updateSelectedIndex(-1);
   }
 
   const handleRemoveLocation = (e) => {
     e.preventDefault();
     removeLocation(location);
     setLocation(initialLocationState);
-    setSelectedIndex(-1);
+    updateSelectedIndex(-1);
   };
 
   const [view, setView] = React.useState("list");
@@ -226,28 +227,53 @@ function QuestLocations() {
   };
 
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
+  const updateSelectedIndex = (index) => {
+    console.log("update selected index")
+    console.log(index)
+    setSelectedIndex(index);
+  }
+
+  useEffect((event) => {
+    console.log("selected index effect")
+    console.log(selectedIndex)
+
+  }, [selectedIndex]);
+
 
   // useEffect(() => {
-  //   setSelectedIndex(locationIndex);
+  //   updateSelectedIndex(locationIndex);
   // }, [locationIndex]);
 
   // const [viewport, setViewport] = useState(quest.region);
 
-  // const mapClick = (event) => {
-  //   const { lngLat } = event;
-  //   const updatedLocation = {
-  //     ...locationRef.current,
-  //     latitude: lngLat.lat,
-  //     longitude: lngLat.lng,
-  //   };
-  //   setLocation(updatedLocation);
-  // };
+  const handleMapClick = (event) => {
+    console.log("handle map click " + selectedIndex)
+    const { lngLat } = event;
+    const updatedLocation = {
+      ...locationRef.current,
+      latitude: lngLat.lat,
+      longitude: lngLat.lng,
+    };
+    // clearLocation();
+    // setLocation(initialLocationState);
+    // updateSelectedIndex(-1);
+    if (selectedIndex === -1 ) {
+      setLocation(updatedLocation);
+    }
+  };
 
-  const onMapPointClick = (event) => {
-    const { id } = event.features[0].properties;
+  const handleViewLocation = ({event: e, el: location}) => {
+    console.log("event")
+    console.log(e)
+    console.log("Handle view location")
+    console.log(location)
+    const { id } = location;
     const index = findWithAttr(quest.locations, "id", id);
-    setLocationIndex(index);
+    updateSelectedIndex(index);
     setLocation(quest.locations[index]);
+    console.log('index ' + index)
+    console.log(selectedIndex)
+    
   };
 
   const renderView = (view) => {
@@ -291,13 +317,21 @@ function QuestLocations() {
             style={{ width: "100%", height: "400px" }}
             mapStyle="mapbox://styles/mapbox/streets-v11"
             accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+            onClick={handleMapClick}
           >
-            <Source id="locationsData" type="geojson" data={geojson} />
+            {/* <Source id="locationsData" type="geojson" data={geojson} />
             <Layer
               source="locationsData"
               onClick={onMapPointClick}
               {...layerStyle}
-            />
+            /> */}
+            {quest.locations.map((el, index) => (
+              <QuestMapMarker
+                location={el}
+                key={index}
+                viewLocation={(event) => handleViewLocation({event, el})}
+              ></QuestMapMarker>
+            ))}
           </MapGL>
         );
     }
@@ -305,7 +339,7 @@ function QuestLocations() {
 
   const handleListItemClick = (location, index) => {
     const selectedLocation = { ...location };
-    setSelectedIndex(index);
+    updateSelectedIndex(index);
     setLocation(selectedLocation);
   };
 
@@ -328,11 +362,11 @@ function QuestLocations() {
               <Button
                 variant="outlined"
                 disableElevation
-                className={ classes.topRowButton}
+                className={classes.topRowButton}
                 onClick={() => {
                   clearLocation();
                   setLocation(initialLocationState);
-                  setSelectedIndex(-1);
+                  updateSelectedIndex(-1);
                 }}
               >
                 Create New
@@ -345,7 +379,7 @@ function QuestLocations() {
                 onChange={handleView}
                 aria-label="location view"
                 size="small"
-                className={ classes.viewHandler }
+                className={classes.viewHandler}
               >
                 <ToggleButton value="list" aria-label="list view">
                   <ListAltIcon />
@@ -494,13 +528,16 @@ function QuestLocations() {
                 />
               </Grid>
             </Grid>
-            <FormControl variant="outlined" className={classes.formControl} fullWidth>
+            <FormControl
+              variant="outlined"
+              className={classes.formControl}
+              fullWidth
+            >
               <InputLabel htmlFor="locationMarker">Marker</InputLabel>
               <Select
                 native
                 value={location.marker}
                 onChange={handleSelectMarker}
-                
                 inputProps={{
                   name: "marker",
                   id: "locationMarker",
