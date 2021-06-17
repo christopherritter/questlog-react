@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     // position: "absolute",
     overflowY: "auto",
     [theme.breakpoints.down("sm")]: {
-      height: "calc(100vh - 64px - 56px - 175px)",
+      height: "calc(100vh - 64px - 104px - 175px)",
     },
   },
   entries: {
