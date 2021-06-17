@@ -26,6 +26,7 @@ import BackpackIcon from "mdi-material-ui/BagPersonal";
 
 const mapHeight = 175;
 const sidebarWidth = 352;
+const actionBarHeight = 96;
 
 const useStyles = makeStyles((theme) => ({
   pink: {
@@ -67,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%", 
     height: "calc(100vh - 64px)",
     [theme.breakpoints.down('sm')]: {
-      height: `calc(100vh - 64px - 56px )`,
+      height: `calc(100vh - 64px - ${actionBarHeight}px )`,
     }
   },
   sidebar: {
@@ -160,10 +161,15 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   actionBar: {
+    marginTop: 24,
+    marginBottom: 24,
     [theme.breakpoints.up('md')]: {
       display: "none",
     }
-  }
+  },
+  actionBarIcon: {
+    fontSize: "3em",
+  },
 }));
 
 function QuestPlayer(props) {
@@ -191,7 +197,7 @@ function QuestPlayer(props) {
   const [currentLocation, setCurrentLocation] = useState();
 
   useEffect(() => {
-    const bottomOffset = size.y - 64 - 56 - mapHeight;
+    const bottomOffset = size.y - 64 - actionBarHeight - mapHeight;
 
     var padding = {
       // bottom: 50,
@@ -543,7 +549,7 @@ function QuestPlayer(props) {
     });
   useEffect(() => (window.onresize = updateSize), []);
 
-  const bottomOffset = size.y - 64 - 56 - mapHeight;
+  const bottomOffset = size.y - 64 - actionBarHeight - mapHeight;
 
   return (
     <React.Fragment>
@@ -723,9 +729,9 @@ function QuestPlayer(props) {
         showLabels
         className={classes.actionBar}
       >
-        <BottomNavigationAction label="Legend" value="map" icon={<MapIcon />} />
-        <BottomNavigationAction label="Journal" value="notebook" icon={<NotebookIcon />} />
-        <BottomNavigationAction label="Backpack" value="backpack" icon={<BackpackIcon />} />
+        <BottomNavigationAction label="Legend" value="map" icon={<MapIcon fontSize="inherit" className={classes.actionBarIcon} />} />
+        <BottomNavigationAction label="Journal" value="notebook" icon={<NotebookIcon fontSize="inherit" className={classes.actionBarIcon} />} />
+        <BottomNavigationAction label="Backpack" value="backpack" icon={<BackpackIcon fontSize="inherit" className={classes.actionBarIcon} />} />
       </BottomNavigation>
       </Grid>
       </Grid>
