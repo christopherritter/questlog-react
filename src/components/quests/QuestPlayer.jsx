@@ -208,6 +208,9 @@ function QuestPlayer(props) {
     }
 
     if (currentLocation) {
+      if (!isMediumAndUp) {
+        setShowLegend(false);
+      }
       if (location.id !== currentLocation.id) {
         if (isMediumAndUp) {
           padding["left"] = 300;
@@ -284,14 +287,9 @@ function QuestPlayer(props) {
   };
 
   function handleBeginQuest() {
-    // const sortedLocations = quest.locations.sort((a, b) => (a.order > b.order) ? 1 : -1)
-    // selectLocation(sortedLocations[0].id);
-
     if (geolocateRef.current) {
       geolocateRef.current.trigger();
     }
-    
-    
     setOpen(false);
   }
 
@@ -482,6 +480,7 @@ function QuestPlayer(props) {
   }
 
   function handleViewLocation(selectedLocation) {
+    console.log("Handle view location")
     setDialogType(null);
     selectLocation(selectedLocation.id);
     setCurrentLocation((current) => ({ ...current, ...selectedLocation }));

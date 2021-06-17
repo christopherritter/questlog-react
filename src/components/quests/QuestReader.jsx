@@ -208,10 +208,7 @@ function QuestReader(props) {
     }
 
     if (currentLocation) {
-      console.log("current location found!");
-      console.log("is medium and up? " + isMediumAndUp);
       if (!isMediumAndUp) {
-        console.log("set show legend false");
         setShowLegend(false);
       }
 
