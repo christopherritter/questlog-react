@@ -517,6 +517,10 @@ function QuestReader(props) {
 
   const [dialogType, setDialogType] = React.useState();
 
+  const handleUpdateDialogType = (type) => {
+    setDialogType(type);
+  }
+
   useEffect(() => {
     var questComplete = true;
 
@@ -557,6 +561,7 @@ function QuestReader(props) {
         location={location}
         item={item}
         dialogType={dialogType}
+        updateDialogType={handleUpdateDialogType}
         open={open}
         operateQuestItem={operateQuestItem}
         onClose={handleClose}

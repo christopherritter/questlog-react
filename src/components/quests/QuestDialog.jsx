@@ -140,6 +140,7 @@ function toggleView({
   beginQuest,
   restartQuest,
   dialogType,
+  updateDialogType,
   operateQuestItem,
   viewQuestItem,
   selectLocation,
@@ -227,12 +228,13 @@ function toggleView({
     }
   } else {
     var questComplete = true;
+    updateDialogType(null);
 
     if (quest.objectives) {
       quest.objectives
         .filter((objective) => objective.isPrimary === true)
         .forEach((objective) => {
-          if (objective.isComplete === false) questComplete = false;
+          if (objective.isPrimary === true && objective.isComplete === false) questComplete = false;
         });
     }
 
@@ -344,6 +346,7 @@ function QuestDialog(props) {
     onClose,
     beginQuest,
     restartQuest,
+    updateDialogType,
     dialogType,
     operateQuestItem,
     viewQuestItem,
@@ -360,6 +363,7 @@ function QuestDialog(props) {
     onClose,
     beginQuest,
     restartQuest,
+    updateDialogType,
     dialogType,
     operateQuestItem,
     viewQuestItem,
