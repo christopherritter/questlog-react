@@ -688,7 +688,7 @@ function QuestPlayer(props) {
                   position="bottom-right"
                   positionOptions={{ enableHighAccuracy: true, maximumAge: 0 }}
                   trackUserLocation={true}
-                  fitBoundsOptions={{ maxZoom: 20 }}
+                  fitBoundsOptions={{ maxZoom: 19 }}
                   onError={(err) => console.log(err)}
                 />
               )}
