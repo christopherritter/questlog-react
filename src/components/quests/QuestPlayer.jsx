@@ -26,7 +26,7 @@ import BackpackIcon from "mdi-material-ui/BagPersonal";
 
 const mapHeight = 175;
 const sidebarWidth = 352;
-const actionBarHeight = 96;
+const actionBarHeight = 104;
 
 const useStyles = makeStyles((theme) => ({
   pink: {
@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
     width: sidebarWidth,
     // maxHeight: "calc(100vh - 188px)",
     padding: 16,
-    [theme.breakpoints.down("xs")]: {
+    [theme.breakpoints.down("sm")]: {
       width: "100%",
       marginTop: mapHeight,
       padding: 0,
@@ -113,48 +113,48 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   locationSidebar: {
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up("md")]: {
       "&.collapsed": {
         transform: "translateX(-352px)",
       },
     },
-    [theme.breakpoints.down("xs")]: {
+    [theme.breakpoints.down("sm")]: {
       "&.collapsed": {
         transform: "translateY(calc(100vh - 120px))",
       },
     },
   },
   legendSidebar: {
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up("md")]: {
       "&.collapsed": {
         transform: "translateX(352px)",
       },
     },
-    [theme.breakpoints.down("xs")]: {
+    [theme.breakpoints.down("sm")]: {
       "&.collapsed": {
         transform: "translateY(calc(100vh - 120px))",
       },
     },
   },
   journalSidebar: {
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up("md")]: {
       "&.collapsed": {
         transform: "translateX(352px)",
       },
     },
-    [theme.breakpoints.down("xs")]: {
+    [theme.breakpoints.down("sm")]: {
       "&.collapsed": {
         transform: "translateY(calc(100vh - 120px))",
       },
     },
   },
   backpackSidebar: {
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up("md")]: {
       "&.collapsed": {
         transform: "translateX(352px)",
       },
     },
-    [theme.breakpoints.down("xs")]: {
+    [theme.breakpoints.down("sm")]: {
       "&.collapsed": {
         transform: "translateY(calc(100vh - 120px))",
       },

@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: "calc(100vh - 120px)",
     // position: "absolute",
     overflowY: "auto",
-    [theme.breakpoints.down("xs")]: {
+    [theme.breakpoints.down("sm")]: {
       height: "calc(100vh - 64px - 56px - 175px)",
     },
   },
