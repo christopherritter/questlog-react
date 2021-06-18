@@ -283,7 +283,10 @@ function QuestPlayer(props) {
   const onLoad = () => {
     setDialogType("begin")
     setLoaded(true);
-    setOpen(true)
+    setOpen(true);
+    if (geolocateRef.current) {
+      geolocateRef.current.options.showAccuracyCircle = false;
+    }
   };
 
   function handleBeginQuest() {
@@ -480,7 +483,6 @@ function QuestPlayer(props) {
   }
 
   function handleViewLocation(selectedLocation) {
-    console.log("Handle view location")
     setDialogType(null);
     selectLocation(selectedLocation.id);
     setCurrentLocation((current) => ({ ...current, ...selectedLocation }));
@@ -693,10 +695,11 @@ function QuestPlayer(props) {
                     (geolocateRef.current = ref && ref.getControl())
                   }
                   position="bottom-right"
-                  positionOptions={{ enableHighAccuracy: true, maximumAge: 0 }}
+                  positionOptions={{ enableHighAccuracy: true, timeout: 3000 }}
                   trackUserLocation={true}
                   fitBoundsOptions={{ maxZoom: 19 }}
                   onError={(err) => console.log(err)}
+                  showAccuracyCircle={false}
                 />
               )}
               
