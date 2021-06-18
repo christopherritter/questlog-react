@@ -40,18 +40,17 @@ const QuestObjectives = () => {
   const classes = useStyles();
   const { quest, addObjective, updateObjective, removeObjective, publishQuest } =
     useContext(QuestContext);
-  var id = 0;
+  var id = 0, idList = [0];
 
   if (quest.objectives) {
-    var idList = quest.objectives.map((obj) => {
+    quest.objectives.forEach((obj) => {
       var idNumber,
         matches = obj.id.match(/\d+$/);
-
       if (matches) {
         idNumber = matches[0];
       }
 
-      return idNumber;
+      idList.push(idNumber);
     });
 
     id = Math.max(...idList) + 1;

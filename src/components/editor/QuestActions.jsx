@@ -47,10 +47,10 @@ const QuestActions = (props) => {
   const classes = useStyles();
   const { quest, addAction, updateAction, removeAction, actionTypes } =
     useContext(QuestContext);
-  var id = 0;
+  var id = 0, idList = [0];
 
   if (quest.actions && quest.actions.length > 0) {
-    var idList = quest.actions.map((obj) => {
+    quest.actions.forEach((obj) => {
       var idNumber,
         matches = obj.id.match(/\d+$/);
 
@@ -58,7 +58,7 @@ const QuestActions = (props) => {
         idNumber = matches[0];
       }
 
-      return idNumber;
+      idList.push(idNumber);
     });
 
     id = Math.max(...idList) + 1;
