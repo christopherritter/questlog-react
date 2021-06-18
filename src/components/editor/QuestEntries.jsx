@@ -58,10 +58,10 @@ const QuestEntries = () => {
     removeEntry,
     publishQuest,
   } = useContext(QuestContext);
-  var id = 0;
+  var id = 0, idList = [0];
 
   if (quest.entries && quest.entries.length > 0) {
-    var idList = quest.entries.map((obj) => {
+    quest.entries.forEach((obj) => {
       var idNumber,
         matches = obj.id.match(/\d+$/);
 
@@ -69,7 +69,7 @@ const QuestEntries = () => {
         idNumber = matches[0];
       }
 
-      return idNumber;
+      idList.push(idNumber);
     });
 
     id = Math.max(...idList) + 1;

@@ -101,10 +101,10 @@ function QuestLocations() {
         })
       : [],
   };
-  var id = 0;
+  var id = 0, idList = [0];
 
   if (quest.locations && quest.locations.length > 0) {
-    var idList = quest.locations.map((obj) => {
+    quest.locations.forEach((obj) => {
       var idNumber,
         matches = obj.id.match(/\d+$/);
 
@@ -112,7 +112,7 @@ function QuestLocations() {
         idNumber = matches[0];
       }
 
-      return idNumber;
+      idList.push(idNumber);
     });
 
     id = Math.max(...idList) + 1;
