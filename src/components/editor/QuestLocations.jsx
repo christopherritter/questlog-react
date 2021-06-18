@@ -245,7 +245,6 @@ function QuestLocations() {
   // const [viewport, setViewport] = useState(quest.region);
 
   const handleMapClick = (event) => {
-    console.log("handle map click " + selectedIndex)
     const { lngLat } = event;
     const updatedLocation = {
       ...locationRef.current,
@@ -261,17 +260,10 @@ function QuestLocations() {
   };
 
   const handleViewLocation = ({event: e, el: location}) => {
-    console.log("event")
-    console.log(e)
-    console.log("Handle view location")
-    console.log(location)
     const { id } = location;
     const index = findWithAttr(quest.locations, "id", id);
     updateSelectedIndex(index);
     setLocation(quest.locations[index]);
-    console.log('index ' + index)
-    console.log(selectedIndex)
-    
   };
 
   const renderView = (view) => {
