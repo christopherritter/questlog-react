@@ -228,16 +228,14 @@ function QuestLocations() {
 
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
   const updateSelectedIndex = (index) => {
-    console.log("update selected index")
-    console.log(index)
     setSelectedIndex(index);
   }
 
-  useEffect((event) => {
-    console.log("selected index effect")
-    console.log(selectedIndex)
+  // useEffect((event) => {
+  //   console.log("selected index effect")
+  //   console.log(selectedIndex)
 
-  }, [selectedIndex]);
+  // }, [selectedIndex]);
 
 
   // useEffect(() => {
