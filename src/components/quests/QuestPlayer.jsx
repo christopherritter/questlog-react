@@ -680,6 +680,13 @@ function QuestPlayer(props) {
                   onClick={toggleBackpack}
                 />
               </Box>
+              {quest.locations.map((el, index) => (
+                <QuestMapMarker
+                  location={el}
+                  key={index}
+                  viewLocation={handleViewLocation}
+                ></QuestMapMarker>
+              ))}
               {isLoaded && (
                 <GeolocateControl
                   ref={(ref) =>
@@ -692,13 +699,7 @@ function QuestPlayer(props) {
                   onError={(err) => console.log(err)}
                 />
               )}
-              {quest.locations.map((el, index) => (
-                <QuestMapMarker
-                  location={el}
-                  key={index}
-                  viewLocation={handleViewLocation}
-                ></QuestMapMarker>
-              ))}
+              
             </MapGL>
           </React.Fragment>
         )}
