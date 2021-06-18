@@ -141,7 +141,7 @@ const App = () => {
           property="og:description"
           content="A storytelling platform for creating and playing text-based adventures on an interactive map. "
         />
-        <meta property="og:image" content="/questlog-home.png" />
+        <meta property="og:image" content="https://www.questlog.app/questlog-home.png" />
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
@@ -154,7 +154,7 @@ const App = () => {
           property="twitter:description"
           content="A storytelling platform for creating and playing text-based adventures on an interactive map. "
         />
-        <meta property="twitter:image" content="/questlog-home.png" />
+        <meta property="twitter:image" content="https://www.questlog.app/questlog-home.png" />
       </Helmet>
       <ThemeProvider theme={theme}>
         <CssBaseline />
