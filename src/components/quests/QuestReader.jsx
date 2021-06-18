@@ -281,7 +281,7 @@ function QuestReader(props) {
   const mapRef = useRef();
 
   const onLoad = () => {
-    setDialogType("begin");
+    handleUpdateDialogType("begin");
     setLoaded(true);
     setOpen(true);
   };
@@ -433,7 +433,7 @@ function QuestReader(props) {
   }
 
   function handleSelectJournalItem() {
-    setDialogType(null);
+    // setDialogType(null);
     setOpen(true);
   }
 
@@ -472,7 +472,7 @@ function QuestReader(props) {
 
   function handleSelectBackpackItem(item) {
     viewQuestItem(item);
-    setDialogType("item");
+    handleUpdateDialogType("item");
     setOpen(true);
   }
 
@@ -495,6 +495,7 @@ function QuestReader(props) {
   function handleRestartQuest() {
     var updatedObjectives = [];
     var updatedItems = [];
+    handleUpdateDialogType("begin");
     setOpen(false);
 
     setTimeout(() => {
@@ -532,6 +533,7 @@ function QuestReader(props) {
         });
 
       if (questComplete) {
+        handleUpdateDialogType("complete");
         setOpen(true);
       } else {
         setOpen(false);

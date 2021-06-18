@@ -1,7 +1,5 @@
 import React from "react";
 
-import { Link as RouterLink } from "react-router-dom";
-
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Dialog from "@material-ui/core/Dialog";
@@ -108,17 +106,17 @@ const DialogQuestActions = withStyles(styles)(
     return (
       <List component="nav" aria-label="location actions">
         {localActions.map((action, index) => (
-            <ListItem button key={index} onClick={selectAction}>
-              <ListItemIcon>{switchIcon(action.type)}</ListItemIcon>
-              <ListItemText
-                primary={
-                  <Typography variant="subtitle1" id={action.id}>
-                    {action.text}
-                  </Typography>
-                }
-              />
-            </ListItem>
-          ))}
+          <ListItem button key={index} onClick={selectAction}>
+            <ListItemIcon>{switchIcon(action.type)}</ListItemIcon>
+            <ListItemText
+              primary={
+                <Typography variant="subtitle1" id={action.id}>
+                  {action.text}
+                </Typography>
+              }
+            />
+          </ListItem>
+        ))}
       </List>
     );
   }
@@ -131,194 +129,191 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 
-function toggleView({
-  quest,
-  location,
-  item,
-  open,
-  onClose,
-  beginQuest,
-  restartQuest,
-  dialogType,
-  updateDialogType,
-  operateQuestItem,
-  viewQuestItem,
-  selectLocation,
-  takeQuestItem,
-  findWithAttr,
-}) {
-  if (dialogType) {
-    switch (dialogType) {
-      case "item":
-        return (
-          item && <Dialog
-            open={open}
-            onClose={onClose}
-            aria-labelledby="item-dialog-title"
-            aria-describedby="item-dialog-description"
-          >
-            <DialogTitle id="item-dialog-title" onClose={onClose}>
-              {item.name}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id="item-dialog-description" style={{whiteSpace: 'pre-line'}}>
-                {item.description}
-              </DialogContentText>
-              <DialogQuestActions
-                quest={quest}
-                item={item}
-                viewQuestItem={viewQuestItem}
-                selectLocation={selectLocation}
-                takeQuestItem={takeQuestItem}
-                operateQuestItem={operateQuestItem}
-                findWithAttr={findWithAttr}
-              />
-            </DialogContent>
-          </Dialog>
-        );
-      case "begin": 
-        return (
-          <Dialog
-            open={open}
-            onClose={onClose}
-            aria-labelledby="invalid-dialog-title"
-            aria-describedby="invalid-dialog-description"
-          >
-            <DialogTitle id="invalid-dialog-title">
-              {quest.title}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id="invalid-dialog-description">
-                {quest.description}
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={onClose} color="secondary">
-                Close
-              </Button>
-              <Button onClick={beginQuest} color="primary">
-                Begin Quest
-              </Button>
-            </DialogActions>
-          </Dialog>
-        );
-      default:
-        return (
-          <Dialog
-            open={open}
-            onClose={onClose}
-            aria-labelledby="invalid-dialog-title"
-            aria-describedby="invalid-dialog-description"
-          >
-            <DialogTitle id="invalid-dialog-title">
-              {"Action type not recognized"}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id="invalid-dialog-description">
-                That is not a valid action type.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={onClose} color="primary">
-                Close dialog
-              </Button>
-            </DialogActions>
-          </Dialog>
-        );
-    }
-  } else {
-    var questComplete = true;
-    updateDialogType(null);
+const QuestObjectivesDialog = (props) => {
+  const { quest, location, open, restartQuest, onClose } = props;
 
-    if (quest.objectives) {
-      quest.objectives
-        .filter((objective) => objective.isPrimary === true)
-        .forEach((objective) => {
-          if (objective.isPrimary === true && objective.isComplete === false) questComplete = false;
-        });
-    }
+  return (
+    <Dialog
+      open={open}
+      onClose={onClose}
+      aria-labelledby="quest-objectives-dialog-title"
+      aria-describedby="quest-objectives-dialog-description"
+    >
+      <DialogTitle id="quest-objectives-dialog-title">
+        {"Objectives"}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="quest-objectives-dialog-description">
+          Complete these objectives to finish the quest.
+        </DialogContentText>
+        <List component="nav">
+          {quest.objectives &&
+            quest.objectives
+              .filter((obj) => {
+                return obj.isPrimary === true;
+              })
+              .map((obj) => {
+                return (
+                  <ListItem
+                    button
+                    key={obj.id}
+                    selected={obj.id === location.id}
+                  >
+                    <ListItemIcon>
+                      {obj.isComplete ? (
+                        <CheckBox />
+                      ) : (
+                        <CheckBoxOutlineBlankIcon />
+                      )}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={
+                        <Typography variant="subtitle1">{obj.text}</Typography>
+                      }
+                    />
+                  </ListItem>
+                );
+              })}
+        </List>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} color="secondary">
+          Keep Playing
+        </Button>
+        <Button onClick={restartQuest} color="primary">
+          Restart Quest
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
 
-    if (questComplete !== true) {
-      return (
-        <Dialog
-          open={open}
-          onClose={onClose}
-          aria-labelledby="quest-dialog-title"
-          aria-describedby="quest-dialog-description"
-        >
-          <DialogTitle id="quest-dialog-title">{"Objectives"}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="quest-dialog-description">
-              Complete these objectives to finish the quest.
-            </DialogContentText>
-            <List component="nav">
-              {quest.objectives &&
-                quest.objectives
-                  .filter((obj) => {
-                    return obj.isPrimary === true;
-                  })
-                  .map((obj) => {
-                    return (
-                      <ListItem
-                        button
-                        key={obj.id}
-                        selected={obj.id === location.id}
-                      >
-                        <ListItemIcon>
-                          {obj.isComplete ? (
-                            <CheckBox />
-                          ) : (
-                            <CheckBoxOutlineBlankIcon />
-                          )}
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={
-                            <Typography variant="subtitle1">
-                              {obj.text}
-                            </Typography>
-                          }
-                        />
-                      </ListItem>
-                    );
-                  })}
-            </List>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={onClose} color="secondary">
-              Keep Playing
-            </Button>
-            <Button onClick={restartQuest} color="primary">
-              Restart Quest
-            </Button>
-          </DialogActions>
-        </Dialog>
-      );
-    } else {
-      return (
-        <Dialog
-          open={open}
-          onClose={onClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">{"Quest complete!"}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description" >
-              You have finished all of the objectives and completed the quest.
-              Would you like to start the quest over and play it again?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={onClose} color="secondary">
-              Keep Playing
-            </Button>
-            <Button onClick={restartQuest} color="primary">
-              Restart Quest
-            </Button>
-          </DialogActions>
-        </Dialog>
-      );
-    }
+const QuestCompleteDialog = (props) => {
+  const { open, restartQuest, onClose } = props;
+
+  return (
+    <Dialog
+      open={open}
+      onClose={onClose}
+      aria-labelledby="quest-complete-dialog-title"
+      aria-describedby="quest-complete-dialog-description"
+    >
+      <DialogTitle id="quest-complete-dialog-title">
+        {"Quest complete!"}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="quest-complete-dialog-description">
+          You have finished all of the objectives and completed the quest. Would
+          you like to start the quest over and play it again?
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} color="secondary">
+          Keep Playing
+        </Button>
+        <Button onClick={restartQuest} color="primary">
+          Restart Quest
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+const QuestItemDialog = (props) => {
+  const { quest, item, viewQuestItem, selectLocation, takeQuestItem, operateQuestItem, findWithAttr, open, onClose } = props;
+
+  return (
+    item && (
+      <Dialog
+        open={open}
+        onClose={onClose}
+        aria-labelledby="item-dialog-title"
+        aria-describedby="item-dialog-description"
+      >
+        <DialogTitle id="item-dialog-title" onClose={onClose}>
+          {item.name}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText
+            id="item-dialog-description"
+            style={{ whiteSpace: "pre-line" }}
+          >
+            {item.description}
+          </DialogContentText>
+          <DialogQuestActions
+            quest={quest}
+            item={item}
+            viewQuestItem={viewQuestItem}
+            selectLocation={selectLocation}
+            takeQuestItem={takeQuestItem}
+            operateQuestItem={operateQuestItem}
+            findWithAttr={findWithAttr}
+          />
+        </DialogContent>
+      </Dialog>
+    )
+  );
+}
+
+const QuestBeginDialog = (props) => {
+  const { quest, beginQuest, open, onClose } = props;
+
+  return (
+    <Dialog
+      open={open}
+      onClose={onClose}
+      aria-labelledby="quest-begin-dialog-title"
+      aria-describedby="quest-begin-dialog-description"
+    >
+      <DialogTitle id="quest-begin-dialog-title">{quest.title}</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="quest-begin-dialog-description">
+          {quest.description}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} color="secondary">
+          Close
+        </Button>
+        <Button onClick={beginQuest} color="primary">
+          Begin Quest
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
+function toggleView(props) {
+  const {
+    quest,
+    dialogType,
+  } = props;
+
+  var questComplete = true;
+  // updateDialogType(null);
+
+  if (quest.objectives) {
+    quest.objectives
+      .filter((objective) => objective.isPrimary === true)
+      .forEach((objective) => {
+        if (objective.isPrimary === true && objective.isComplete === false)
+          questComplete = false;
+      });
+  }
+
+  switch (dialogType) {
+    case "item":
+      return <QuestItemDialog {...props} />
+    case "begin":
+      return <QuestBeginDialog {...props} />
+    case "complete":
+      return <QuestCompleteDialog {...props} />;
+    default:
+      // if (questComplete !== true) {
+        return <QuestObjectivesDialog {...props} />;
+      // } else {
+        // return <QuestCompleteDialog {...props} />;
+      // }
   }
 }
 
