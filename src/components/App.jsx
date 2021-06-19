@@ -9,6 +9,8 @@ import {
 import { useAuth } from "../contexts/AuthContext.jsx";
 import theme from "./theme.jsx";
 
+import { Helmet } from "react-helmet";
+
 import PrivateRoute from "./utils/PrivateRoute.jsx";
 import Signup from "./auth/Signup.jsx";
 import Login from "./auth/Login.jsx";
@@ -52,9 +54,9 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
     color: theme.palette.common.white,
 
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down("sm")]: {
       display: "none",
-    }
+    },
   },
 }));
 
@@ -121,25 +123,57 @@ const App = () => {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <AppBar className={classes.appBar}>
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-            component={RouterLink}
-            to="/"
-          >
-            <CompassOutline />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            QuestLog
-          </Typography>
-          {questTitle && (
+    <React.Fragment>
+      <Helmet>
+        {/* Primary Meta Tags */}
+        <title>QuestLog Interactive Adventures</title>
+        <meta name="title" content="QuestLog Interactive Adventures" />
+        <meta
+          name="description"
+          content="A storytelling platform for creating and playing text-based adventures on an interactive map. "
+        />
 
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.questlog.app/" />
+        <meta property="og:title" content="QuestLog Interactive Adventures" />
+        <meta
+          property="og:description"
+          content="A storytelling platform for creating and playing text-based adventures on an interactive map. "
+        />
+        <meta property="og:image" content="https://www.questlog.app/questlog-home.png" />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://www.questlog.app/" />
+        <meta
+          property="twitter:title"
+          content="QuestLog Interactive Adventures"
+        />
+        <meta
+          property="twitter:description"
+          content="A storytelling platform for creating and playing text-based adventures on an interactive map. "
+        />
+        <meta property="twitter:image" content="https://www.questlog.app/questlog-home.png" />
+      </Helmet>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <AppBar className={classes.appBar}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="menu"
+              component={RouterLink}
+              to="/"
+            >
+              <CompassOutline />
+            </IconButton>
+            <Typography variant="h6" className={classes.title}>
+              QuestLog
+            </Typography>
+            {questTitle && (
               <Typography
                 variant="h6"
                 className={classes.questTitle}
@@ -148,83 +182,83 @@ const App = () => {
               >
                 {questTitle}
               </Typography>
-      
-          )}
-          {currentUser ? (
-            <div>
-              <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <DotsVertical />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={open}
-                onClose={handleClose}
-              >
-                <MenuItem
-                  onClick={handleClose}
-                  component={RouterLink}
-                  to="/profile"
+            )}
+            {currentUser ? (
+              <div>
+                <IconButton
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleMenu}
+                  color="inherit"
                 >
-                  Profile
-                </MenuItem>
-                <MenuItem
-                  onClick={handleClose}
-                  component={RouterLink}
-                  to="/create-quest"
+                  <DotsVertical />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={open}
+                  onClose={handleClose}
                 >
-                  Create Quest
-                </MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-              </Menu>
-            </div>
-          ) : (
-            <Button color="inherit" component={RouterLink} to="/login">
-              Login
-            </Button>
-          )}
-        </Toolbar>
-      </AppBar>
-      <main className={classes.root}>
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/quests" component={QuestLibrary} />
-          <PrivateRoute path="/create-quest" component={CreateQuest} />
-          <Route
-            exact
-            path="/quest/:questId/:role?"
-            render={(props) => {
-              return (
-                <Quest
-                  {...props}
-                  setQuestId={handleSetQuestId}
-                  setQuestTitle={handleSetQuestTitle}
-                />
-              );
-            }}
-          />
-          <Route path="/signup" component={Signup} />
-          <Route path="/login" component={Login} />
-          <PrivateRoute path="/profile" component={Profile} />
-          <PrivateRoute path="/update-profile" component={UpdateProfile} />
-        </Switch>
-      </main>
-    </ThemeProvider>
+                  <MenuItem
+                    onClick={handleClose}
+                    component={RouterLink}
+                    to="/profile"
+                  >
+                    Profile
+                  </MenuItem>
+                  <MenuItem
+                    onClick={handleClose}
+                    component={RouterLink}
+                    to="/create-quest"
+                  >
+                    Create Quest
+                  </MenuItem>
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu>
+              </div>
+            ) : (
+              <Button color="inherit" component={RouterLink} to="/login">
+                Login
+              </Button>
+            )}
+          </Toolbar>
+        </AppBar>
+        <main className={classes.root}>
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/quests" component={QuestLibrary} />
+            <PrivateRoute path="/create-quest" component={CreateQuest} />
+            <Route
+              exact
+              path="/quest/:questId/:role?"
+              render={(props) => {
+                return (
+                  <Quest
+                    {...props}
+                    setQuestId={handleSetQuestId}
+                    setQuestTitle={handleSetQuestTitle}
+                  />
+                );
+              }}
+            />
+            <Route path="/signup" component={Signup} />
+            <Route path="/login" component={Login} />
+            <PrivateRoute path="/profile" component={Profile} />
+            <PrivateRoute path="/update-profile" component={UpdateProfile} />
+          </Switch>
+        </main>
+      </ThemeProvider>
+    </React.Fragment>
   );
 };
 
