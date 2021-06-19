@@ -7,6 +7,7 @@ import {
   useRouteMatch,
 } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import ReactGA from "react-ga";
 import theme from "./theme.jsx";
 
 import PrivateRoute from "./utils/PrivateRoute.jsx";
@@ -69,11 +70,15 @@ const App = () => {
   let match = useRouteMatch("/quest/");
 
   useEffect(() => {
+    ReactGA.initialize('G-TSREEGQX9Z');
+  }, []);
+
+  useEffect(() => {
     if (!match) {
       clearQuest();
     }
   }, [match]);
-
+  
   useEffect(() => {
     if (currentUser) {
       setLoggedIn(true);
@@ -119,6 +124,8 @@ const App = () => {
     setQuestId(null);
     setQuestTitle(null);
   }
+  
+  
 
   return (
     <ThemeProvider theme={theme}>
