@@ -485,7 +485,7 @@ function QuestPlayer(props) {
   function handleViewLocation(selectedLocation) {
     // setDialogType(null);
     selectLocation(selectedLocation.id);
-    setCurrentLocation((current) => ({ ...current, ...selectedLocation }));
+    // setCurrentLocation((current) => ({ ...current, ...selectedLocation }));
   }
 
   const [open, setOpen] = React.useState(false);
@@ -688,7 +688,7 @@ function QuestPlayer(props) {
                 <QuestMapMarker
                   location={el}
                   key={index}
-                  viewLocation={selectLocation}
+                  viewLocation={handleViewLocation}
                 ></QuestMapMarker>
               ))}
               {isLoaded && (
