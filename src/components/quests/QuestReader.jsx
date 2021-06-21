@@ -482,6 +482,7 @@ function QuestReader(props) {
 
   function handleViewLocation(selectedLocation) {
     // setDialogType(null);
+    console.log(selectedLocation.name)
     selectLocation(selectedLocation.id);
     // setCurrentLocation((current) => ({ ...current, ...selectedLocation }));
   }
