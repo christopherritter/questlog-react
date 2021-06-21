@@ -688,7 +688,7 @@ function QuestPlayer(props) {
                 <QuestMapMarker
                   location={el}
                   key={index}
-                  viewLocation={handleViewLocation}
+                  viewLocation={selectLocation}
                 ></QuestMapMarker>
               ))}
               {isLoaded && (

@@ -688,7 +688,7 @@ function QuestReader(props) {
                     <QuestMapMarker
                       location={el}
                       key={index}
-                      viewLocation={handleViewLocation}
+                      viewLocation={selectLocation}
                     ></QuestMapMarker>
                   ))}
                 </MapGL>
