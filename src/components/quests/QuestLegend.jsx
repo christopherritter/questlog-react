@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import PropTypes from "prop-types";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
 
@@ -34,12 +33,12 @@ const useStyles = makeStyles((theme) => ({
 
 const QuestLegend = (props) => {
   const classes = useStyles(props);
-  const { quest, location } = useContext(QuestContext);
+  const { quest, location, selectLocation } = useContext(QuestContext);
 
   function onListItemClick(loc) {
     console.log("on list item click " + loc.id);
     console.log("select location " + loc.name)
-    props.selectLocation(loc.id)
+    selectLocation(loc.id)
   };
 
   return (

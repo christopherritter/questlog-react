@@ -1,5 +1,7 @@
-import React, { useRef } from "react";
+import React, { useRef, useContext } from "react";
 import { Marker } from "@urbica/react-map-gl";
+
+// import QuestContext from "../../contexts/QuestContext.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import { green, pink, grey } from "@material-ui/core/colors";
@@ -34,13 +36,18 @@ const useStyles = makeStyles((theme) => ({
 
 const QuestMapMarker = (props) => {
   const classes = useStyles(props);
-  const { location, viewLocation } = props;
+  const { location, selectLocation } = props;
+  // const { location, selectLocation } = useContext(QuestContext);
   const markerRef = useRef();
+
+
+
+
 
   function onMarkerClick(location) {
     console.log("on marker click " + location.id);
     console.log("select location " + location.name)
-    props.selectLocation(location.id)
+    selectLocation(location.id)
   };
 
   const switchMarker = (marker) => {

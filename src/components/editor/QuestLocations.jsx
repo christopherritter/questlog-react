@@ -152,6 +152,7 @@ function QuestLocations() {
   // }, [props.location, setLocation]);
 
   function handleChangeLocation(event) {
+    console.log("handle change location")
     const { name, value } = event.target;
     setLocation({ ...location, [name]: value });
   }
@@ -245,6 +246,7 @@ function QuestLocations() {
   // const [viewport, setViewport] = useState(quest.region);
 
   const handleMapClick = (event) => {
+    console.log("handle map click")
     const { lngLat } = event;
     const updatedLocation = {
       ...locationRef.current,
@@ -254,16 +256,17 @@ function QuestLocations() {
     // clearLocation();
     // setLocation(initialLocationState);
     // updateSelectedIndex(-1);
+    console.log(selectedIndex)
     if (selectedIndex === -1 ) {
       setLocation(updatedLocation);
     }
   };
 
-  const handleViewLocation = ({event: e, el: location}) => {
-    const { id } = location;
-    const index = findWithAttr(quest.locations, "id", id);
+  const handleViewLocation = (locationId) => {
+    const index = findWithAttr(quest.locations, "id", locationId);
+    const selectedLocation = { ...quest.locations[index] };
     updateSelectedIndex(index);
-    setLocation(quest.locations[index]);
+    setLocation(selectedLocation);
   };
 
   const renderView = (view) => {
@@ -319,7 +322,7 @@ function QuestLocations() {
               <QuestMapMarker
                 location={el}
                 key={index}
-                viewLocation={(event) => handleViewLocation({event, el})}
+                selectLocation={(loc) => handleViewLocation(loc)}
               ></QuestMapMarker>
             ))}
           </MapGL>
@@ -328,12 +331,14 @@ function QuestLocations() {
   };
 
   const handleListItemClick = (location, index) => {
+    console.log("handle list item click")
     const selectedLocation = { ...location };
     updateSelectedIndex(index);
     setLocation(selectedLocation);
   };
 
   function handleSelectMarker(event) {
+    console.log("handle select marker")
     const { name, value } = event.target;
     setLocation({ ...location, [name]: value });
   }

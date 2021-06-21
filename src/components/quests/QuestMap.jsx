@@ -7,7 +7,7 @@ import QuestMapMarker from "./QuestMapMarker.jsx";
 const QuestMap = ({ width, height, quest }) => {
   const mapRef = useRef();
 
-  function handleViewLocation() {}
+  function handleSelectLocation() {}
 
   return (
     <MapGL
@@ -25,7 +25,7 @@ const QuestMap = ({ width, height, quest }) => {
         <QuestMapMarker
           location={el}
           key={index}
-          viewLocation={handleViewLocation}
+          selectLocation={handleSelectLocation}
         ></QuestMapMarker>
       ))}
     </MapGL>
