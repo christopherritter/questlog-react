@@ -40,13 +40,7 @@ const QuestMapMarker = (props) => {
   // const { location, selectLocation } = useContext(QuestContext);
   const markerRef = useRef();
 
-
-
-
-
   const onMarkerClick = () => {
-    console.log("on marker click " + location.id);
-    console.log("select location " + location.name)
     selectLocation(location.id)
   };
 

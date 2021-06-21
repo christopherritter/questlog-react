@@ -36,8 +36,6 @@ const QuestLegend = (props) => {
   const { quest, location, selectLocation } = useContext(QuestContext);
 
   function onListItemClick(loc) {
-    console.log("on list item click " + loc.id);
-    console.log("select location " + loc.name)
     selectLocation(loc.id)
   };
 
