@@ -37,8 +37,10 @@ const QuestMapMarker = (props) => {
   const { location, viewLocation } = props;
   const markerRef = useRef();
 
-  function onMarkerClick() {
-    viewLocation(location);
+  function onMarkerClick(location) {
+    console.log("on marker click " + location.id);
+    console.log("select location " + location.name)
+    props.selectLocation(location.id)
   };
 
   const switchMarker = (marker) => {
@@ -79,7 +81,7 @@ const QuestMapMarker = (props) => {
       bearing={location.bearing}
       pitch={location.pitch}
       zoom={location.zoom}
-      onClick={onMarkerClick}
+      onClick={() => onMarkerClick(location)}
       {...props}
     >
       <Avatar className={classes.darkGrey}>

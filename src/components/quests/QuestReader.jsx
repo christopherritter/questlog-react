@@ -614,8 +614,6 @@ function QuestReader(props) {
                     <QuestLegend
                       width={sidebarWidth}
                       toggleLegend={toggleLegend}
-                      selectLegendItem={selectLegendItem}
-                      viewLocation={handleViewLocation}
                       selectLocation={selectLocation}
                     />
                   </Box>
@@ -690,6 +688,7 @@ function QuestReader(props) {
                     <QuestMapMarker
                       location={el}
                       key={index}
+                      selectLocation={selectLocation}
                       viewLocation={handleViewLocation}
                     ></QuestMapMarker>
                   ))}
