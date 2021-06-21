@@ -70,7 +70,10 @@ const App = () => {
   let match = useRouteMatch("/quest/");
 
   useEffect(() => {
-    ReactGA.initialize('G-TSREEGQX9Z');
+    ReactGA.initialize(process.env.REACT_APP_MEASUREMENT_ID, {
+      debug: true,
+      titleCase: false,
+    });
     ReactGA.pageview(window.location.pathname);
   }, []);
 
