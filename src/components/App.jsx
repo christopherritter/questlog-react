@@ -66,16 +66,21 @@ const App = () => {
   const history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  // const hist = createHistory(); hist.listen((location, action) => { ReactGA.set({ page: location.pathname });
+
+  ReactGA.pageview(window.location.pathname);
 
   let match = useRouteMatch("/quest/");
 
-  useEffect(() => {
-    ReactGA.initialize(process.env.REACT_APP_MEASUREMENT_ID, {
-      debug: true,
-      titleCase: false,
-    });
-    ReactGA.pageview(window.location.pathname);
-  }, []);
+  // useEffect(() => {
+  //   console.log("initialize react GA")
+  //   console.log(window.location.pathname)
+  //   ReactGA.initialize(process.env.REACT_APP_MEASUREMENT_ID, {
+  //     debug: true,
+  //     titleCase: false,
+  //   });
+  //   ReactGA.pageview(window.location.pathname);
+  // }, []);
 
   useEffect(() => {
     if (!match) {
