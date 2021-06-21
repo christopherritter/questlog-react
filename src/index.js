@@ -8,6 +8,7 @@ import ReactGA from "react-ga";
 ReactGA.initialize(process.env.REACT_APP_MEASUREMENT_ID, {
   debug: true,
   titleCase: false,
+  sampleRate: 5,
 });
 
 // ReactGA.pageview(window.location.pathname + window.location.search);
