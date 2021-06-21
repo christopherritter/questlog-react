@@ -71,6 +71,7 @@ const App = () => {
 
   useEffect(() => {
     ReactGA.initialize('G-TSREEGQX9Z');
+    ReactGA.pageview(window.location.pathname);
   }, []);
 
   useEffect(() => {
