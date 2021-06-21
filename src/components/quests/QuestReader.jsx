@@ -198,7 +198,7 @@ function QuestReader(props) {
 
   useEffect(() => {
     const bottomOffset = size.y - 64 - actionBarHeight - mapHeight;
-    
+
     var padding = {
       // bottom: 50,
     };
@@ -287,10 +287,11 @@ function QuestReader(props) {
   };
 
   function handleBeginQuest() {
-    // const sortedLocations = quest.locations.sort((a, b) =>
-    //   a.order > b.order ? 1 : -1
-    // );
-    // selectLocation(sortedLocations[0].id);
+    const currentLocations = [...quest.locations];
+    const sortedLocations = currentLocations.sort((a, b) =>
+      a.order > b.order ? 1 : -1
+    );
+    selectLocation(sortedLocations[0].id);
     setOpen(false);
   }
 
@@ -482,8 +483,8 @@ function QuestReader(props) {
 
   function handleViewLocation(selectedLocation) {
     // setDialogType(null);
-    console.log('select location')
-    console.log(selectedLocation.name + ", " + selectedLocation.id)
+    console.log("select location");
+    console.log(selectedLocation.name + ", " + selectedLocation.id);
     selectLocation(selectedLocation.id);
     // setCurrentLocation((current) => ({ ...current, ...selectedLocation }));
   }
@@ -522,7 +523,7 @@ function QuestReader(props) {
 
   const handleUpdateDialogType = (type) => {
     setDialogType(type);
-  }
+  };
 
   useEffect(() => {
     var questComplete = true;
@@ -729,17 +730,29 @@ function QuestReader(props) {
             <BottomNavigationAction
               label="Legend"
               value="map"
-              icon={<MapIcon fontSize="inherit" className={classes.actionBarIcon} />}
+              icon={
+                <MapIcon fontSize="inherit" className={classes.actionBarIcon} />
+              }
             />
             <BottomNavigationAction
               label="Journal"
               value="notebook"
-              icon={<NotebookIcon fontSize="inherit" className={classes.actionBarIcon} />}
+              icon={
+                <NotebookIcon
+                  fontSize="inherit"
+                  className={classes.actionBarIcon}
+                />
+              }
             />
             <BottomNavigationAction
               label="Backpack"
               value="backpack"
-              icon={<BackpackIcon fontSize="inherit" className={classes.actionBarIcon} />}
+              icon={
+                <BackpackIcon
+                  fontSize="inherit"
+                  className={classes.actionBarIcon}
+                />
+              }
             />
           </BottomNavigation>
         </Grid>
