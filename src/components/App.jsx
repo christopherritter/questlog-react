@@ -72,15 +72,9 @@ const App = () => {
 
   let match = useRouteMatch("/quest/");
 
-  // useEffect(() => {
-  //   console.log("initialize react GA")
-  //   console.log(window.location.pathname)
-  //   ReactGA.initialize(process.env.REACT_APP_MEASUREMENT_ID, {
-  //     debug: true,
-  //     titleCase: false,
-  //   });
-  //   ReactGA.pageview(window.location.pathname);
-  // }, []);
+  useEffect(() => {
+    ReactGA.pageview(history.location.pathname);
+  }, [history.location.pathname]);
 
   useEffect(() => {
     if (!match) {
