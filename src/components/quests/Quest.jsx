@@ -14,10 +14,12 @@ function renderView({ role, currentUser, authorId }) {
   } else if (role === "read") {
     return <QuestReader />;
   } else if (role === "edit") {
-    if (!currentUser || currentUser.uid !== authorId) {
-      return <Redirect to="/login" />;
-    } else {
-      return <QuestEditor />;
+    if (currentUser && authorId) {
+      if (currentUser.uid !== authorId) {
+        return <Redirect to="/login" />;
+      } else {
+        return <QuestEditor />;
+      }
     }
   } else {
     return <QuestViewer />;

@@ -10,7 +10,7 @@ const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === "development"
 ReactGA.initialize(process.env.REACT_APP_MEASUREMENT_ID, {
   useExistingGa: true,
   siteSpeedSampleRate: 100,
-  debug: isDev,
+  debug: false,
 });
 ReactGA.ga("create", process.env.REACT_APP_MEASUREMENT_ID, 'auto', { cookieFlags: "SameSite=None; Secure" });
 
