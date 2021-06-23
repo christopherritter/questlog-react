@@ -21,9 +21,7 @@ import Quest from "./quests/Quest.jsx";
 import Home from "./Home.jsx";
 
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
-import { display } from "@material-ui/system";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Box from "@material-ui/core/Box";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -66,7 +64,6 @@ const App = () => {
   const history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  // const hist = createHistory(); hist.listen((location, action) => { ReactGA.set({ page: location.pathname });
 
   ReactGA.pageview(window.location.pathname);
 
@@ -127,8 +124,6 @@ const App = () => {
     setQuestId(null);
     setQuestTitle(null);
   }
-  
-  
 
   return (
     <ThemeProvider theme={theme}>
