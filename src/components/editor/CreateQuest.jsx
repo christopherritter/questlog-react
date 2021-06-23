@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
   headerButtons: {
     marginRight: "1em",
   },
+  actionButton: {
+    marginTop: "1em"
+  }
 }));
 
 const CreateQuest = (props) => {
@@ -103,7 +106,7 @@ const CreateQuest = (props) => {
       <Container>
         <Grid container spacing={2}>
           <Grid item sm={12}>
-            <Typography variant="h4">Create Quest</Typography>
+            <Typography variant="h4" className={classes.headerTitle}>Create Quest</Typography>
           </Grid>
           <Grid item sm={12}>
             <form noValidate>
@@ -143,7 +146,7 @@ const CreateQuest = (props) => {
                 value={quest.description}
                 onChange={handleInputChange}
               />
-              <Button color="primary" type="submit" onClick={saveQuest}>
+              <Button color="primary" className={classes.actionButton} variant="contained" type="submit" onClick={saveQuest}>
                 Submit
               </Button>
             </form>
