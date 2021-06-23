@@ -68,7 +68,8 @@ const App = () => {
   let match = useRouteMatch("/quest/");
 
   useEffect(() => {
-    ReactGA.pageview(history.location.pathname);
+    ReactGA.set({ page: history.location.pathname })
+    ReactGA.pageview(history.location.pathname)
   }, [history.location.pathname]);
 
   useEffect(() => {
