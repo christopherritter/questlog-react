@@ -65,8 +65,6 @@ const App = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
-  ReactGA.pageview(window.location.pathname);
-
   let match = useRouteMatch("/quest/");
 
   useEffect(() => {
