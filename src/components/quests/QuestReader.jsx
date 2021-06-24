@@ -286,7 +286,7 @@ function QuestReader(props) {
         }
       }
     }
-  }, [location, currentLocation, isMediumAndUp, showLocationSidebar, size.y]);
+  }, [location]);
 
   const mapRef = useRef();
 

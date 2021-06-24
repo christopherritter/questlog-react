@@ -204,7 +204,7 @@ function QuestPlayer(props) {
       x: window.innerWidth,
       y: window.innerHeight,
     });
-    
+
   useEffect(() => (window.onresize = updateSize), []);
 
   const bottomOffset = size.y - 64 - actionBarHeight - mapHeight;
@@ -287,7 +287,7 @@ function QuestPlayer(props) {
         }
       }
     }
-  }, [location, currentLocation, isMediumAndUp, showLocationSidebar, size.y]);
+  }, [location]);
 
   const mapRef = useRef();
 

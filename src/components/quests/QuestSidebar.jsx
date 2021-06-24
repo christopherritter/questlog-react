@@ -71,7 +71,7 @@ const QuestActions = ({
   );
   var localActions = [];
 
-  const filteredEntries = localEntries.forEach((entry) => {
+  const filteredEntries = localEntries.filter((entry) => {
     if (entry.requirements && entry.requirements.length > 0) {
       let required = true;
 
@@ -99,7 +99,7 @@ const QuestActions = ({
     entry.actions.map((action) => localActions.push(action));
   });
 
-  const filteredActions = localActions.forEach((action) => {
+  const filteredActions = localActions.filter((action) => {
     const actionIndex = findWithAttr(quest.actions, "id", action);
     const selectedAction = quest.actions[actionIndex];
 
@@ -123,19 +123,17 @@ const QuestActions = ({
     const actionIndex = findWithAttr(quest.actions, "id", event.target.id);
     const action = quest.actions[actionIndex];
 
-    if (action.type) {
-      switch (action.type) {
-        case "look":
-          return viewQuestItem(action.targetId);
-        case "move":
-          return selectLocation(action.targetId);
-        case "take":
-          return takeQuestItem(action);
-        case "operate":
-          return operateQuestItem(action);
-        default:
-          return;
-      }
+    switch (action.type) {
+      case "look":
+        return viewQuestItem(action.targetId);
+      case "move":
+        return selectLocation(action.targetId);
+      case "take":
+        return takeQuestItem(action);
+      case "operate":
+        return operateQuestItem(action);
+      default:
+        return;
     }
   }
 
@@ -186,7 +184,7 @@ const QuestSidebar = (props) => {
     (entry) => entry.locationId === location.id
   );
 
-  const filteredEntries = localEntries.forEach((entry) => {
+  const filteredEntries = localEntries.filter((entry) => {
     if (entry.requirements && entry.requirements.length > 0) {
       for (let i = 0; i < entry.requirements.length; i++) {
         const objectiveIndex = findWithAttr(
