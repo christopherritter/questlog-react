@@ -27,7 +27,8 @@ function renderView({ role, currentUser, authorId }) {
 }
 
 const Quest = (props) => {
-  const role = props.match.params.role;
+  const { setQuestId, setQuestTitle } = props;
+  const { role, questId } = props.match.params;
   const { currentUser } = useAuth();
 
   // Quest
@@ -52,18 +53,18 @@ const Quest = (props) => {
 
   useEffect(() => {
     const unsubscribe = QuestDataService.getAll()
-      .where("questId", "==", props.match.params.questId)
+      .where("questId", "==", questId)
       .onSnapshot((snapshot) => {
         snapshot.docs.map((doc) => {
           var q = doc.data();
-          props.setQuestId(q.questId);
-          props.setQuestTitle({ title: q.title, id: q.questId });
+          setQuestId(q.questId);
+          setQuestTitle({ title: q.title, id: q.questId });
           return setQuest(q);
         });
       });
 
     return unsubscribe;
-  }, [props.match.params.questId]);
+  }, [questId, setQuestId, setQuestTitle]);
 
   function handleUpdateDetails(event) {
     const { name, value } = event.target;
