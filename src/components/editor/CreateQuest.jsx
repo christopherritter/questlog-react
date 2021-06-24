@@ -21,11 +21,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "1.5em",
   },
   headerText: {
-    marginBottom: "1.5em",
+    marginTop: "1.5em",
     marginBottom: "2em",
   },
   headerButtonBar: {
-    marginBottom: "1em",
+    marginTop: "1em",
     marginBottom: "4em",
   },
   headerButtons: {
@@ -76,7 +76,7 @@ const CreateQuest = (props) => {
       });
 
     return unsubscribe;
-  }, [currentUser]);
+  }, [currentUser, quest]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;

@@ -285,21 +285,20 @@ const QuestBeginDialog = (props) => {
 
 function toggleView(props) {
   const {
-    quest,
     dialogType,
   } = props;
 
-  var questComplete = true;
+  // var questComplete = true;
   // updateDialogType(null);
 
-  if (quest.objectives) {
-    quest.objectives
-      .filter((objective) => objective.isPrimary === true)
-      .forEach((objective) => {
-        if (objective.isPrimary === true && objective.isComplete === false)
-          questComplete = false;
-      });
-  }
+  // if (quest.objectives) {
+  //   quest.objectives
+  //     .filter((objective) => objective.isPrimary === true)
+  //     .forEach((objective) => {
+  //       if (objective.isPrimary === true && objective.isComplete === false)
+  //         questComplete = false;
+  //     });
+  // }
 
   switch (dialogType) {
     case "item":

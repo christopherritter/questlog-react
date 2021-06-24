@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
-import MapGL, { Source, Layer } from "@urbica/react-map-gl";
+import MapGL from "@urbica/react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
@@ -55,52 +55,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const layerStyle = {
-  id: "point",
-  type: "circle",
-  paint: {
-    "circle-radius": 10,
-    "circle-color": "#007cbf",
-  },
-};
-
 function QuestLocations() {
   const classes = useStyles();
   const {
     quest,
     addLocation,
-    setLocationIndex,
     findWithAttr,
     updateLocation,
-    locationIndex,
     clearLocation,
     removeLocation,
     publishQuest,
     markerTypes,
   } = useContext(QuestContext);
-  const geojson = {
-    type: "FeatureCollection",
-    features: quest.locations
-      ? quest.locations.map((location) => {
-          var feature = {
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: [location.longitude, location.latitude],
-            },
-            properties: {
-              id: location.id,
-              name: location.name,
-              bearing: location.bearing,
-              pitch: location.pitch,
-              zoom: location.zoom,
-              marker: location.marker,
-            },
-          };
-          return feature;
-        })
-      : [],
-  };
+
   var id = 0, idList = [0];
 
   if (quest.locations && quest.locations.length > 0) {
@@ -246,17 +213,12 @@ function QuestLocations() {
   // const [viewport, setViewport] = useState(quest.region);
 
   const handleMapClick = (event) => {
-    console.log("handle map click")
     const { lngLat } = event;
     const updatedLocation = {
       ...locationRef.current,
       latitude: lngLat.lat,
       longitude: lngLat.lng,
     };
-    // clearLocation();
-    // setLocation(initialLocationState);
-    // updateSelectedIndex(-1);
-    console.log(selectedIndex)
     if (selectedIndex === -1 ) {
       setLocation(updatedLocation);
     }
@@ -312,12 +274,6 @@ function QuestLocations() {
             accessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
             onClick={handleMapClick}
           >
-            {/* <Source id="locationsData" type="geojson" data={geojson} />
-            <Layer
-              source="locationsData"
-              onClick={onMapPointClick}
-              {...layerStyle}
-            /> */}
             {quest.locations.map((el, index) => (
               <QuestMapMarker
                 location={el}
@@ -331,14 +287,12 @@ function QuestLocations() {
   };
 
   const handleListItemClick = (location, index) => {
-    console.log("handle list item click")
     const selectedLocation = { ...location };
     updateSelectedIndex(index);
     setLocation(selectedLocation);
   };
 
   function handleSelectMarker(event) {
-    console.log("handle select marker")
     const { name, value } = event.target;
     setLocation({ ...location, [name]: value });
   }

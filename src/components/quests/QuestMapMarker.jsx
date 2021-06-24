@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from "react";
+import React, { useRef} from "react";
 import { Marker } from "@urbica/react-map-gl";
 
 // import QuestContext from "../../contexts/QuestContext.jsx";

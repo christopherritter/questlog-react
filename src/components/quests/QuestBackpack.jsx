@@ -2,8 +2,6 @@ import React, { useContext } from "react";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
 
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { useTheme } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -34,10 +32,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const QuestBackpack = (props) => {
-  const theme = useTheme();
+  // const theme = useTheme();
   const classes = useStyles(props);
   const { quest, location } = useContext(QuestContext);
-  const isMediumAndUp = useMediaQuery(theme.breakpoints.up("md"));
 
   return (
     <Card className={`${classes.sidebarContent}`} elevation={5}>

@@ -51,7 +51,6 @@ const QuestEntries = () => {
   const classes = useStyles();
   const {
     quest,
-    entryIndex,
     addEntry,
     updateEntry,
     clearEntry,
@@ -421,12 +420,13 @@ const QuestEntries = () => {
                             .filter((entry) => {
                               return entry.locationId === location.id;
                             })
-                            .map((entry, index) => (
+                            .map((entry) => (
                               <ListItem
+                                ref={entryRef}
                                 button
                                 key={entry.id}
                                 selected={selectedIndex === entry.id}
-                                onClick={(event) =>
+                                onClick={() =>
                                   handleListItemClick(entry, entry.id)
                                 }
                               >

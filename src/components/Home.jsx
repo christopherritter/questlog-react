@@ -10,8 +10,6 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 
-import CompassOutlineIcon from "mdi-material-ui/CompassOutline";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -97,7 +95,7 @@ const Home = () => {
             quests.docs
               .filter((quest) => quest.data().isFeatured === true)
               .map((quest, index) => (
-                <Grid item key={index} xs={12} sm={6} md={4} key={index}>
+                <Grid item key={index} xs={12} sm={6} md={4}>
                   <QuestCard quest={quest} />
                 </Grid>
               ))}

@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import PropTypes from "prop-types";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
 
@@ -35,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 const QuestJournal = (props) => {
   const classes = useStyles(props);
-  const { quest, location, updateCenter, selectLocation, locationIndex } =
+  const { quest, location } =
     useContext(QuestContext);
 
   return (

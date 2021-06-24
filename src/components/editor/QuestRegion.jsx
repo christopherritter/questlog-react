@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
-import MapGL, { Source, Layer } from "@urbica/react-map-gl";
+import MapGL from "@urbica/react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import { makeStyles } from "@material-ui/core/styles";

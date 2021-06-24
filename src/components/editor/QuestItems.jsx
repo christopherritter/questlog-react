@@ -51,7 +51,6 @@ const QuestItems = () => {
   const classes = useStyles();
   const {
     quest,
-    itemIndex,
     addItem,
     updateItem,
     clearItem,
@@ -421,12 +420,13 @@ const QuestItems = () => {
                             .filter((item) => {
                               return item.locationId === location.id;
                             })
-                            .map((item, index) => (
+                            .map((item) => (
                               <ListItem
+                                ref={itemRef}
                                 button
                                 key={item.id}
                                 selected={selectedIndex === item.id}
-                                onClick={(event) =>
+                                onClick={() =>
                                   handleListItemClick(item, item.id)
                                 }
                               >

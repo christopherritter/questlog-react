@@ -182,19 +182,29 @@ function QuestReader(props) {
     setQuest,
     updateCenter,
     selectLocation,
-    clearItem,
     viewQuestItem,
     operateQuestItem,
   } = useContext(QuestContext);
   const isMediumAndUp = useMediaQuery(theme.breakpoints.up("md"));
 
-  const [isLoaded, setLoaded] = useState(false);
   const [showLocationSidebar, setShowLocationSidebar] = useState(false);
   const [showLegend, setShowLegend] = useState(false);
   const [showJournal, setShowJournal] = useState(false);
   const [showBackpack, setShowBackpack] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
   const [currentLocation, setCurrentLocation] = useState();
+
+  const [size, setSize] = useState({
+    x: window.innerWidth,
+    y: window.innerHeight,
+  });
+  const updateSize = () =>
+    setSize({
+      x: window.innerWidth,
+      y: window.innerHeight,
+    });
+  useEffect(() => (window.onresize = updateSize), []);
+
+  const bottomOffset = size.y - 64 - actionBarHeight - mapHeight;
 
   useEffect(() => {
     const bottomOffset = size.y - 64 - actionBarHeight - mapHeight;
@@ -276,13 +286,12 @@ function QuestReader(props) {
         }
       }
     }
-  }, [location]);
+  }, [location, currentLocation, isMediumAndUp, showLocationSidebar, size.y]);
 
   const mapRef = useRef();
 
   const onLoad = () => {
     handleUpdateDialogType("begin");
-    setLoaded(true);
     setOpen(true);
   };
 
@@ -325,78 +334,6 @@ function QuestReader(props) {
         padding: padding,
         duration: 1000,
       });
-    }
-  }
-
-  function selectLegendItem(item) {
-    const formattedLocation = {
-      features: [
-        {
-          properties: {
-            id: item.id,
-          },
-        },
-      ],
-    };
-    var padding = {
-      // bottom: 50,
-    };
-
-    selectLocation(formattedLocation);
-
-    if (item.id !== location.id) {
-      if (isMediumAndUp) {
-        padding["left"] = 300;
-      } else {
-        padding["bottom"] = bottomOffset;
-      }
-
-      setShowLocationSidebar(true);
-
-      mapRef.current.easeTo({
-        center: [item.longitude, item.latitude],
-        bearing: item.bearing,
-        pitch: item.pitch,
-        zoom: item.zoom,
-        padding: padding,
-        duration: 1000,
-      });
-    } else {
-      if (showLocationSidebar) {
-        if (isMediumAndUp) {
-          padding["left"] = 0;
-        } else {
-          padding["bottom"] = 0;
-        }
-
-        setShowLocationSidebar(false);
-
-        mapRef.current.easeTo({
-          center: [item.longitude, item.latitude],
-          bearing: item.bearing,
-          pitch: item.pitch,
-          zoom: item.zoom,
-          padding: padding,
-          duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
-        });
-      } else {
-        if (isMediumAndUp) {
-          padding["left"] = 300;
-        } else {
-          padding["bottom"] = bottomOffset;
-        }
-
-        setShowLocationSidebar(true);
-
-        mapRef.current.easeTo({
-          center: [item.longitude, item.latitude],
-          padding: padding,
-          bearing: item.bearing,
-          pitch: item.pitch,
-          zoom: item.zoom,
-          duration: 1000,
-        });
-      }
     }
   }
 
@@ -543,19 +480,6 @@ function QuestReader(props) {
       setOpen(false);
     }
   }, [quest.objectives]);
-
-  const [size, setSize] = useState({
-    x: window.innerWidth,
-    y: window.innerHeight,
-  });
-  const updateSize = () =>
-    setSize({
-      x: window.innerWidth,
-      y: window.innerHeight,
-    });
-  useEffect(() => (window.onresize = updateSize), []);
-
-  const bottomOffset = size.y - 64 - actionBarHeight - mapHeight;
 
   return (
     <React.Fragment>

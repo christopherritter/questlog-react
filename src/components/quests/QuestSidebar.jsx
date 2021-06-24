@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
 
-import { useTheme } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -72,7 +71,7 @@ const QuestActions = ({
   );
   var localActions = [];
 
-  const filteredEntries = localEntries.filter((entry) => {
+  const filteredEntries = localEntries.forEach((entry) => {
     if (entry.requirements && entry.requirements.length > 0) {
       let required = true;
 
@@ -100,7 +99,7 @@ const QuestActions = ({
     entry.actions.map((action) => localActions.push(action));
   });
 
-  const filteredActions = localActions.filter((action) => {
+  const filteredActions = localActions.forEach((action) => {
     const actionIndex = findWithAttr(quest.actions, "id", action);
     const selectedAction = quest.actions[actionIndex];
 
@@ -172,7 +171,6 @@ const QuestActions = ({
 };
 
 const QuestSidebar = (props) => {
-  const theme = useTheme();
   const classes = useStyles(props);
   const {
     quest,
@@ -188,7 +186,7 @@ const QuestSidebar = (props) => {
     (entry) => entry.locationId === location.id
   );
 
-  const filteredEntries = localEntries.filter((entry) => {
+  const filteredEntries = localEntries.forEach((entry) => {
     if (entry.requirements && entry.requirements.length > 0) {
       for (let i = 0; i < entry.requirements.length; i++) {
         const objectiveIndex = findWithAttr(

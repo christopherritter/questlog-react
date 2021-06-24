@@ -182,7 +182,6 @@ function QuestPlayer(props) {
     setQuest,
     updateCenter,
     selectLocation,
-    clearItem,
     viewQuestItem,
     operateQuestItem,
   } = useContext(QuestContext);
@@ -193,8 +192,22 @@ function QuestPlayer(props) {
   const [showLegend, setShowLegend] = useState(false);
   const [showJournal, setShowJournal] = useState(false);
   const [showBackpack, setShowBackpack] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
   const [currentLocation, setCurrentLocation] = useState();
+
+  const [size, setSize] = useState({
+    x: window.innerWidth,
+    y: window.innerHeight,
+  });
+
+  const updateSize = () =>
+    setSize({
+      x: window.innerWidth,
+      y: window.innerHeight,
+    });
+    
+  useEffect(() => (window.onresize = updateSize), []);
+
+  const bottomOffset = size.y - 64 - actionBarHeight - mapHeight;
 
   useEffect(() => {
     const bottomOffset = size.y - 64 - actionBarHeight - mapHeight;
@@ -274,7 +287,7 @@ function QuestPlayer(props) {
         }
       }
     }
-  }, [location]);
+  }, [location, currentLocation, isMediumAndUp, showLocationSidebar, size.y]);
 
   const mapRef = useRef();
 
@@ -544,19 +557,6 @@ function QuestPlayer(props) {
       setOpen(false);
     }
   }, [quest.objectives]);
-
-  const [size, setSize] = useState({
-    x: window.innerWidth,
-    y: window.innerHeight,
-  });
-  const updateSize = () =>
-    setSize({
-      x: window.innerWidth,
-      y: window.innerHeight,
-    });
-  useEffect(() => (window.onresize = updateSize), []);
-
-  const bottomOffset = size.y - 64 - actionBarHeight - mapHeight;
 
   return (
     <React.Fragment>

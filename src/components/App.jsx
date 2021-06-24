@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Link as RouterLink,
   Switch,
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
 
 const App = () => {
   const classes = useStyles();
-  const [loggedIn, setLoggedIn] = useState(false);
+  // const [loggedIn, setLoggedIn] = useState(false);
   const { currentUser, logout } = useAuth();
   const history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -78,15 +78,15 @@ const App = () => {
     }
   }, [match]);
   
-  useEffect(() => {
-    if (currentUser) {
-      setLoggedIn(true);
-    } else {
-      return function cleanup() {
-        setLoggedIn(false);
-      };
-    }
-  }, [currentUser]);
+  // useEffect(() => {
+  //   if (currentUser) {
+  //     setLoggedIn(true);
+  //   } else {
+  //     return function cleanup() {
+  //       setLoggedIn(false);
+  //     };
+  //   }
+  // }, [currentUser]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
