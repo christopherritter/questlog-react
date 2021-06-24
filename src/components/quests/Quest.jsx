@@ -58,7 +58,7 @@ const Quest = (props) => {
           var q = doc.data();
           props.setQuestId(q.questId);
           props.setQuestTitle({ title: q.title, id: q.questId });
-          setQuest(q);
+          return setQuest(q);
         });
       });
 
@@ -136,7 +136,7 @@ const Quest = (props) => {
     isStartingPoint: false,
   };
 
-  const [locationIndex, setLocationIndex] = useState(-1);
+  // const [locationIndex, setLocationIndex] = useState(-1);
 
   const [location, setLocation] = useState(initialLocationState);
 
@@ -172,12 +172,12 @@ const Quest = (props) => {
 
           updatedObjectives[objectiveIndex] = updatedObjective;
 
-          setQuest({ ...quest, objectives: updatedObjectives });
+          return setQuest({ ...quest, objectives: updatedObjectives });
         });
       }
     });
 
-    setLocationIndex(index);
+    // setLocationIndex(index);
     setLocation((prevLocation) => ({ ...prevLocation, ...selectedLocation }));
   }
 
@@ -217,12 +217,12 @@ const Quest = (props) => {
       (loc) => loc.id !== location.id
     );
     setQuest({ ...quest, locations: updatedLocations });
-    setLocationIndex(-1);
+    // setLocationIndex(-1);
     setLocation(null);
   }
 
   function handleClearLocation() {
-    setLocationIndex(-1);
+    // setLocationIndex(-1);
     setLocation(null);
   }
 
@@ -230,7 +230,7 @@ const Quest = (props) => {
   // Short text entries that are displayed at a location
   // Usually provide readers with a set of actions to choose from
 
-  const [entryIndex, setEntryIndex] = useState(-1);
+  // const [entryIndex, setEntryIndex] = useState(-1);
 
   const [entry, setEntry] = useState();
 
@@ -258,12 +258,12 @@ const Quest = (props) => {
   function handleRemoveEntry(entry) {
     const updatedEntries = quest.entries.filter((ent) => ent.id !== entry.id);
     setQuest({ ...quest, entries: updatedEntries });
-    setEntryIndex(-1);
+    // setEntryIndex(-1);
     setEntry(null);
   }
 
   function handleClearEntry() {
-    setEntryIndex(-1);
+    // setEntryIndex(-1);
     setEntry(null);
   }
 
@@ -369,7 +369,7 @@ const Quest = (props) => {
   // Actions may be taken by the user to move the story
   // They are associated with Entries and Items
 
-  const [actionIndex, setActionIndex] = useState(-1);
+  // const [actionIndex, setActionIndex] = useState(-1);
 
   const [action, setAction] = useState();
 
@@ -400,12 +400,12 @@ const Quest = (props) => {
     quest.actions.map((a) => console.log(a));
     const updatedActions = quest.actions.filter((a) => a.id !== action.id);
     setQuest({ ...quest, actions: updatedActions });
-    setActionIndex(-1);
+    // setActionIndex(-1);
     setAction(null);
   }
 
   function handleClearAction() {
-    setActionIndex(-1);
+    // setActionIndex(-1);
     setAction(null);
   }
 
@@ -498,7 +498,7 @@ const Quest = (props) => {
         action,
         setQuest,
         setLocation,
-        setLocationIndex,
+        // setLocationIndex,
         addLocation: handleAddLocation,
         selectLocation: handleSelectLocation,
         updateLocation: handleUpdateLocation,
