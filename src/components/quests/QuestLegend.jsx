@@ -33,10 +33,11 @@ const useStyles = makeStyles((theme) => ({
 
 const QuestLegend = (props) => {
   const classes = useStyles(props);
-  const { quest, location, selectLocation } = useContext(QuestContext);
+  const { viewLocation } = props;
+  const { quest, location } = useContext(QuestContext);
 
   function onListItemClick(loc) {
-    selectLocation(loc.id)
+    viewLocation(loc)
   };
 
   return (

@@ -137,20 +137,10 @@ const Quest = (props) => {
     isStartingPoint: false,
   };
 
-  // const [locationIndex, setLocationIndex] = useState(-1);
-
   const [location, setLocation] = useState(initialLocationState);
 
-  function handleSelectLocation(event) {
-    var index;
-
-    if (event.features) {
-      const { id } = event.features[0].properties;
-      index = findWithAttr(quest.locations, "id", id);
-    } else {
-      index = findWithAttr(quest.locations, "id", event);
-    }
-
+  function handleSelectLocation(id) {
+    const index = findWithAttr(quest.locations, "id", id);
     const selectedLocation = quest.locations[index];
 
     const filteredEntries = quest.entries.filter(
@@ -178,8 +168,7 @@ const Quest = (props) => {
       }
     });
 
-    // setLocationIndex(index);
-    setLocation((prevLocation) => ({ ...prevLocation, ...selectedLocation }));
+    setLocation(() => { return selectedLocation });
   }
 
   function handleAddLocation(location) {
@@ -488,6 +477,18 @@ const Quest = (props) => {
       value: "operate",
     },
   ];
+
+  // const [state, setState] = useState({page: {}})
+  // const setPageContext = useCallback(
+  //   newState => {
+  //     setState({page: {...state.page, ...newState}})
+  //   },
+  //   [state, setState],
+  // )
+  // const getContextValue = useCallback(
+  //   () => ({setPageContext, ...state}),
+  //   [state, updateState],
+  // )
 
   return (
     <QuestContext.Provider

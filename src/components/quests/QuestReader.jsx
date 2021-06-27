@@ -191,7 +191,8 @@ function QuestReader(props) {
   const [showLegend, setShowLegend] = useState(false);
   const [showJournal, setShowJournal] = useState(false);
   const [showBackpack, setShowBackpack] = useState(false);
-  const [currentLocation, setCurrentLocation] = useState();
+
+  const [currentLocation, setCurrentLocation] = useState(null);
 
   const [size, setSize] = useState({
     x: window.innerWidth,
@@ -207,29 +208,15 @@ function QuestReader(props) {
   const bottomOffset = size.y - 64 - actionBarHeight - mapHeight;
 
   useEffect(() => {
-    const bottomOffset = size.y - 64 - actionBarHeight - mapHeight;
+    var padding = {};
 
-    var padding = {
-      // bottom: 50,
-    };
-
-    if (location) {
-      setCurrentLocation(location);
-    }
-
-    if (currentLocation) {
-      if (!isMediumAndUp) {
-        setShowLegend(false);
-      }
-
-      if (location.id !== currentLocation.id) {
+    if (location && location.id) {
+      if (showLocationSidebar || (!isMediumAndUp && showLegend)) {
         if (isMediumAndUp) {
           padding["left"] = 300;
         } else {
           padding["bottom"] = bottomOffset;
         }
-
-        setShowLocationSidebar(true);
 
         mapRef.current.easeTo({
           center: {
@@ -243,50 +230,26 @@ function QuestReader(props) {
           duration: 1000,
         });
       } else {
-        if (showLocationSidebar === true) {
-          if (isMediumAndUp) {
-            padding["left"] = 0;
-          } else {
-            padding["bottom"] = 0;
-          }
-
-          setShowLocationSidebar(false);
-
-          mapRef.current.easeTo({
-            center: {
-              lat: location.latitude,
-              lng: location.longitude,
-            },
-            bearing: location.bearing,
-            pitch: location.pitch,
-            zoom: location.zoom,
-            padding: padding,
-            duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
-          });
+        if (isMediumAndUp) {
+          padding["left"] = 0;
         } else {
-          if (isMediumAndUp) {
-            padding["left"] = 300;
-          } else {
-            padding["bottom"] = bottomOffset;
-          }
-
-          setShowLocationSidebar(true);
-
-          mapRef.current.easeTo({
-            center: {
-              lat: location.latitude,
-              lng: location.longitude,
-            },
-            padding: padding,
-            bearing: location.bearing,
-            pitch: location.pitch,
-            zoom: location.zoom,
-            duration: 1000,
-          });
+          padding["bottom"] = 0;
         }
+
+        mapRef.current.easeTo({
+          center: {
+            lat: location.latitude,
+            lng: location.longitude,
+          },
+          bearing: location.bearing,
+          pitch: location.pitch,
+          zoom: location.zoom,
+          padding: padding,
+          duration: 1000,
+        });
       }
     }
-  }, [location]);
+  }, [location, showLocationSidebar, showLegend, isMediumAndUp, bottomOffset]);
 
   const mapRef = useRef();
 
@@ -305,10 +268,8 @@ function QuestReader(props) {
   }
 
   function toggleLegend() {
-    var padding = {
-      // bottom: 50,
-    };
-    if (showLegend === true) {
+    var padding = {};
+    if (showLegend) {
       if (isMediumAndUp) {
         padding["right"] = 0;
       } else {
@@ -414,14 +375,83 @@ function QuestReader(props) {
     setOpen(true);
   }
 
-  function toggleSidebar() {
-    handleViewLocation(location);
+  function handleViewLocation(selectedLocation) {
+    var previousLocation = null;
+
+    setCurrentLocation((current) => {
+      previousLocation = { ...current };
+      return { ...selectedLocation };
+    });
+
+    if (previousLocation && selectedLocation) {
+      if (previousLocation.id === selectedLocation.id) {
+        toggleSidebar(selectedLocation);
+      } else {
+        setShowLocationSidebar(true);
+
+        if (!isMediumAndUp) {
+          setShowLegend(false);
+        }
+
+        selectLocation(selectedLocation.id);
+      }
+    } else {
+      console.log(currentLocation);
+    }
   }
 
-  function handleViewLocation(selectedLocation) {
-    // setDialogType(null);
-    selectLocation(selectedLocation.id);
-    // setCurrentLocation((current) => ({ ...current, ...selectedLocation }));
+  function toggleSidebar(location) {
+    var sidebarState = null;
+    var padding = {
+      // bottom: 50,
+    };
+
+    setShowLocationSidebar((current) => {
+      sidebarState = !current;
+      return sidebarState;
+    });
+
+    if (!isMediumAndUp) {
+      setShowLegend(false);
+    }
+
+    if (!sidebarState) {
+      if (isMediumAndUp) {
+        padding["left"] = 0;
+      } else {
+        padding["bottom"] = 0;
+      }
+
+      mapRef.current.easeTo({
+        center: {
+          lat: location.latitude,
+          lng: location.longitude,
+        },
+        bearing: location.bearing,
+        pitch: location.pitch,
+        zoom: location.zoom,
+        padding: padding,
+        duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
+      });
+    } else {
+      if (isMediumAndUp) {
+        padding["left"] = 300;
+      } else {
+        padding["bottom"] = bottomOffset;
+      }
+
+      mapRef.current.easeTo({
+        center: {
+          lat: location.latitude,
+          lng: location.longitude,
+        },
+        padding: padding,
+        bearing: location.bearing,
+        pitch: location.pitch,
+        zoom: location.zoom,
+        duration: 1000,
+      });
+    }
   }
 
   const [open, setOpen] = React.useState(false);
@@ -537,7 +567,7 @@ function QuestReader(props) {
                     <QuestLegend
                       width={sidebarWidth}
                       toggleLegend={toggleLegend}
-                      selectLocation={selectLocation}
+                      viewLocation={handleViewLocation}
                     />
                   </Box>
                   <Box
@@ -611,7 +641,6 @@ function QuestReader(props) {
                     <QuestMapMarker
                       location={el}
                       key={index}
-                      selectLocation={selectLocation}
                       viewLocation={handleViewLocation}
                     ></QuestMapMarker>
                   ))}

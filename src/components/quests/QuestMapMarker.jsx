@@ -36,12 +36,11 @@ const useStyles = makeStyles((theme) => ({
 
 const QuestMapMarker = (props) => {
   const classes = useStyles(props);
-  const { location, selectLocation } = props;
-  // const { location, selectLocation } = useContext(QuestContext);
+  const { location, viewLocation } = props;
   const markerRef = useRef();
 
   const onMarkerClick = () => {
-    selectLocation(location.id)
+    viewLocation(location)
   };
 
   const switchMarker = (marker) => {

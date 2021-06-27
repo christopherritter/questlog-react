@@ -71,7 +71,9 @@ const QuestActions = ({
   );
   var localActions = [];
 
-  const filteredEntries = localEntries.filter((entry) => {
+  const filteredEntries = [];
+
+  localEntries.forEach((entry) => {
     if (entry.requirements && entry.requirements.length > 0) {
       let required = true;
 
@@ -80,7 +82,7 @@ const QuestActions = ({
         return (required = quest.objectives[i].isComplete);
       });
 
-      if (required) return entry;
+      if (required) filteredEntries.push(entry);
     } else if (entry.expirations && entry.expirations.length > 0) {
       let expired = true;
 
@@ -89,9 +91,9 @@ const QuestActions = ({
         return (expired = quest.objectives[i].isComplete);
       });
 
-      if (!expired) return entry;
+      if (!expired) filteredEntries.push(entry);
     } else {
-      return entry;
+      filteredEntries.push(entry);
     }
   });
 
@@ -99,7 +101,9 @@ const QuestActions = ({
     entry.actions.map((action) => localActions.push(action));
   });
 
-  const filteredActions = localActions.filter((action) => {
+  const filteredActions = [];
+
+  localActions.forEach((action) => {
     const actionIndex = findWithAttr(quest.actions, "id", action);
     const selectedAction = quest.actions[actionIndex];
 
@@ -112,10 +116,10 @@ const QuestActions = ({
       const targetItem = quest.items[targetIndex];
 
       if (!targetItem.isOwned) {
-        return action;
+        filteredActions.push(action);
       }
     } else {
-      return action;
+      filteredActions.push(action);
     }
   });
 
@@ -184,7 +188,9 @@ const QuestSidebar = (props) => {
     (entry) => entry.locationId === location.id
   );
 
-  const filteredEntries = localEntries.filter((entry) => {
+  const filteredEntries = [];
+
+  localEntries.forEach((entry) => {
     if (entry.requirements && entry.requirements.length > 0) {
       for (let i = 0; i < entry.requirements.length; i++) {
         const objectiveIndex = findWithAttr(
@@ -194,7 +200,7 @@ const QuestSidebar = (props) => {
         );
 
         if (quest.objectives[objectiveIndex].isComplete === true) {
-          return entry;
+          filteredEntries.push(entry);
         }
       }
     } else if (entry.expirations && entry.expirations.length > 0) {
@@ -206,11 +212,11 @@ const QuestSidebar = (props) => {
         );
 
         if (quest.objectives[objectiveIndex].isComplete !== true) {
-          return entry;
+          filteredEntries.push(entry);
         }
       }
     } else {
-      return entry;
+      filteredEntries.push(entry);
     }
   });
 
@@ -227,7 +233,9 @@ const QuestSidebar = (props) => {
             <IconButton
               aria-label="delete"
               className={classes.margin}
-              onClick={props.toggleSidebar}
+              onClick={() => {
+                props.toggleSidebar(location);
+              }}
               size="small"
             >
               <CloseIcon fontSize="inherit" />
@@ -244,7 +252,7 @@ const QuestSidebar = (props) => {
               component="p"
               className={classes.entries}
               key={index}
-              style={{whiteSpace: 'pre-line'}}
+              style={{ whiteSpace: "pre-line" }}
             >
               {entry.text}
             </Typography>
