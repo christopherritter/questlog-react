@@ -211,43 +211,47 @@ function QuestReader(props) {
     var padding = {};
 
     if (location && location.id) {
-      if (showLocationSidebar || (!isMediumAndUp && showLegend)) {
+      if (showLocationSidebar && showLegend) {
         if (isMediumAndUp) {
           padding["left"] = 300;
+          padding["right"] = 300;
         } else {
           padding["bottom"] = bottomOffset;
         }
-
-        mapRef.current.easeTo({
-          center: {
-            lat: location.latitude,
-            lng: location.longitude,
-          },
-          bearing: location.bearing,
-          pitch: location.pitch,
-          zoom: location.zoom,
-          padding: padding,
-          duration: 1000,
-        });
+      } else if (showLocationSidebar && !showLegend) {
+        if (isMediumAndUp) {
+          padding["left"] = 300;
+          padding["right"] = 0;
+        } else {
+          padding["bottom"] = bottomOffset;
+        }
+      } else if (!showLocationSidebar && showLegend) {
+        if (isMediumAndUp) {
+          padding["left"] = 0;
+          padding["right"] = 300;
+        } else {
+          padding["bottom"] = bottomOffset;
+        }
       } else {
         if (isMediumAndUp) {
           padding["left"] = 0;
+          padding["right"] = 0;
         } else {
           padding["bottom"] = 0;
         }
-
-        mapRef.current.easeTo({
-          center: {
-            lat: location.latitude,
-            lng: location.longitude,
-          },
-          bearing: location.bearing,
-          pitch: location.pitch,
-          zoom: location.zoom,
-          padding: padding,
-          duration: 1000,
-        });
       }
+
+      mapRef.current.easeTo({
+        center: {
+          lat: location.latitude,
+          lng: location.longitude,
+        },
+        bearing: location.bearing,
+        pitch: location.pitch,
+        zoom: location.zoom,
+        padding: padding,
+        duration: 1000,
+      });
     }
   }, [location, showLocationSidebar, showLegend, isMediumAndUp, bottomOffset]);
 
@@ -264,6 +268,7 @@ function QuestReader(props) {
       a.order > b.order ? 1 : -1
     );
     selectLocation(sortedLocations[0].id);
+    setShowLocationSidebar(true);
     setOpen(false);
   }
 
@@ -299,9 +304,7 @@ function QuestReader(props) {
   }
 
   function toggleJournal() {
-    var padding = {
-      // bottom: 50,
-    };
+    var padding = {};
     if (showJournal) {
       if (isMediumAndUp) {
         padding["right"] = 0;
@@ -337,9 +340,7 @@ function QuestReader(props) {
   }
 
   function toggleBackpack() {
-    var padding = {
-      // bottom: 50,
-    };
+    var padding = {};
     if (showBackpack) {
       if (isMediumAndUp) {
         padding["right"] = 0;
@@ -400,58 +401,12 @@ function QuestReader(props) {
     }
   }
 
-  function toggleSidebar(location) {
-    var sidebarState = null;
-    var padding = {
-      // bottom: 50,
-    };
-
+  function toggleSidebar() {
+    var show = null;
     setShowLocationSidebar((current) => {
-      sidebarState = !current;
-      return sidebarState;
+      show = current;
+      return !show;
     });
-
-    if (!isMediumAndUp) {
-      setShowLegend(false);
-    }
-
-    if (!sidebarState) {
-      if (isMediumAndUp) {
-        padding["left"] = 0;
-      } else {
-        padding["bottom"] = 0;
-      }
-
-      mapRef.current.easeTo({
-        center: {
-          lat: location.latitude,
-          lng: location.longitude,
-        },
-        bearing: location.bearing,
-        pitch: location.pitch,
-        zoom: location.zoom,
-        padding: padding,
-        duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
-      });
-    } else {
-      if (isMediumAndUp) {
-        padding["left"] = 300;
-      } else {
-        padding["bottom"] = bottomOffset;
-      }
-
-      mapRef.current.easeTo({
-        center: {
-          lat: location.latitude,
-          lng: location.longitude,
-        },
-        padding: padding,
-        bearing: location.bearing,
-        pitch: location.pitch,
-        zoom: location.zoom,
-        duration: 1000,
-      });
-    }
   }
 
   const [open, setOpen] = React.useState(false);

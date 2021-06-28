@@ -214,43 +214,46 @@ function QuestPlayer(props) {
     var padding = {};
 
     if (location && location.id) {
-      if (showLocationSidebar || (!isMediumAndUp && showLegend)) {
+      if (showLocationSidebar && showLegend) {
         if (isMediumAndUp) {
           padding["left"] = 300;
+          padding["right"] = 300;
         } else {
           padding["bottom"] = bottomOffset;
         }
-
-        mapRef.current.easeTo({
-          center: {
-            lat: location.latitude,
-            lng: location.longitude,
-          },
-          bearing: location.bearing,
-          pitch: location.pitch,
-          zoom: location.zoom,
-          padding: padding,
-          duration: 1000,
-        });
+      } else if (showLocationSidebar && !showLegend) {
+        if (isMediumAndUp) {
+          padding["left"] = 300;
+          padding["right"] = 0;
+        } else {
+          padding["bottom"] = bottomOffset;
+        }
+      } else if (!showLocationSidebar && showLegend) {
+        if (isMediumAndUp) {
+          padding["left"] = 0;
+          padding["right"] = 300;
+        } else {
+          padding["bottom"] = bottomOffset;
+        }
       } else {
         if (isMediumAndUp) {
           padding["left"] = 0;
+          padding["right"] = 0;
         } else {
           padding["bottom"] = 0;
         }
-
-        mapRef.current.easeTo({
-          center: {
-            lat: location.latitude,
-            lng: location.longitude,
-          },
-          bearing: location.bearing,
-          pitch: location.pitch,
-          zoom: location.zoom,
-          padding: padding,
-          duration: 1000,
-        });
       }
+      mapRef.current.easeTo({
+        center: {
+          lat: location.latitude,
+          lng: location.longitude,
+        },
+        bearing: location.bearing,
+        pitch: location.pitch,
+        zoom: location.zoom,
+        padding: padding,
+        duration: 1000,
+      });
     }
   }, [location, showLocationSidebar, showLegend, isMediumAndUp, bottomOffset]);
 
@@ -268,15 +271,22 @@ function QuestPlayer(props) {
   };
 
   function handleBeginQuest() {
+    const currentLocations = [...quest.locations];
+    const sortedLocations = currentLocations.sort((a, b) =>
+      a.order > b.order ? 1 : -1
+    );
+
     if (geolocateRef.current) {
       geolocateRef.current.trigger();
     }
+
+    selectLocation(sortedLocations[0].id);
+    setShowLocationSidebar(true);
     setOpen(false);
   }
 
   function toggleLegend() {
     var padding = {};
-
     if (showLegend) {
       if (isMediumAndUp) {
         padding["right"] = 0;
@@ -298,7 +308,7 @@ function QuestPlayer(props) {
       }
 
       setShowLegend(true);
-      
+
       mapRef.current.easeTo({
         padding: padding,
         duration: 1000,
@@ -307,9 +317,7 @@ function QuestPlayer(props) {
   }
 
   function toggleJournal() {
-    var padding = {
-      // bottom: 50,
-    };
+    var padding = {};
     if (showJournal) {
       if (isMediumAndUp) {
         padding["right"] = 0;
@@ -345,9 +353,7 @@ function QuestPlayer(props) {
   }
 
   function toggleBackpack() {
-    var padding = {
-      // bottom: 50,
-    };
+    var padding = {};
     if (showBackpack) {
       if (isMediumAndUp) {
         padding["right"] = 0;
@@ -393,8 +399,10 @@ function QuestPlayer(props) {
 
     if (previousLocation && selectedLocation) {
       if (previousLocation.id === selectedLocation.id) {
+        console.log("LOCATION MATCH");
         toggleSidebar(selectedLocation);
       } else {
+        console.log("NO LOCATION MATCH");
         setShowLocationSidebar(true);
 
         if (!isMediumAndUp) {
@@ -408,58 +416,12 @@ function QuestPlayer(props) {
     }
   }
 
-  function toggleSidebar(location) {
-    var sidebarState = null;
-    var padding = {
-      // bottom: 50,
-    };
-
+  function toggleSidebar() {
+    var show = null;
     setShowLocationSidebar((current) => {
-      sidebarState = !current;
-      return sidebarState;
+      show = current;
+      return !show;
     });
-
-    if (!isMediumAndUp) {
-      setShowLegend(false);
-    }
-
-    if (!sidebarState) {
-      if (isMediumAndUp) {
-        padding["left"] = 0;
-      } else {
-        padding["bottom"] = 0;
-      }
-
-      mapRef.current.easeTo({
-        center: {
-          lat: location.latitude,
-          lng: location.longitude,
-        },
-        bearing: location.bearing,
-        pitch: location.pitch,
-        zoom: location.zoom,
-        padding: padding,
-        duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
-      });
-    } else {
-      if (isMediumAndUp) {
-        padding["left"] = 300;
-      } else {
-        padding["bottom"] = bottomOffset;
-      }
-
-      mapRef.current.easeTo({
-        center: {
-          lat: location.latitude,
-          lng: location.longitude,
-        },
-        padding: padding,
-        bearing: location.bearing,
-        pitch: location.pitch,
-        zoom: location.zoom,
-        duration: 1000,
-      });
-    }
   }
 
   const [open, setOpen] = React.useState(false);
