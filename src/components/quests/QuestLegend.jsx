@@ -36,6 +36,11 @@ const QuestLegend = (props) => {
   const { viewLocation } = props;
   const { quest, location } = useContext(QuestContext);
 
+  const currentLocations = [...quest.locations];
+  const sortedLocations = currentLocations.sort((a, b) =>
+    a.order > b.order ? 1 : -1
+  );
+
   function onListItemClick(loc) {
     viewLocation(loc)
   };
@@ -62,7 +67,7 @@ const QuestLegend = (props) => {
         </Grid>
         <List component="nav">
           {quest.locations &&
-            quest.locations.map((loc, index) => {
+            sortedLocations.map((loc, index) => {
               return (
                 <ListItem
                   button
