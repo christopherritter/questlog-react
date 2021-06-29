@@ -12,6 +12,8 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "@turf/bbox": "^6.4.0",
+    "@turf/helpers": "^6.4.0",
     "@urbica/react-map-gl": "^1.14.3",
     "firebase": "^8.6.1",
     "mapbox-gl": "^2.3.0",

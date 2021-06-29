@@ -1,6 +1,8 @@
 import React, { useRef, useState, useContext, useEffect } from "react";
 import MapGL, { GeolocateControl } from "@urbica/react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import bbox from '@turf/bbox';
+import { multiPoint } from '@turf/helpers';
 
 import QuestContext from "../../contexts/QuestContext.jsx";
 import QuestSidebar from "./QuestSidebar.jsx";
@@ -481,6 +483,18 @@ function QuestPlayer(props) {
     }
   }, [quest.objectives]);
 
+  function flyToKenya() {
+    var coords = quest.locations.map((location) => {
+      return [location.longitude, location.latitude]
+    });
+
+    var multiPt = multiPoint(coords);
+
+    var bounds = bbox(multiPt);
+
+    mapRef.current.fitBounds(bounds);
+  };
+
   return (
     <React.Fragment>
       <QuestDialog
@@ -606,6 +620,7 @@ function QuestPlayer(props) {
                       startIcon={<BackpackIcon />}
                       onClick={toggleBackpack}
                     />
+                    <Button variant="contained" color="default" size="small" onClick={flyToKenya}>Okie!</Button>
                   </Box>
                   {quest.locations.map((el, index) => (
                     <QuestMapMarker
