@@ -466,6 +466,12 @@ function QuestPlayer(props) {
             selectLocation(selectedLocation);
           }
         } else {
+          var padding = {};
+          if (isMediumAndUp) {
+           padding = {left: 150, right: 75, top: 0, bottom: 75}
+          } else {
+            padding = {left: 25, right: 25, top: 25, bottom: 25}
+          }
           setShowLocationSidebar(false);
           var coords = [
             [locationPreview.longitude, locationPreview.latitude],
@@ -475,7 +481,7 @@ function QuestPlayer(props) {
           var bounds = bbox(multiPt);
 
           mapRef.current.fitBounds(bounds, {
-            padding: {left: 150, right: 75, top: 0, bottom: 75},
+            padding: padding,
           });
         }
       }
