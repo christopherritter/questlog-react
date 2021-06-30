@@ -192,20 +192,30 @@ function QuestReader(props) {
   const [showJournal, setShowJournal] = useState(false);
   const [showBackpack, setShowBackpack] = useState(false);
 
-  const [currentLocation, setCurrentLocation] = useState(null);
-
   const [size, setSize] = useState({
     x: window.innerWidth,
     y: window.innerHeight,
   });
+
   const updateSize = () =>
     setSize({
       x: window.innerWidth,
       y: window.innerHeight,
     });
-  useEffect(() => (window.onresize = updateSize), []);
 
   const bottomOffset = size.y - 64 - actionBarHeight - mapHeight;
+  const mapRef = useRef();
+
+  const [open, setOpen] = React.useState(false);
+  const [dialogType, setDialogType] = React.useState();
+
+  const locationForMap = useRef();
+
+  useEffect(() => {
+    locationForMap.current = location;
+  }, [location]);
+
+  useEffect(() => (window.onresize = updateSize), []);
 
   useEffect(() => {
     var padding = {};
@@ -255,9 +265,28 @@ function QuestReader(props) {
     }
   }, [location, showLocationSidebar, showLegend, isMediumAndUp, bottomOffset]);
 
-  const mapRef = useRef();
+  useEffect(() => {
+    var questComplete = true;
 
-  const onLoad = () => {
+    if (quest.objectives && quest.objectives.length > 0) {
+      quest.objectives
+        .filter((objective) => objective.isPrimary === true)
+        .forEach((objective) => {
+          if (objective.isComplete === false) questComplete = false;
+        });
+
+      if (questComplete) {
+        handleUpdateDialogType("complete");
+        setOpen(true);
+      } else {
+        setOpen(false);
+      }
+    } else {
+      setOpen(false);
+    }
+  }, [quest.objectives]);
+
+  function onLoad() {
     handleUpdateDialogType("begin");
     setOpen(true);
   };
@@ -377,15 +406,8 @@ function QuestReader(props) {
   }
 
   function handleViewLocation(selectedLocation) {
-    var previousLocation = null;
-
-    setCurrentLocation((current) => {
-      previousLocation = { ...current };
-      return { ...selectedLocation };
-    });
-
-    if (previousLocation && selectedLocation) {
-      if (previousLocation.id === selectedLocation.id) {
+    if (locationForMap) {
+      if (locationForMap.current.id === selectedLocation) {
         toggleSidebar(selectedLocation);
       } else {
         setShowLocationSidebar(true);
@@ -394,10 +416,10 @@ function QuestReader(props) {
           setShowLegend(false);
         }
 
-        selectLocation(selectedLocation.id);
+        selectLocation(selectedLocation);
       }
     } else {
-      console.log(currentLocation);
+      console.log(locationForMap);
     }
   }
 
@@ -409,9 +431,7 @@ function QuestReader(props) {
     });
   }
 
-  const [open, setOpen] = React.useState(false);
-
-  const handleClose = () => {
+  function handleClose() {
     setOpen(false);
   };
 
@@ -439,32 +459,9 @@ function QuestReader(props) {
     }, 150);
   }
 
-  const [dialogType, setDialogType] = React.useState();
-
-  const handleUpdateDialogType = (type) => {
+  function handleUpdateDialogType(type) {
     setDialogType(type);
   };
-
-  useEffect(() => {
-    var questComplete = true;
-
-    if (quest.objectives && quest.objectives.length > 0) {
-      quest.objectives
-        .filter((objective) => objective.isPrimary === true)
-        .forEach((objective) => {
-          if (objective.isComplete === false) questComplete = false;
-        });
-
-      if (questComplete) {
-        handleUpdateDialogType("complete");
-        setOpen(true);
-      } else {
-        setOpen(false);
-      }
-    } else {
-      setOpen(false);
-    }
-  }, [quest.objectives]);
 
   return (
     <React.Fragment>

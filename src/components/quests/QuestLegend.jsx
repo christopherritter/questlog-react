@@ -42,7 +42,7 @@ const QuestLegend = (props) => {
   );
 
   function onListItemClick(loc) {
-    viewLocation(loc)
+    viewLocation(loc.id)
   };
 
   return (

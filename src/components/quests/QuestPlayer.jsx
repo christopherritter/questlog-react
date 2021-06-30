@@ -1,8 +1,9 @@
 import React, { useRef, useState, useContext, useEffect } from "react";
 import MapGL, { GeolocateControl } from "@urbica/react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import bbox from '@turf/bbox';
-import { multiPoint } from '@turf/helpers';
+import bbox from "@turf/bbox";
+import distance from "@turf/distance";
+import { point, multiPoint } from "@turf/helpers";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
 import QuestSidebar from "./QuestSidebar.jsx";
@@ -186,6 +187,7 @@ function QuestPlayer(props) {
     selectLocation,
     viewQuestItem,
     operateQuestItem,
+    findWithAttr,
   } = useContext(QuestContext);
   const isMediumAndUp = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -194,8 +196,6 @@ function QuestPlayer(props) {
   const [showLegend, setShowLegend] = useState(false);
   const [showJournal, setShowJournal] = useState(false);
   const [showBackpack, setShowBackpack] = useState(false);
-
-  const [currentLocation, setCurrentLocation] = useState(null);
 
   const [size, setSize] = useState({
     x: window.innerWidth,
@@ -208,12 +208,34 @@ function QuestPlayer(props) {
       y: window.innerHeight,
     });
 
-  useEffect(() => (window.onresize = updateSize), []);
-
   const bottomOffset = size.y - 64 - actionBarHeight - mapHeight;
+  const mapRef = useRef();
+  const geolocateRef = useRef();
+
+  const [open, setOpen] = React.useState(false);
+  const [dialogType, setDialogType] = React.useState();
+  const [position, setPosition] = React.useState(null);
+
+  const locationForMap = useRef();
+  const positionForMap = useRef();
 
   useEffect(() => {
-    var padding = {};
+    locationForMap.current = location;
+  }, [location]);
+
+  useEffect(() => {
+    positionForMap.current = position;
+  }, [position]);
+
+  useEffect(() => (window.onresize = updateSize), []);
+
+  useEffect(() => {
+    var padding = {
+      left: 0,
+      right: 0,
+      bottom: 0,
+      top: 0,
+    };
 
     if (location && location.id) {
       if (showLocationSidebar && showLegend) {
@@ -257,33 +279,55 @@ function QuestPlayer(props) {
         duration: 1000,
       });
     }
+
   }, [location, showLocationSidebar, showLegend, isMediumAndUp, bottomOffset]);
 
-  const mapRef = useRef();
+  useEffect(() => {
+    var questComplete = true;
 
-  const geolocateRef = useRef();
+    if (quest.objectives && quest.objectives.length > 0) {
+      quest.objectives
+        .filter((objective) => objective.isPrimary === true)
+        .forEach((objective) => {
+          if (objective.isComplete === false) questComplete = false;
+        });
 
-  const onLoad = () => {
+      if (questComplete) {
+        handleUpdateDialogType("complete");
+        setOpen(true);
+      } else {
+        setOpen(false);
+      }
+    } else {
+      setOpen(false);
+    }
+  }, [quest.objectives]);
+
+  function handleClose() {
+    setOpen(false);
+  }
+
+  function onLoad() {
     handleUpdateDialogType("begin");
     setLoaded(true);
     setOpen(true);
     if (geolocateRef.current) {
       geolocateRef.current.options.showAccuracyCircle = false;
     }
-  };
+  }
 
   function handleBeginQuest() {
-    const currentLocations = [...quest.locations];
-    const sortedLocations = currentLocations.sort((a, b) =>
-      a.order > b.order ? 1 : -1
-    );
+    // const currentLocations = [...quest.locations];
+    // const sortedLocations = currentLocations.sort((a, b) =>
+    //   a.order > b.order ? 1 : -1
+    // );
 
     if (geolocateRef.current) {
       geolocateRef.current.trigger();
     }
 
-    selectLocation(sortedLocations[0].id);
-    setShowLocationSidebar(true);
+    // selectLocation(sortedLocations[0].id);
+    // setShowLocationSidebar(true);
     setOpen(false);
   }
 
@@ -392,29 +436,52 @@ function QuestPlayer(props) {
   }
 
   function handleViewLocation(selectedLocation) {
-    var previousLocation = null;
 
-    setCurrentLocation((current) => {
-      previousLocation = { ...current };
-      return { ...selectedLocation };
-    });
+    if (positionForMap) {
+      const selectedLocationIndex = findWithAttr(
+        quest.locations,
+        "id",
+        selectedLocation
+      );
+      const locationPreview = quest.locations[selectedLocationIndex];
 
-    if (previousLocation && selectedLocation) {
-      if (previousLocation.id === selectedLocation.id) {
-        console.log("LOCATION MATCH");
-        toggleSidebar(selectedLocation);
-      } else {
-        console.log("NO LOCATION MATCH");
-        setShowLocationSidebar(true);
+      if (locationPreview) {
+        var from = point([
+          positionForMap.current.longitude,
+          positionForMap.current.latitude,
+        ]);
+        var to = point([locationPreview.longitude, locationPreview.latitude]);
+        var options = { units: "miles" };
+        var totalDistance = distance(from, to, options);
+        var totalDistanceInYards = Math.round(totalDistance * 1760);
 
-        if (!isMediumAndUp) {
-          setShowLegend(false);
+        if (totalDistanceInYards < 100) {
+          if (locationPreview.id === selectedLocation) {
+            toggleSidebar(selectedLocation);
+          } else {
+            setShowLocationSidebar(true);
+            if (!isMediumAndUp) {
+              setShowLegend(false);
+            }
+            selectLocation(selectedLocation);
+          }
+        } else {
+          setShowLocationSidebar(false);
+          var coords = [
+            [locationPreview.longitude, locationPreview.latitude],
+            [positionForMap.current.longitude, positionForMap.current.latitude],
+          ];
+          var multiPt = multiPoint(coords);
+          var bounds = bbox(multiPt);
+
+          mapRef.current.fitBounds(bounds, {
+            padding: {left: 150, right: 75, top: 0, bottom: 75},
+          });
         }
-
-        selectLocation(selectedLocation.id);
       }
     } else {
-      console.log(currentLocation);
+      console.log("no position detected");
+      console.log(position);
     }
   }
 
@@ -425,12 +492,6 @@ function QuestPlayer(props) {
       return !show;
     });
   }
-
-  const [open, setOpen] = React.useState(false);
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   function handleRestartQuest() {
     var updatedObjectives = [];
@@ -456,44 +517,9 @@ function QuestPlayer(props) {
     }, 150);
   }
 
-  const [dialogType, setDialogType] = React.useState();
-
-  const handleUpdateDialogType = (type) => {
+  function handleUpdateDialogType(type) {
     setDialogType(type);
-  };
-
-  useEffect(() => {
-    var questComplete = true;
-
-    if (quest.objectives && quest.objectives.length > 0) {
-      quest.objectives
-        .filter((objective) => objective.isPrimary === true)
-        .forEach((objective) => {
-          if (objective.isComplete === false) questComplete = false;
-        });
-
-      if (questComplete) {
-        handleUpdateDialogType("complete");
-        setOpen(true);
-      } else {
-        setOpen(false);
-      }
-    } else {
-      setOpen(false);
-    }
-  }, [quest.objectives]);
-
-  function flyToKenya() {
-    var coords = quest.locations.map((location) => {
-      return [location.longitude, location.latitude]
-    });
-
-    var multiPt = multiPoint(coords);
-
-    var bounds = bbox(multiPt);
-
-    mapRef.current.fitBounds(bounds);
-  };
+  }
 
   return (
     <React.Fragment>
@@ -620,13 +646,12 @@ function QuestPlayer(props) {
                       startIcon={<BackpackIcon />}
                       onClick={toggleBackpack}
                     />
-                    <Button variant="contained" color="default" size="small" onClick={flyToKenya}>Okie!</Button>
                   </Box>
                   {quest.locations.map((el, index) => (
                     <QuestMapMarker
                       location={el}
                       key={index}
-                      viewLocation={handleViewLocation}
+                      viewLocation={() => handleViewLocation(el.id)}
                     ></QuestMapMarker>
                   ))}
                   {isLoaded && (
@@ -643,6 +668,7 @@ function QuestPlayer(props) {
                       fitBoundsOptions={{ maxZoom: 19 }}
                       onError={(err) => console.log(err)}
                       showAccuracyCircle={false}
+                      onGeolocate={(result) => setPosition(result.coords)}
                     />
                   )}
                 </MapGL>

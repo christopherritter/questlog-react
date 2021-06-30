@@ -40,7 +40,7 @@ const QuestMapMarker = (props) => {
   const markerRef = useRef();
 
   const onMarkerClick = () => {
-    viewLocation(location)
+    viewLocation(location.id)
   };
 
   const switchMarker = (marker) => {
