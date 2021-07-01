@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext, useEffect } from "react";
+import React, { useRef, useState, useContext, useEffect, useCallback } from "react";
 import MapGL, { GeolocateControl } from "@urbica/react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import bbox from "@turf/bbox";
@@ -213,6 +213,53 @@ function QuestPlayer(props) {
 
   const bottomOffset = size.y - 64 - actionBarHeight - mapHeight;
 
+  const previewLocation = useCallback((location) => {
+    var from = [position.longitude, position.latitude];
+    var to = [location.longitude, location.latitude];
+    var coords = [from, to];
+    var multiPt = multiPoint(coords);
+    var bounds = bbox(multiPt);
+    var padding = {};
+
+    if (isMediumAndUp) {
+      padding["right"] = 200;
+    } else {
+      padding = { left: 25, right: 50, top: 25, bottom: 25 };
+    }
+
+    setShowLocationSidebar(false);
+
+    mapRef.current.fitBounds(bounds, {
+      padding: padding,
+    });
+  }, [isMediumAndUp, position]);
+
+  const viewStartingPoint = useCallback(() => {
+    const currentLocations = [...quest.locations];
+    const sortedLocations = currentLocations.sort((a, b) =>
+      a.order > b.order ? 1 : -1
+    );
+
+    if (position.latitude && position.longitude) {
+      var from = point([position.longitude, position.latitude]);
+      var to = point([
+        sortedLocations[0].longitude,
+        sortedLocations[0].latitude,
+      ]);
+      var options = { units: "miles" };
+      var totalDistance = distance(from, to, options);
+      var totalDistanceInYards = Math.round(totalDistance * 1760);
+
+      if (totalDistanceInYards < 100) {
+        selectLocation(sortedLocations[0].id);
+        setShowLocationSidebar(true);
+      } else {
+        previewLocation(sortedLocations[0]);
+      }
+    }
+  }, [quest, position, previewLocation, selectLocation]);
+
+
   useEffect(() => (window.onresize = updateSize), []);
 
   useEffect(() => {
@@ -220,14 +267,9 @@ function QuestPlayer(props) {
       if (!isPlaying) {
         viewStartingPoint();
         setIsPlaying(true);
-        console.log("the quest is now playing");
-      } else {
-        console.log("the quest is playing");
       }
-    } else {
-      console.log("no position");
     }
-  }, [position, isPlaying]);
+  }, [position, isPlaying, viewStartingPoint]);
 
   useEffect(() => {
     var questComplete = true;
@@ -336,35 +378,6 @@ function QuestPlayer(props) {
     }
     // setIsPlaying(true);
     setOpenDialog(false);
-  }
-
-  function viewStartingPoint() {
-    console.log("view starting point");
-    const currentLocations = [...quest.locations];
-    const sortedLocations = currentLocations.sort((a, b) =>
-      a.order > b.order ? 1 : -1
-    );
-
-    if (position.latitude && position.longitude) {
-      console.log("position for map current");
-      var from = point([position.longitude, position.latitude]);
-      var to = point([
-        sortedLocations[0].longitude,
-        sortedLocations[0].latitude,
-      ]);
-      var options = { units: "miles" };
-      var totalDistance = distance(from, to, options);
-      var totalDistanceInYards = Math.round(totalDistance * 1760);
-
-      if (totalDistanceInYards < 100) {
-        console.log("total distance < 100 yards");
-        selectLocation(sortedLocations[0].id);
-        setShowLocationSidebar(true);
-      } else {
-        console.log("total distance OVER 100 YARDS!?!😱");
-        previewLocation(sortedLocations[0]);
-      }
-    }
   }
 
   function toggleLegend() {
@@ -510,26 +523,7 @@ function QuestPlayer(props) {
     }
   }
 
-  function previewLocation(location) {
-    var from = [position.longitude, position.latitude];
-    var to = [location.longitude, location.latitude];
-    var coords = [from, to];
-    var multiPt = multiPoint(coords);
-    var bounds = bbox(multiPt);
-    var padding = {};
 
-    if (isMediumAndUp) {
-      padding["right"] = 200;
-    } else {
-      padding = { left: 25, right: 50, top: 25, bottom: 25 };
-    }
-
-    setShowLocationSidebar(false);
-
-    mapRef.current.fitBounds(bounds, {
-      padding: padding,
-    });
-  }
 
   function toggleSidebar() {
     var show = null;
