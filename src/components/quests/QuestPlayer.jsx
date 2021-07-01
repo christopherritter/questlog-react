@@ -222,9 +222,9 @@ function QuestPlayer(props) {
     var padding = {};
 
     if (isMediumAndUp) {
-      padding["right"] = 200;
+      padding = { left: 200, right: 200, top: 50, bottom: 50 };
     } else {
-      padding = { left: 25, right: 50, top: 25, bottom: 25 };
+      padding = { left: 50, right: 50, top: 25, bottom: 25 };
     }
 
     setShowLocationSidebar(false);
