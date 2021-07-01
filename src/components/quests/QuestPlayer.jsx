@@ -191,43 +191,64 @@ function QuestPlayer(props) {
   } = useContext(QuestContext);
   const isMediumAndUp = useMediaQuery(theme.breakpoints.up("md"));
 
-  const [isLoaded, setLoaded] = useState(false);
-  const [showLocationSidebar, setShowLocationSidebar] = useState(false);
-  const [showLegend, setShowLegend] = useState(false);
-  const [showJournal, setShowJournal] = useState(false);
-  const [showBackpack, setShowBackpack] = useState(false);
-
   const [size, setSize] = useState({
     x: window.innerWidth,
     y: window.innerHeight,
   });
 
-  const updateSize = () =>
-    setSize({
-      x: window.innerWidth,
-      y: window.innerHeight,
-    });
-
-  const bottomOffset = size.y - 64 - actionBarHeight - mapHeight;
-  const mapRef = useRef();
-  const geolocateRef = useRef();
-
-  const [open, setOpen] = React.useState(false);
+  const [isLoaded, setLoaded] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [showLocationSidebar, setShowLocationSidebar] = useState(false);
+  const [showLegend, setShowLegend] = useState(false);
+  const [showJournal, setShowJournal] = useState(false);
+  const [showBackpack, setShowBackpack] = useState(false);
+  const [openDialog, setOpenDialog] = React.useState(false);
   const [dialogType, setDialogType] = React.useState();
   const [position, setPosition] = React.useState(null);
 
-  const locationForMap = useRef();
-  const positionForMap = useRef();
+  const mapRef = useRef();
+  const geolocateRef = useRef();
+  const locationRef = useRef();
+  const positionRef = useRef();
 
-  useEffect(() => {
-    locationForMap.current = location;
-  }, [location]);
-
-  useEffect(() => {
-    positionForMap.current = position;
-  }, [position]);
+  const bottomOffset = size.y - 64 - actionBarHeight - mapHeight;
 
   useEffect(() => (window.onresize = updateSize), []);
+
+  useEffect(() => {
+    if (position) {
+      if (!isPlaying) {
+        viewStartingPoint();
+        setIsPlaying(true);
+        console.log("the quest is now playing");
+      } else {
+        console.log("the quest is playing");
+      }
+    } else {
+      console.log("no position");
+    }
+  }, [position, isPlaying]);
+
+  useEffect(() => {
+    var questComplete = true;
+
+    if (quest.objectives && quest.objectives.length > 0) {
+      quest.objectives
+        .filter((objective) => objective.isPrimary === true)
+        .forEach((objective) => {
+          if (objective.isComplete === false) questComplete = false;
+        });
+
+      if (questComplete) {
+        handleUpdateDialogType("complete");
+        setOpenDialog(true);
+      } else {
+        setOpenDialog(false);
+      }
+    } else {
+      setOpenDialog(false);
+    }
+  }, [quest.objectives]);
 
   useEffect(() => {
     var padding = {
@@ -279,56 +300,71 @@ function QuestPlayer(props) {
         duration: 1000,
       });
     }
-
   }, [location, showLocationSidebar, showLegend, isMediumAndUp, bottomOffset]);
 
   useEffect(() => {
-    var questComplete = true;
+    locationRef.current = location;
+  }, [location]);
 
-    if (quest.objectives && quest.objectives.length > 0) {
-      quest.objectives
-        .filter((objective) => objective.isPrimary === true)
-        .forEach((objective) => {
-          if (objective.isComplete === false) questComplete = false;
-        });
+  useEffect(() => {
+    positionRef.current = position;
+  }, [position, isPlaying]);
 
-      if (questComplete) {
-        handleUpdateDialogType("complete");
-        setOpen(true);
-      } else {
-        setOpen(false);
-      }
-    } else {
-      setOpen(false);
-    }
-  }, [quest.objectives]);
+  function updateSize() {
+    setSize({
+      x: window.innerWidth,
+      y: window.innerHeight,
+    });
+  }
 
   function handleClose() {
-    setOpen(false);
+    setOpenDialog(false);
   }
 
   function onLoad() {
     handleUpdateDialogType("begin");
     setLoaded(true);
-    setOpen(true);
+    setOpenDialog(true);
     if (geolocateRef.current) {
       geolocateRef.current.options.showAccuracyCircle = false;
     }
   }
 
   function handleBeginQuest() {
-    // const currentLocations = [...quest.locations];
-    // const sortedLocations = currentLocations.sort((a, b) =>
-    //   a.order > b.order ? 1 : -1
-    // );
-
     if (geolocateRef.current) {
       geolocateRef.current.trigger();
     }
+    // setIsPlaying(true);
+    setOpenDialog(false);
+  }
 
-    // selectLocation(sortedLocations[0].id);
-    // setShowLocationSidebar(true);
-    setOpen(false);
+  function viewStartingPoint() {
+    console.log("view starting point");
+    const currentLocations = [...quest.locations];
+    const sortedLocations = currentLocations.sort((a, b) =>
+      a.order > b.order ? 1 : -1
+    );
+
+    if (position.latitude && position.longitude) {
+      console.log("position for map current");
+      var from = point([position.longitude, position.latitude]);
+      var to = point([
+        sortedLocations[0].longitude,
+        sortedLocations[0].latitude,
+      ]);
+      var options = { units: "miles" };
+      var totalDistance = distance(from, to, options);
+      var totalDistanceInYards = Math.round(totalDistance * 1760);
+
+      if (totalDistanceInYards < 100) {
+        console.log("total distance < 100 yards");
+        selectLocation(sortedLocations[0].id);
+        setShowLocationSidebar(true);
+      } else {
+        console.log("total distance OVER 100 YARDS!?!😱");
+        previewLocation(sortedLocations[0]);
+      }
+    }
   }
 
   function toggleLegend() {
@@ -395,7 +431,7 @@ function QuestPlayer(props) {
 
   function handleSelectJournalItem() {
     // setDialogType(null);
-    setOpen(true);
+    setOpenDialog(true);
   }
 
   function toggleBackpack() {
@@ -432,12 +468,11 @@ function QuestPlayer(props) {
   function handleSelectBackpackItem(item) {
     viewQuestItem(item);
     handleUpdateDialogType("item");
-    setOpen(true);
+    setOpenDialog(true);
   }
 
   function handleViewLocation(selectedLocation) {
-
-    if (positionForMap) {
+    if (positionRef) {
       const selectedLocationIndex = findWithAttr(
         quest.locations,
         "id",
@@ -447,8 +482,8 @@ function QuestPlayer(props) {
 
       if (locationPreview) {
         var from = point([
-          positionForMap.current.longitude,
-          positionForMap.current.latitude,
+          positionRef.current.longitude,
+          positionRef.current.latitude,
         ]);
         var to = point([locationPreview.longitude, locationPreview.latitude]);
         var options = { units: "miles" };
@@ -466,29 +501,34 @@ function QuestPlayer(props) {
             selectLocation(selectedLocation);
           }
         } else {
-          var padding = {};
-          if (isMediumAndUp) {
-           padding = {left: 150, right: 75, top: 0, bottom: 75}
-          } else {
-            padding = {left: 25, right: 25, top: 25, bottom: 25}
-          }
-          setShowLocationSidebar(false);
-          var coords = [
-            [locationPreview.longitude, locationPreview.latitude],
-            [positionForMap.current.longitude, positionForMap.current.latitude],
-          ];
-          var multiPt = multiPoint(coords);
-          var bounds = bbox(multiPt);
-
-          mapRef.current.fitBounds(bounds, {
-            padding: padding,
-          });
+          previewLocation(locationPreview);
         }
       }
     } else {
       console.log("no position detected");
       console.log(position);
     }
+  }
+
+  function previewLocation(location) {
+    var from = [position.longitude, position.latitude];
+    var to = [location.longitude, location.latitude];
+    var coords = [from, to];
+    var multiPt = multiPoint(coords);
+    var bounds = bbox(multiPt);
+    var padding = {};
+
+    if (isMediumAndUp) {
+      padding["right"] = 200;
+    } else {
+      padding = { left: 25, right: 50, top: 25, bottom: 25 };
+    }
+
+    setShowLocationSidebar(false);
+
+    mapRef.current.fitBounds(bounds, {
+      padding: padding,
+    });
   }
 
   function toggleSidebar() {
@@ -503,7 +543,7 @@ function QuestPlayer(props) {
     var updatedObjectives = [];
     var updatedItems = [];
     handleUpdateDialogType("begin");
-    setOpen(false);
+    setOpenDialog(false);
 
     setTimeout(() => {
       quest.objectives.map((objective) => {
@@ -535,7 +575,7 @@ function QuestPlayer(props) {
         item={item}
         dialogType={dialogType}
         updateDialogType={handleUpdateDialogType}
-        open={open}
+        open={openDialog}
         operateQuestItem={operateQuestItem}
         onClose={handleClose}
         beginQuest={handleBeginQuest}
