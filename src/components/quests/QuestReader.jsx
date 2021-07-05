@@ -466,6 +466,7 @@ function QuestReader(props) {
   }
 
   function handleViewLocation(id) {
+    console.log("handle view location")
     const selectedLocationIndex = findWithAttr(quest.locations, "id", id);
     const selectedLocation = quest.locations[selectedLocationIndex];
 
@@ -482,9 +483,8 @@ function QuestReader(props) {
   }
 
   function toggleSidebar() {
+    console.log("toggle sidebar")
     var padding = {};
-
-    setShowLocationSidebar(!showLocationSidebar);
 
     if (sidebarRef.current.location && sidebarRef.current.legend) {
       if (isMediumAndUp) {
@@ -493,6 +493,8 @@ function QuestReader(props) {
       } else {
         padding["bottom"] = bottomOffset;
       }
+
+      setShowLocationSidebar(false);
     } else if (!sidebarRef.current.location && !sidebarRef.current.legend) {
       if (isMediumAndUp) {
         padding["left"] = 300;
@@ -500,6 +502,8 @@ function QuestReader(props) {
       } else {
         padding["bottom"] = bottomOffset;
       }
+
+      setShowLocationSidebar(true);
     } else if (!sidebarRef.current.location && sidebarRef.current.legend) {
       if (isMediumAndUp) {
         padding["left"] = 300;
@@ -507,6 +511,8 @@ function QuestReader(props) {
       } else {
         padding["bottom"] = bottomOffset;
       }
+
+      setShowLocationSidebar(true);
     } else if (sidebarRef.current.location && !sidebarRef.current.legend) {
       if (isMediumAndUp) {
         padding["left"] = 0;
@@ -514,6 +520,8 @@ function QuestReader(props) {
       } else {
         padding["bottom"] = 0;
       }
+
+      setShowLocationSidebar(false);
     }
 
     mapRef.current.easeTo({
