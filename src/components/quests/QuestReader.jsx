@@ -262,7 +262,7 @@ function QuestReader(props) {
 
       if (sidebarRef.current.location && sidebarRef.current.legend) {
         if (isMediumAndUp) {
-          padding["left"] = 300;
+          padding["left"] = 0;
           padding["right"] = 300;
         } else {
           padding["bottom"] = bottomOffset;
@@ -276,7 +276,7 @@ function QuestReader(props) {
         }
       } else if (!sidebarRef.current.location && sidebarRef.current.legend) {
         if (isMediumAndUp) {
-          padding["left"] = 0;
+          padding["left"] = 300;
           padding["right"] = 300;
         } else {
           padding["bottom"] = bottomOffset;
@@ -488,7 +488,7 @@ function QuestReader(props) {
 
     if (sidebarRef.current.location && sidebarRef.current.legend) {
       if (isMediumAndUp) {
-        padding["left"] = 300;
+        padding["left"] = 0;
         padding["right"] = 300;
       } else {
         padding["bottom"] = bottomOffset;
@@ -502,7 +502,7 @@ function QuestReader(props) {
       }
     } else if (!sidebarRef.current.location && sidebarRef.current.legend) {
       if (isMediumAndUp) {
-        padding["left"] = 0;
+        padding["left"] = 300;
         padding["right"] = 300;
       } else {
         padding["bottom"] = bottomOffset;
