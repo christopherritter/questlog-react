@@ -309,9 +309,6 @@ function QuestPlayer(props) {
 
   const showLocation = useCallback(
     (loc) => {
-      console.log("show location start");
-      console.log("location sidebar: " + sidebarRef.current.location);
-      console.log("legend sidebar: " + sidebarRef.current.legend);
       var padding = {
         left: 0,
         right: 0,
@@ -320,7 +317,6 @@ function QuestPlayer(props) {
       };
 
       if (sidebarRef.current.location && sidebarRef.current.legend) {
-        console.log("show both sidebars");
         if (isMediumAndUp) {
           padding["left"] = 0;
           padding["right"] = 300;
@@ -328,7 +324,6 @@ function QuestPlayer(props) {
           padding["bottom"] = bottomOffset;
         }
       } else if (sidebarRef.current.location && !sidebarRef.current.legend) {
-        console.log("show location sidebar");
         if (isMediumAndUp) {
           padding["left"] = 300;
           padding["right"] = 0;
@@ -336,7 +331,6 @@ function QuestPlayer(props) {
           padding["bottom"] = bottomOffset;
         }
       } else if (!sidebarRef.current.location && sidebarRef.current.legend) {
-        console.log("show legend sidebar");
         if (isMediumAndUp) {
           padding["left"] = 300;
           padding["right"] = 300;
@@ -344,7 +338,6 @@ function QuestPlayer(props) {
           padding["bottom"] = bottomOffset;
         }
       } else {
-        console.log("show no sidebars");
         if (isMediumAndUp) {
           padding["left"] = 0;
           padding["right"] = 0;
@@ -434,6 +427,9 @@ function QuestPlayer(props) {
     setOpenDialog(true);
     if (geolocateRef.current) {
       geolocateRef.current.options.showAccuracyCircle = false;
+    }
+    if (popupRef.current) {
+      popupRef.current.options.dynamicPosition = false;
     }
   }
 
@@ -548,13 +544,8 @@ function QuestPlayer(props) {
   }
 
   function handleViewLocation(id) {
-    console.log("handle view location id " + id );
-
     const selectedLocationIndex = findWithAttr(quest.locations, "id", id);
     const selectedLocation = quest.locations[selectedLocationIndex];
-
-    console.log(selectedLocation.latitude, selectedLocation.longitude);
-    console.log(positionRef.current.latitude, positionRef.current.longitude);
 
     if (positionRef.current) {
       var from = point([
