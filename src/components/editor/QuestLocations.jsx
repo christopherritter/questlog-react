@@ -106,7 +106,6 @@ function QuestLocations() {
     image: "",
     marker: "",
     isLandmark: false,
-    isStartingPoint: false,
   };
 
   const [location, locationRef, setLocation] =
@@ -143,7 +142,6 @@ function QuestLocations() {
       marker: location.marker,
       order: location.order,
       isLandmark: location.isLandmark,
-      isStartingPoint: location.isStartingPoint,
     });
     setLocation(initialLocationState);
     updateSelectedIndex(-1);
@@ -163,7 +161,6 @@ function QuestLocations() {
       marker: location.marker,
       order: location.order,
       isLandmark: location.isLandmark,
-      isStartingPoint: location.isStartingPoint,
     });
     clearLocation();
     setLocation(initialLocationState);
@@ -376,7 +373,7 @@ function QuestLocations() {
             </Grid>
 
             <Grid container spacing={2}>
-              <Grid item sm={6}>
+              <Grid item sm={12}>
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -386,18 +383,6 @@ function QuestLocations() {
                     />
                   }
                   label="Landmark"
-                />
-              </Grid>
-              <Grid item sm={6}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={location.isStartingPoint}
-                      onChange={handleToggleLocation}
-                      name="isStartingPoint"
-                    />
-                  }
-                  label="Starting Point"
                 />
               </Grid>
             </Grid>

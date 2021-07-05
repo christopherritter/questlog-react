@@ -134,7 +134,6 @@ const Quest = (props) => {
     image: "",
     marker: "",
     isLandmark: false,
-    isStartingPoint: false,
   };
 
   const [location, setLocation] = useState(initialLocationState);
@@ -196,7 +195,6 @@ const Quest = (props) => {
     updatedLocation.marker = location.marker;
     updatedLocation.order = location.order;
     updatedLocation.isLandmark = location.isLandmark;
-    updatedLocation.isStartingPoint = location.isStartingPoint;
     updatedLocations[selectedLocation] = updatedLocation;
 
     setQuest({ ...quest, locations: updatedLocations });
