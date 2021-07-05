@@ -228,7 +228,7 @@ function QuestPlayer(props) {
 
   const previewLocation = useCallback(
     (loc) => {
-      var from = [position.longitude, position.latitude];
+      var from = [positionRef.current.longitude, positionRef.current.latitude];
       var to = [loc.longitude, loc.latitude];
       var coords = [from, to];
       var multiPt = multiPoint(coords);
@@ -248,7 +248,7 @@ function QuestPlayer(props) {
         padding: padding,
       });
     },
-    [isMediumAndUp, selectLocation, position]
+    [isMediumAndUp, selectLocation, positionRef]
   );
 
   const viewStartingPoint = useCallback(() => {
@@ -309,9 +309,9 @@ function QuestPlayer(props) {
 
   const showLocation = useCallback(
     (loc) => {
-      console.log("show location start")
-      console.log("location sidebar: " + sidebarRef.current.location)
-      console.log("legend sidebar: " + sidebarRef.current.legend)
+      console.log("show location start");
+      console.log("location sidebar: " + sidebarRef.current.location);
+      console.log("legend sidebar: " + sidebarRef.current.legend);
       var padding = {
         left: 0,
         right: 0,
@@ -320,7 +320,7 @@ function QuestPlayer(props) {
       };
 
       if (sidebarRef.current.location && sidebarRef.current.legend) {
-        console.log("show both sidebars")
+        console.log("show both sidebars");
         if (isMediumAndUp) {
           padding["left"] = 0;
           padding["right"] = 300;
@@ -328,7 +328,7 @@ function QuestPlayer(props) {
           padding["bottom"] = bottomOffset;
         }
       } else if (sidebarRef.current.location && !sidebarRef.current.legend) {
-        console.log("show location sidebar")
+        console.log("show location sidebar");
         if (isMediumAndUp) {
           padding["left"] = 300;
           padding["right"] = 0;
@@ -336,7 +336,7 @@ function QuestPlayer(props) {
           padding["bottom"] = bottomOffset;
         }
       } else if (!sidebarRef.current.location && sidebarRef.current.legend) {
-        console.log("show legend sidebar")
+        console.log("show legend sidebar");
         if (isMediumAndUp) {
           padding["left"] = 300;
           padding["right"] = 300;
@@ -344,7 +344,7 @@ function QuestPlayer(props) {
           padding["bottom"] = bottomOffset;
         }
       } else {
-        console.log("show no sidebars")
+        console.log("show no sidebars");
         if (isMediumAndUp) {
           padding["left"] = 0;
           padding["right"] = 0;
@@ -415,8 +415,6 @@ function QuestPlayer(props) {
     sidebarRef.current["legend"] = showLegend;
     sidebarRef.current["journal"] = showJournal;
     sidebarRef.current["backpack"] = showBackpack;
-    console.log("update sidebar ref")
-    console.log(sidebarRef.current)
   }, [showLocationSidebar, showLegend, showJournal, showBackpack]);
 
   function updateSize() {
@@ -550,10 +548,13 @@ function QuestPlayer(props) {
   }
 
   function handleViewLocation(id) {
-    console.log("handle view location")
+    console.log("handle view location id " + id );
 
     const selectedLocationIndex = findWithAttr(quest.locations, "id", id);
     const selectedLocation = quest.locations[selectedLocationIndex];
+
+    console.log(selectedLocation.latitude, selectedLocation.longitude);
+    console.log(positionRef.current.latitude, positionRef.current.longitude);
 
     if (positionRef.current) {
       var from = point([
@@ -567,17 +568,12 @@ function QuestPlayer(props) {
 
       if (totalDistanceInYards < 100) {
         if (locationRef.current.id === id) {
-          console.log("go toggle yourself")
           toggleSidebar(id);
         } else {
-          console.log("set show location sidebar")
           setShowLocationSidebar(true);
           if (!isMediumAndUp) {
             setShowLegend(false);
           }
-          // console.log("select location")
-          // selectLocation(id);
-          console.log("show location")
           showLocation(selectedLocation);
         }
       } else {
@@ -587,11 +583,9 @@ function QuestPlayer(props) {
   }
 
   function toggleSidebar() {
-    console.log("toggle sidebar")
     var padding = {};
 
     if (sidebarRef.current.location && sidebarRef.current.legend) {
-      console.log("both visible")
       if (isMediumAndUp) {
         padding["left"] = 0;
         padding["right"] = 300;
@@ -601,7 +595,6 @@ function QuestPlayer(props) {
 
       setShowLocationSidebar(false);
     } else if (!sidebarRef.current.location && !sidebarRef.current.legend) {
-      console.log("none selected")
       if (isMediumAndUp) {
         padding["left"] = 300;
         padding["right"] = 0;
@@ -611,7 +604,6 @@ function QuestPlayer(props) {
 
       setShowLocationSidebar(true);
     } else if (!sidebarRef.current.location && sidebarRef.current.legend) {
-      console.log("no location")
       if (isMediumAndUp) {
         padding["left"] = 300;
         padding["right"] = 300;
@@ -621,7 +613,6 @@ function QuestPlayer(props) {
 
       setShowLocationSidebar(true);
     } else if (sidebarRef.current.location && !sidebarRef.current.legend) {
-      console.log("no legend")
       if (isMediumAndUp) {
         padding["left"] = 0;
         padding["right"] = 0;
@@ -643,8 +634,6 @@ function QuestPlayer(props) {
       padding: padding,
       duration: 1000,
     });
-
-    // setShowLocationSidebar(!showLocationSidebar);
   }
 
   function handleRestartQuest() {
@@ -801,7 +790,7 @@ function QuestPlayer(props) {
                       onClick={toggleBackpack}
                     />
                   </Box>
-                  {(location && location.latitude ) && (
+                  {location && location.latitude && (
                     <Popup
                       ref={popupRef}
                       longitude={location.latitude}
