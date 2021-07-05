@@ -1,5 +1,6 @@
-import React, { useRef} from "react";
+import React, { useRef, useContext } from "react";
 import { Marker } from "@urbica/react-map-gl";
+import QuestContext from "../../contexts/QuestContext.jsx";
 
 // import QuestContext from "../../contexts/QuestContext.jsx";
 
@@ -27,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
   green: {
     color: "#fff",
     backgroundColor: green[500],
+    borderColor: green[800],
+    borderWidth: 2,
+    borderStyle: "solid"
   },
   darkGrey: {
     color: "#fff",
@@ -36,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
 
 const QuestMapMarker = (props) => {
   const classes = useStyles(props);
+  const {
+    location: currentLocation,
+  } = useContext(QuestContext);
   const { location, viewLocation } = props;
   const markerRef = useRef();
 
@@ -84,7 +91,7 @@ const QuestMapMarker = (props) => {
       onClick={onMarkerClick}
       {...props}
     >
-      <Avatar className={classes.darkGrey}>
+      <Avatar className={ location.id === currentLocation.id ? classes.green : classes.darkGrey }>
         {switchMarker(location.marker)}
       </Avatar>
     </Marker>
