@@ -1,4 +1,10 @@
-import React, { useRef, useState, useContext, useEffect } from "react";
+import React, {
+  useRef,
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+} from "react";
 import MapGL from "@urbica/react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -184,58 +190,92 @@ function QuestReader(props) {
     selectLocation,
     viewQuestItem,
     operateQuestItem,
+    findWithAttr,
   } = useContext(QuestContext);
   const isMediumAndUp = useMediaQuery(theme.breakpoints.up("md"));
-
-  const [showLocationSidebar, setShowLocationSidebar] = useState(false);
-  const [showLegend, setShowLegend] = useState(false);
-  const [showJournal, setShowJournal] = useState(false);
-  const [showBackpack, setShowBackpack] = useState(false);
 
   const [size, setSize] = useState({
     x: window.innerWidth,
     y: window.innerHeight,
   });
 
-  const updateSize = () =>
-    setSize({
-      x: window.innerWidth,
-      y: window.innerHeight,
-    });
-
-  const bottomOffset = size.y - 64 - actionBarHeight - mapHeight;
-  const mapRef = useRef();
-
-  const [open, setOpen] = React.useState(false);
+  const [showLocationSidebar, setShowLocationSidebar] = useState(false);
+  const [showLegend, setShowLegend] = useState(false);
+  const [showJournal, setShowJournal] = useState(false);
+  const [showBackpack, setShowBackpack] = useState(false);
+  const [openDialog, setOpenDialog] = React.useState(false);
   const [dialogType, setDialogType] = React.useState();
 
-  const locationForMap = useRef();
+  const mapRef = useRef();
+  const locationRef = useRef();
+  const sidebarRef = useRef({
+    location: false,
+    legend: false,
+    journal: false,
+    backpack: false,
+  });
 
-  useEffect(() => {
-    locationForMap.current = location;
-  }, [location]);
+  const bottomOffset = size.y - 64 - actionBarHeight - mapHeight;
 
-  useEffect(() => (window.onresize = updateSize), []);
+  const viewStartingPoint = useCallback(() => {
+    const currentLocations = [...quest.locations];
+    const sortedLocations = currentLocations.sort((a, b) =>
+      a.order > b.order ? 1 : -1
+    );
+    var padding = {
+      left: 0,
+      right: 0,
+      bottom: 0,
+      top: 0,
+    };
 
-  useEffect(() => {
-    var padding = {};
+    if (isMediumAndUp) {
+      padding["left"] = 300;
+      padding["right"] = 300;
+    } else {
+      padding["bottom"] = bottomOffset;
+    }
 
-    if (location && location.id) {
-      if (showLocationSidebar && showLegend) {
+    selectLocation(sortedLocations[0].id);
+    setShowLocationSidebar(true);
+
+    mapRef.current.easeTo({
+      center: {
+        lat: sortedLocations[0].latitude,
+        lng: sortedLocations[0].longitude,
+      },
+      bearing: sortedLocations[0].bearing,
+      pitch: sortedLocations[0].pitch,
+      zoom: sortedLocations[0].zoom,
+      padding: padding,
+      duration: 1000,
+    });
+  }, [quest, selectLocation, bottomOffset, isMediumAndUp]);
+
+  const showLocation = useCallback(
+    (loc) => {
+      var padding = {
+        left: 0,
+        right: 0,
+        bottom: 0,
+        top: 0,
+      };
+
+      if (sidebarRef.current.location && sidebarRef.current.legend) {
         if (isMediumAndUp) {
           padding["left"] = 300;
           padding["right"] = 300;
         } else {
           padding["bottom"] = bottomOffset;
         }
-      } else if (showLocationSidebar && !showLegend) {
+      } else if (sidebarRef.current.location && !sidebarRef.current.legend) {
         if (isMediumAndUp) {
           padding["left"] = 300;
           padding["right"] = 0;
         } else {
           padding["bottom"] = bottomOffset;
         }
-      } else if (!showLocationSidebar && showLegend) {
+      } else if (!sidebarRef.current.location && sidebarRef.current.legend) {
         if (isMediumAndUp) {
           padding["left"] = 0;
           padding["right"] = 300;
@@ -250,20 +290,24 @@ function QuestReader(props) {
           padding["bottom"] = 0;
         }
       }
-
       mapRef.current.easeTo({
         center: {
-          lat: location.latitude,
-          lng: location.longitude,
+          lat: loc.latitude,
+          lng: loc.longitude,
         },
-        bearing: location.bearing,
-        pitch: location.pitch,
-        zoom: location.zoom,
+        bearing: loc.bearing,
+        pitch: loc.pitch,
+        zoom: loc.zoom,
         padding: padding,
         duration: 1000,
       });
-    }
-  }, [location, showLocationSidebar, showLegend, isMediumAndUp, bottomOffset]);
+
+      selectLocation(loc.id);
+    },
+    [selectLocation, isMediumAndUp, bottomOffset]
+  );
+
+  useEffect(() => (window.onresize = updateSize), []);
 
   useEffect(() => {
     var questComplete = true;
@@ -277,28 +321,46 @@ function QuestReader(props) {
 
       if (questComplete) {
         handleUpdateDialogType("complete");
-        setOpen(true);
+        setOpenDialog(true);
       } else {
-        setOpen(false);
+        setOpenDialog(false);
       }
     } else {
-      setOpen(false);
+      setOpenDialog(false);
     }
   }, [quest.objectives]);
 
+  useEffect(() => {
+    locationRef.current = location;
+  }, [location]);
+
+  useEffect(() => {
+    sidebarRef.current["location"] = showLocationSidebar;
+    sidebarRef.current["legend"] = showLegend;
+    sidebarRef.current["journal"] = showJournal;
+    sidebarRef.current["backpack"] = showBackpack;
+  }, [showLocationSidebar, showLegend, showJournal, showBackpack]);
+
+  function updateSize() {
+    setSize({
+      x: window.innerWidth,
+      y: window.innerHeight,
+    });
+  }
+
+  function handleClose() {
+    setOpenDialog(false);
+  }
+
   function onLoad() {
     handleUpdateDialogType("begin");
-    setOpen(true);
-  };
+    setOpenDialog(true);
+  }
 
   function handleBeginQuest() {
-    const currentLocations = [...quest.locations];
-    const sortedLocations = currentLocations.sort((a, b) =>
-      a.order > b.order ? 1 : -1
-    );
-    selectLocation(sortedLocations[0].id);
+    viewStartingPoint();
     setShowLocationSidebar(true);
-    setOpen(false);
+    setOpenDialog(false);
   }
 
   function toggleLegend() {
@@ -364,8 +426,7 @@ function QuestReader(props) {
   }
 
   function handleSelectJournalItem() {
-    // setDialogType(null);
-    setOpen(true);
+    setOpenDialog(true);
   }
 
   function toggleBackpack() {
@@ -402,44 +463,78 @@ function QuestReader(props) {
   function handleSelectBackpackItem(item) {
     viewQuestItem(item);
     handleUpdateDialogType("item");
-    setOpen(true);
+    setOpenDialog(true);
   }
 
-  function handleViewLocation(selectedLocation) {
-    if (locationForMap) {
-      if (locationForMap.current.id === selectedLocation) {
-        toggleSidebar(selectedLocation);
-      } else {
-        setShowLocationSidebar(true);
+  function handleViewLocation(id) {
+    const selectedLocationIndex = findWithAttr(quest.locations, "id", id);
+    const selectedLocation = quest.locations[selectedLocationIndex];
 
-        if (!isMediumAndUp) {
-          setShowLegend(false);
-        }
-
-        selectLocation(selectedLocation);
-      }
+    if (locationRef.current.id === id) {
+      toggleSidebar(id);
     } else {
-      console.log(locationForMap);
+      setShowLocationSidebar(true);
+      if (!isMediumAndUp) {
+        setShowLegend(false);
+      }
+      selectLocation(id);
+      showLocation(selectedLocation);
     }
   }
 
   function toggleSidebar() {
-    var show = null;
-    setShowLocationSidebar((current) => {
-      show = current;
-      return !show;
+    var padding = {};
+
+    setShowLocationSidebar(!showLocationSidebar);
+
+    if (sidebarRef.current.location && sidebarRef.current.legend) {
+      if (isMediumAndUp) {
+        padding["left"] = 300;
+        padding["right"] = 300;
+      } else {
+        padding["bottom"] = bottomOffset;
+      }
+    } else if (!sidebarRef.current.location && !sidebarRef.current.legend) {
+      if (isMediumAndUp) {
+        padding["left"] = 300;
+        padding["right"] = 0;
+      } else {
+        padding["bottom"] = bottomOffset;
+      }
+    } else if (!sidebarRef.current.location && sidebarRef.current.legend) {
+      if (isMediumAndUp) {
+        padding["left"] = 0;
+        padding["right"] = 300;
+      } else {
+        padding["bottom"] = bottomOffset;
+      }
+    } else if (sidebarRef.current.location && !sidebarRef.current.legend) {
+      if (isMediumAndUp) {
+        padding["left"] = 0;
+        padding["right"] = 0;
+      } else {
+        padding["bottom"] = 0;
+      }
+    }
+
+    mapRef.current.easeTo({
+      center: {
+        lat: locationRef.current.latitude,
+        lng: locationRef.current.longitude,
+      },
+      bearing: locationRef.current.bearing,
+      pitch: locationRef.current.pitch,
+      zoom: locationRef.current.zoom,
+      padding: padding,
+      duration: 1000,
     });
   }
-
-  function handleClose() {
-    setOpen(false);
-  };
 
   function handleRestartQuest() {
     var updatedObjectives = [];
     var updatedItems = [];
     handleUpdateDialogType("begin");
-    setOpen(false);
+    setOpenDialog(false);
 
     setTimeout(() => {
       quest.objectives.map((objective) => {
@@ -461,7 +556,7 @@ function QuestReader(props) {
 
   function handleUpdateDialogType(type) {
     setDialogType(type);
-  };
+  }
 
   return (
     <React.Fragment>
@@ -471,7 +566,7 @@ function QuestReader(props) {
         item={item}
         dialogType={dialogType}
         updateDialogType={handleUpdateDialogType}
-        open={open}
+        open={openDialog}
         operateQuestItem={operateQuestItem}
         onClose={handleClose}
         beginQuest={handleBeginQuest}
