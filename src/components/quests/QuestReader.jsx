@@ -231,7 +231,6 @@ function QuestReader(props) {
 
     if (isMediumAndUp) {
       padding["left"] = 300;
-      padding["right"] = 300;
     } else {
       padding["bottom"] = bottomOffset;
     }

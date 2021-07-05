@@ -214,6 +214,7 @@ function QuestPlayer(props) {
 
   const mapRef = useRef();
   const geolocateRef = useRef();
+  const popupRef = useRef();
   const locationRef = useRef();
   const positionRef = useRef();
   const sidebarRef = useRef({
@@ -275,7 +276,6 @@ function QuestPlayer(props) {
       if (totalDistanceInYards < 100) {
         if (isMediumAndUp) {
           padding["left"] = 300;
-          padding["right"] = 300;
         } else {
           padding["bottom"] = bottomOffset;
         }
@@ -540,6 +540,8 @@ function QuestPlayer(props) {
   }
 
   function handleViewLocation(id) {
+    console.log("handle view location")
+
     const selectedLocationIndex = findWithAttr(quest.locations, "id", id);
     const selectedLocation = quest.locations[selectedLocationIndex];
 
@@ -571,38 +573,49 @@ function QuestPlayer(props) {
   }
 
   function toggleSidebar() {
+    console.log("toggle sidebar")
     var padding = {};
 
-    setShowLocationSidebar(!showLocationSidebar);
-
     if (sidebarRef.current.location && sidebarRef.current.legend) {
+      console.log("both visible")
       if (isMediumAndUp) {
         padding["left"] = 300;
         padding["right"] = 300;
       } else {
         padding["bottom"] = bottomOffset;
       }
+
+      setShowLocationSidebar(false);
     } else if (!sidebarRef.current.location && !sidebarRef.current.legend) {
+      console.log("none selected")
       if (isMediumAndUp) {
         padding["left"] = 300;
         padding["right"] = 0;
       } else {
         padding["bottom"] = bottomOffset;
       }
+
+      setShowLocationSidebar(true);
     } else if (!sidebarRef.current.location && sidebarRef.current.legend) {
+      console.log("no location")
       if (isMediumAndUp) {
         padding["left"] = 0;
         padding["right"] = 300;
       } else {
         padding["bottom"] = bottomOffset;
       }
+
+      setShowLocationSidebar(true);
     } else if (sidebarRef.current.location && !sidebarRef.current.legend) {
+      console.log("no legend")
       if (isMediumAndUp) {
         padding["left"] = 0;
         padding["right"] = 0;
       } else {
         padding["bottom"] = 0;
       }
+
+      setShowLocationSidebar(false);
     }
 
     mapRef.current.easeTo({
@@ -616,6 +629,8 @@ function QuestPlayer(props) {
       padding: padding,
       duration: 1000,
     });
+
+    // setShowLocationSidebar(!showLocationSidebar);
   }
 
   function handleRestartQuest() {
@@ -695,9 +710,9 @@ function QuestPlayer(props) {
                   <Box
                     id="legendSidebar"
                     className={`${classes.sidebar}
-                ${classes.flexCenter}
-                ${classes.legendSidebar}
-                ${showLegend ? "" : "collapsed"}`}
+                    ${classes.flexCenter}
+                    ${classes.legendSidebar}
+                    ${showLegend ? "" : "collapsed"}`}
                   >
                     <QuestLegend
                       width={sidebarWidth}
@@ -772,14 +787,19 @@ function QuestPlayer(props) {
                       onClick={toggleBackpack}
                     />
                   </Box>
-                  {/* <Popup
-                    longitude={location.latitude}
-                    latitude={location.longitude}
-                    closeButton={false}
-                    closeOnClick={false}
-                  >
-                    Hi there! 👋
-                  </Popup> */}
+                  {(location && location.latitude ) && (
+                    <Popup
+                      ref={popupRef}
+                      longitude={location.latitude}
+                      latitude={location.longitude}
+                      closeButton={false}
+                      closeOnClick={false}
+                      anchor="top"
+                      offsetTop={-30}
+                    >
+                      {location.name}
+                    </Popup>
+                  )}
                   {quest.locations.map((el, index) => (
                     <QuestMapMarker
                       location={el}
