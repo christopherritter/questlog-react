@@ -66,7 +66,7 @@ const QuestJournal = (props) => {
                 <ListItem
                   button
                   key={obj.id}
-                  selected={obj.id === location.id}
+                  selected={location ? obj.id === location.id : false }
                   onClick={() => props.selectJournalItem(obj)}
                 >
                   <ListItemIcon>

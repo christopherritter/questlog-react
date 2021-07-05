@@ -72,7 +72,7 @@ const QuestLegend = (props) => {
                 <ListItem
                   button
                   key={index}
-                  selected={loc.id === location.id}
+                  selected={ location ? loc.id === location.id : false }
                   onClick={() => onListItemClick(loc)}
                 >
                   <ListItemIcon>

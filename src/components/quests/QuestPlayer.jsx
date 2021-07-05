@@ -187,6 +187,7 @@ function QuestPlayer(props) {
   const {
     quest,
     location,
+    clearLocation,
     item,
     setQuest,
     updateCenter,
@@ -408,7 +409,7 @@ function QuestPlayer(props) {
     sidebarRef.current["legend"] = showLegend;
     sidebarRef.current["journal"] = showJournal;
     sidebarRef.current["backpack"] = showBackpack;
-  }, [showLocationSidebar, showLegend, showJournal, showBackpack]);
+  }, [showLocationSidebar, showLegend, showJournal, showBackpack, clearLocation]);
 
   function updateSize() {
     setSize({
@@ -558,7 +559,7 @@ function QuestPlayer(props) {
       var totalDistanceInYards = Math.round(totalDistance * 1760);
 
       if (totalDistanceInYards < 100) {
-        if (locationRef.current.id === id) {
+        if (locationRef.current && locationRef.current.id === id) {
           toggleSidebar(id);
         } else {
           setShowLocationSidebar(true);
@@ -604,14 +605,16 @@ function QuestPlayer(props) {
 
       setShowLocationSidebar(true);
     } else if (sidebarRef.current.location && !sidebarRef.current.legend) {
+      console.log("clear location")
       if (isMediumAndUp) {
         padding["left"] = 0;
         padding["right"] = 0;
       } else {
         padding["bottom"] = 0;
       }
-
+      
       setShowLocationSidebar(false);
+      // clearLocation();
     }
 
     mapRef.current.easeTo({
@@ -717,9 +720,9 @@ function QuestPlayer(props) {
                   <Box
                     id="journalSidebar"
                     className={`${classes.sidebar}
-                ${classes.flexCenter}
-                ${classes.journalSidebar}
-                ${showJournal ? "" : "collapsed"}`}
+                    ${classes.flexCenter}
+                    ${classes.journalSidebar}
+                    ${showJournal ? "" : "collapsed"}`}
                   >
                     <QuestJournal
                       width={sidebarWidth}

@@ -91,7 +91,7 @@ const QuestMapMarker = (props) => {
       onClick={onMarkerClick}
       {...props}
     >
-      <Avatar className={ location.id === currentLocation.id ? classes.green : classes.darkGrey }>
+      <Avatar className={ currentLocation ? location.id === currentLocation.id ? classes.green : classes.darkGrey : classes.darkGrey }>
         {switchMarker(location.marker)}
       </Avatar>
     </Marker>
