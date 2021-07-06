@@ -373,6 +373,7 @@ function QuestReader(props) {
       }
 
       setShowLegend(false);
+      if (!showLocationSidebar) clearLocation();
 
       mapRef.current.easeTo({
         padding: padding,
