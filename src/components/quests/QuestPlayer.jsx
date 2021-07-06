@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import MapGL, { GeolocateControl, Popup } from "@urbica/react-map-gl";
+import MapGL, { GeolocateControl } from "@urbica/react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import bbox from "@turf/bbox";
 import distance from "@turf/distance";
@@ -215,7 +215,6 @@ function QuestPlayer(props) {
 
   const mapRef = useRef();
   const geolocateRef = useRef();
-  const popupRef = useRef();
   const locationRef = useRef();
   const positionRef = useRef();
   const sidebarRef = useRef({
@@ -429,9 +428,6 @@ function QuestPlayer(props) {
     if (geolocateRef.current) {
       geolocateRef.current.options.showAccuracyCircle = false;
     }
-    if (popupRef.current) {
-      popupRef.current.options.dynamicPosition = false;
-    }
   }
 
   function handleBeginQuest() {
@@ -614,20 +610,27 @@ function QuestPlayer(props) {
       }
       
       setShowLocationSidebar(false);
-      // clearLocation();
+      clearLocation();
     }
 
-    mapRef.current.easeTo({
-      center: {
-        lat: locationRef.current.latitude,
-        lng: locationRef.current.longitude,
-      },
-      bearing: locationRef.current.bearing,
-      pitch: locationRef.current.pitch,
-      zoom: locationRef.current.zoom,
-      padding: padding,
-      duration: 1000,
-    });
+    if (locationRef.current) {
+      mapRef.current.easeTo({
+        center: {
+          lat: locationRef.current.latitude,
+          lng: locationRef.current.longitude,
+        },
+        bearing: locationRef.current.bearing,
+        pitch: locationRef.current.pitch,
+        zoom: locationRef.current.zoom,
+        padding: padding,
+        duration: 1000,
+      });
+    } else {
+      mapRef.current.easeTo({
+        padding: padding,
+        duration: 1000,
+      });
+    }
   }
 
   function handleRestartQuest() {
@@ -784,19 +787,6 @@ function QuestPlayer(props) {
                       onClick={toggleBackpack}
                     />
                   </Box>
-                  {location && location.latitude && (
-                    <Popup
-                      ref={popupRef}
-                      longitude={location.latitude}
-                      latitude={location.longitude}
-                      closeButton={false}
-                      closeOnClick={false}
-                      anchor="top"
-                      offsetTop={-30}
-                    >
-                      {location.name}
-                    </Popup>
-                  )}
                   {quest.locations.map((el, index) => (
                     <QuestMapMarker
                       location={el}

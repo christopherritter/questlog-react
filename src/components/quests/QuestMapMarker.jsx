@@ -21,6 +21,9 @@ import SignIcon from "mdi-material-ui/SignText";
 import CampfireIcon from "mdi-material-ui/Campfire";
 
 const useStyles = makeStyles((theme) => ({
+  marker: {
+    cursor: "pointer",
+  },
   pink: {
     color: theme.palette.getContrastText(pink[500]),
     backgroundColor: pink[500],
@@ -30,24 +33,24 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: green[500],
     borderColor: green[800],
     borderWidth: 2,
-    borderStyle: "solid"
+    borderStyle: "solid",
+    zIndex: 100,
   },
   darkGrey: {
     color: "#fff",
     backgroundColor: grey[800],
+    zIndex: 10,
   },
 }));
 
 const QuestMapMarker = (props) => {
   const classes = useStyles(props);
-  const {
-    location: currentLocation,
-  } = useContext(QuestContext);
+  const { location: currentLocation } = useContext(QuestContext);
   const { location, viewLocation } = props;
   const markerRef = useRef();
 
   const onMarkerClick = () => {
-    viewLocation(location.id)
+    viewLocation(location.id);
   };
 
   const switchMarker = (marker) => {
@@ -80,21 +83,38 @@ const QuestMapMarker = (props) => {
   };
 
   return (
-    <Marker
-      ref={markerRef}
-      id={location.id}
-      longitude={location.longitude}
-      latitude={location.latitude}
-      bearing={location.bearing}
-      pitch={location.pitch}
-      zoom={location.zoom}
-      onClick={onMarkerClick}
-      {...props}
+    <div
+    id={location.id}
+      className={
+        classes.selected
+      }
+      style={{color: "orange"}}
     >
-      <Avatar className={ currentLocation ? location.id === currentLocation.id ? classes.green : classes.darkGrey : classes.darkGrey }>
-        {switchMarker(location.marker)}
-      </Avatar>
-    </Marker>
+      <Marker
+        ref={markerRef}
+        style={{color: "pink"}}
+        longitude={location.longitude}
+        latitude={location.latitude}
+        bearing={location.bearing}
+        pitch={location.pitch}
+        zoom={location.zoom}
+        onClick={onMarkerClick}
+        {...props}
+      >
+        <Avatar
+          className={
+            classes.marker + " " +
+            (currentLocation
+              ? location.id === currentLocation.id
+                ? classes.green
+                : classes.darkGrey
+              : classes.darkGrey )
+          }
+        >
+          {switchMarker(location.marker)}
+        </Avatar>
+      </Marker>
+    </div>
   );
 };
 

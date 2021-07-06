@@ -184,6 +184,7 @@ function QuestReader(props) {
   const {
     quest,
     location,
+    clearLocation,
     item,
     setQuest,
     updateCenter,
@@ -466,11 +467,11 @@ function QuestReader(props) {
   }
 
   function handleViewLocation(id) {
-    console.log("handle view location")
+    // console.log("handle view location")
     const selectedLocationIndex = findWithAttr(quest.locations, "id", id);
     const selectedLocation = quest.locations[selectedLocationIndex];
 
-    if (locationRef.current.id === id) {
+    if (locationRef.current && locationRef.current.id === id) {
       toggleSidebar(id);
     } else {
       setShowLocationSidebar(true);
@@ -483,7 +484,7 @@ function QuestReader(props) {
   }
 
   function toggleSidebar() {
-    console.log("toggle sidebar")
+    // console.log("toggle sidebar")
     var padding = {};
 
     if (sidebarRef.current.location && sidebarRef.current.legend) {
@@ -522,19 +523,27 @@ function QuestReader(props) {
       }
 
       setShowLocationSidebar(false);
+      clearLocation();
     }
 
-    mapRef.current.easeTo({
-      center: {
-        lat: locationRef.current.latitude,
-        lng: locationRef.current.longitude,
-      },
-      bearing: locationRef.current.bearing,
-      pitch: locationRef.current.pitch,
-      zoom: locationRef.current.zoom,
-      padding: padding,
-      duration: 1000,
-    });
+    if (locationRef.current) {
+      mapRef.current.easeTo({
+        center: {
+          lat: locationRef.current.latitude,
+          lng: locationRef.current.longitude,
+        },
+        bearing: locationRef.current.bearing,
+        pitch: locationRef.current.pitch,
+        zoom: locationRef.current.zoom,
+        padding: padding,
+        duration: 1000,
+      });
+    } else {
+      mapRef.current.easeTo({
+        padding: padding,
+        duration: 1000,
+      });
+    }
   }
 
   function handleRestartQuest() {
@@ -693,6 +702,7 @@ function QuestReader(props) {
                   </Box>
                   {quest.locations.map((el, index) => (
                     <QuestMapMarker
+                      style={{ color: "red" }}
                       location={el}
                       key={index}
                       viewLocation={handleViewLocation}
