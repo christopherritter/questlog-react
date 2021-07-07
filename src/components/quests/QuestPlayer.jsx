@@ -499,6 +499,10 @@ function QuestPlayer(props) {
         padding: padding,
         duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
       });
+
+      setTimeout(function () {
+        geolocateRef.current.trigger();
+      }, 500);
     } else {
       if (isMediumAndUp) {
         padding["right"] = 300;
@@ -534,6 +538,10 @@ function QuestPlayer(props) {
         padding: padding,
         duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
       });
+
+      setTimeout(function () {
+        geolocateRef.current.trigger();
+      }, 500);
     } else {
       if (isMediumAndUp) {
         padding["right"] = 300;
