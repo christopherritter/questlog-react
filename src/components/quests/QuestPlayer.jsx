@@ -273,7 +273,7 @@ function QuestPlayer(props) {
       var totalDistance = distance(from, to, options);
       var totalDistanceInYards = Math.round(totalDistance * 1760);
 
-      if (totalDistanceInYards < 100) {
+      if (totalDistanceInYards < 30) {
         if (isMediumAndUp) {
           padding["left"] = 300;
         } else {
@@ -555,7 +555,7 @@ function QuestPlayer(props) {
       var totalDistance = distance(from, to, options);
       var totalDistanceInYards = Math.round(totalDistance * 1760);
 
-      if (totalDistanceInYards < 100) {
+      if (totalDistanceInYards < 30) {
         if (locationRef.current && locationRef.current.id === id) {
           toggleSidebar(id);
         } else {
@@ -602,7 +602,6 @@ function QuestPlayer(props) {
 
       setShowLocationSidebar(true);
     } else if (sidebarRef.current.location && !sidebarRef.current.legend) {
-      console.log("clear location")
       if (isMediumAndUp) {
         padding["left"] = 0;
         padding["right"] = 0;
