@@ -702,6 +702,10 @@ function QuestPlayer(props) {
     setDialogType(type);
   }
 
+  function handleClick(event) {
+    event.preventDefault();
+  }
+
   return (
     <React.Fragment>
       <QuestDialog
@@ -733,6 +737,13 @@ function QuestPlayer(props) {
                   zoom={quest.region.zoom}
                   onViewportChange={updateCenter}
                   onLoad={onLoad}
+                  onClick={handleClick}
+                  cursorStyle="pointer"
+                  doubleClickZoom={false}
+                  dragPan={false}
+                  dragRotate={false}
+                  attributionControl="false"
+                  scrollZoom={false}
                 >
                   <Box
                     id="locationSidebar"
