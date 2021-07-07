@@ -41,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: grey[800],
     zIndex: 10,
   },
+  hidden: {
+    display: "none"
+  }
 }));
 
 const QuestMapMarker = (props) => {
@@ -83,38 +86,30 @@ const QuestMapMarker = (props) => {
   };
 
   return (
-    <div
-    id={location.id}
-      className={
-        classes.selected
-      }
-      style={{color: "orange"}}
+    <Marker
+      ref={markerRef}
+      longitude={location.longitude}
+      latitude={location.latitude}
+      bearing={location.bearing}
+      pitch={location.pitch}
+      zoom={location.zoom}
+      onClick={onMarkerClick}
+      {...props}
     >
-      <Marker
-        ref={markerRef}
-        style={{color: "pink"}}
-        longitude={location.longitude}
-        latitude={location.latitude}
-        bearing={location.bearing}
-        pitch={location.pitch}
-        zoom={location.zoom}
-        onClick={onMarkerClick}
-        {...props}
+      <Avatar
+        className={
+          classes.marker
+          + " " +
+          (currentLocation
+            ? location.id === currentLocation.id
+              ? classes.green
+              : classes.hidden
+            : classes.darkGrey )
+        }
       >
-        <Avatar
-          className={
-            classes.marker + " " +
-            (currentLocation
-              ? location.id === currentLocation.id
-                ? classes.green
-                : classes.darkGrey
-              : classes.darkGrey )
-          }
-        >
-          {switchMarker(location.marker)}
-        </Avatar>
-      </Marker>
-    </div>
+        {switchMarker(location.marker)}
+      </Avatar>
+    </Marker>
   );
 };
 
