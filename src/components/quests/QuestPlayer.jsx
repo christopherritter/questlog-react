@@ -408,7 +408,13 @@ function QuestPlayer(props) {
     sidebarRef.current["legend"] = showLegend;
     sidebarRef.current["journal"] = showJournal;
     sidebarRef.current["backpack"] = showBackpack;
-  }, [showLocationSidebar, showLegend, showJournal, showBackpack, clearLocation]);
+  }, [
+    showLocationSidebar,
+    showLegend,
+    showJournal,
+    showBackpack,
+    clearLocation,
+  ]);
 
   function updateSize() {
     setSize({
@@ -447,12 +453,21 @@ function QuestPlayer(props) {
       }
 
       setShowLegend(false);
-      if (!showLocationSidebar) clearLocation();
-
-      mapRef.current.easeTo({
-        padding: padding,
-        duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
-      });
+      if (!showLocationSidebar) {
+        clearLocation();
+        mapRef.current.easeTo({
+          padding: padding,
+          duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
+        });
+        setTimeout(function () {
+          geolocateRef.current.trigger();
+        }, 500);
+      } else {
+        mapRef.current.easeTo({
+          padding: padding,
+          duration: 1000, // In ms, CSS transition duration property for the sidebar matches this value
+        });
+      }
     } else {
       if (isMediumAndUp) {
         padding["right"] = 300;
@@ -583,37 +598,7 @@ function QuestPlayer(props) {
       }
 
       setShowLocationSidebar(false);
-    } else if (!sidebarRef.current.location && !sidebarRef.current.legend) {
-      if (isMediumAndUp) {
-        padding["left"] = 300;
-        padding["right"] = 0;
-      } else {
-        padding["bottom"] = bottomOffset;
-      }
 
-      setShowLocationSidebar(true);
-    } else if (!sidebarRef.current.location && sidebarRef.current.legend) {
-      if (isMediumAndUp) {
-        padding["left"] = 300;
-        padding["right"] = 300;
-      } else {
-        padding["bottom"] = bottomOffset;
-      }
-
-      setShowLocationSidebar(true);
-    } else if (sidebarRef.current.location && !sidebarRef.current.legend) {
-      if (isMediumAndUp) {
-        padding["left"] = 0;
-        padding["right"] = 0;
-      } else {
-        padding["bottom"] = 0;
-      }
-      
-      setShowLocationSidebar(false);
-      clearLocation();
-    }
-
-    if (locationRef.current) {
       mapRef.current.easeTo({
         center: {
           lat: locationRef.current.latitude,
@@ -625,11 +610,67 @@ function QuestPlayer(props) {
         padding: padding,
         duration: 1000,
       });
-    } else {
+    } else if (!sidebarRef.current.location && !sidebarRef.current.legend) {
+      if (isMediumAndUp) {
+        padding["left"] = 300;
+        padding["right"] = 0;
+      } else {
+        padding["bottom"] = bottomOffset;
+      }
+
+      setShowLocationSidebar(true);
+
       mapRef.current.easeTo({
+        center: {
+          lat: locationRef.current.latitude,
+          lng: locationRef.current.longitude,
+        },
+        bearing: locationRef.current.bearing,
+        pitch: locationRef.current.pitch,
+        zoom: locationRef.current.zoom,
         padding: padding,
         duration: 1000,
       });
+    } else if (!sidebarRef.current.location && sidebarRef.current.legend) {
+      if (isMediumAndUp) {
+        padding["left"] = 300;
+        padding["right"] = 300;
+      } else {
+        padding["bottom"] = bottomOffset;
+      }
+
+      setShowLocationSidebar(true);
+
+      mapRef.current.easeTo({
+        center: {
+          lat: locationRef.current.latitude,
+          lng: locationRef.current.longitude,
+        },
+        bearing: locationRef.current.bearing,
+        pitch: locationRef.current.pitch,
+        zoom: locationRef.current.zoom,
+        padding: padding,
+        duration: 1000,
+      });
+    } else if (sidebarRef.current.location && !sidebarRef.current.legend) {
+      if (isMediumAndUp) {
+        padding["left"] = 0;
+        padding["right"] = 0;
+      } else {
+        padding["bottom"] = 0;
+      }
+
+      setShowLocationSidebar(false);
+
+      clearLocation();
+      mapRef.current.easeTo({
+        padding: padding,
+        duration: 500,
+      });
+
+      setTimeout(function () {
+        geolocateRef.current.trigger();
+      }, 500);
     }
   }
 
