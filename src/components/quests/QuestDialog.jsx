@@ -266,7 +266,7 @@ const QuestItemDialog = (props) => {
 };
 
 const QuestBeginDialog = (props) => {
-  const { quest, location, beginQuest, open, onClose } = props;
+  const { quest, beginQuest, open, onClose } = props;
 
   return (
     <Dialog

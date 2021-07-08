@@ -468,15 +468,12 @@ function QuestReader(props) {
   }
 
   function handleViewLocation(id) {
-    console.log("handle view location")
     const selectedLocationIndex = findWithAttr(quest.locations, "id", id);
     const selectedLocation = quest.locations[selectedLocationIndex];
 
     if (locationRef.current && locationRef.current.id === id) {
-      // console.log("match")
       toggleSidebar(id);
     } else {
-      console.log("no match")
       setShowLocationSidebar(true);
       if (!isMediumAndUp) {
         setShowLegend(false);
