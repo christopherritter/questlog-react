@@ -236,7 +236,7 @@ function QuestPlayer(props) {
       var padding = {};
 
       if (isMediumAndUp) {
-        padding = { left: 0, right: 300, top: 50, bottom: 150 };
+        padding = { left: 75, right: 250, top: 50, bottom: 150 };
       } else {
         padding = { left: 75, right: 100, top: 50, bottom: 50 };
       }
