@@ -183,6 +183,7 @@ const QuestSidebar = (props) => {
     operateQuestItem,
     findWithAttr,
   } = useContext(QuestContext);
+  const { selectMoveAction } = props;
 
   const localEntries = quest.entries.filter(
     (entry) => entry.locationId === location.id
@@ -262,7 +263,7 @@ const QuestSidebar = (props) => {
         <QuestActions
           quest={quest}
           location={location}
-          selectLocation={selectLocation}
+          selectLocation={selectMoveAction}
           viewQuestItem={viewQuestItem}
           takeQuestItem={takeQuestItem}
           operateQuestItem={operateQuestItem}
