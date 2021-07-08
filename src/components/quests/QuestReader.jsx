@@ -263,7 +263,7 @@ function QuestReader(props) {
 
       if (sidebarRef.current.location && sidebarRef.current.legend) {
         if (isMediumAndUp) {
-          padding["left"] = 0;
+          padding["left"] = 300;
           padding["right"] = 300;
         } else {
           padding["bottom"] = bottomOffset;
@@ -468,13 +468,15 @@ function QuestReader(props) {
   }
 
   function handleViewLocation(id) {
-    // console.log("handle view location")
+    console.log("handle view location")
     const selectedLocationIndex = findWithAttr(quest.locations, "id", id);
     const selectedLocation = quest.locations[selectedLocationIndex];
 
     if (locationRef.current && locationRef.current.id === id) {
+      // console.log("match")
       toggleSidebar(id);
     } else {
+      console.log("no match")
       setShowLocationSidebar(true);
       if (!isMediumAndUp) {
         setShowLegend(false);
@@ -485,7 +487,6 @@ function QuestReader(props) {
   }
 
   function toggleSidebar() {
-    // console.log("toggle sidebar")
     var padding = {};
 
     if (sidebarRef.current.location && sidebarRef.current.legend) {

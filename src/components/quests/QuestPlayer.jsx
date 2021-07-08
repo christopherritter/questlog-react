@@ -319,7 +319,7 @@ function QuestPlayer(props) {
 
       if (sidebarRef.current.location && sidebarRef.current.legend) {
         if (isMediumAndUp) {
-          padding["left"] = 0;
+          padding["left"] = 300;
           padding["right"] = 300;
         } else {
           padding["bottom"] = bottomOffset;
