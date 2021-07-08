@@ -177,7 +177,6 @@ const QuestSidebar = (props) => {
   const {
     quest,
     location,
-    selectLocation,
     viewQuestItem,
     takeQuestItem,
     operateQuestItem,

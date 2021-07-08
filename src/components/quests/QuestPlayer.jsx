@@ -236,13 +236,14 @@ function QuestPlayer(props) {
       var padding = {};
 
       if (isMediumAndUp) {
-        padding = { left: 200, right: 200, top: 50, bottom: 50 };
+        padding = { left: 0, right: 300, top: 50, bottom: 150 };
       } else {
         padding = { left: 75, right: 100, top: 50, bottom: 50 };
       }
 
       setShowLocationSidebar(false);
-      selectLocation(loc.id);
+
+      setTimeout(function(){ selectLocation(loc.id)}, 600);
 
       mapRef.current.fitBounds(bounds, {
         padding: padding,
@@ -589,6 +590,7 @@ function QuestPlayer(props) {
           showLocation(selectedLocation);
         }
       } else {
+        console.log("preview location")
         previewLocation(selectedLocation);
       }
     }
