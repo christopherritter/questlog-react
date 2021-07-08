@@ -590,7 +590,6 @@ function QuestPlayer(props) {
           showLocation(selectedLocation);
         }
       } else {
-        console.log("preview location")
         previewLocation(selectedLocation);
       }
     }
