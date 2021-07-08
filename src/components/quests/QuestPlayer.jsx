@@ -581,7 +581,7 @@ function QuestPlayer(props) {
 
       if (totalDistanceInYards < 30) {
         if (locationRef.current && locationRef.current.id === id) {
-          toggleSidebar(id);
+          toggleSidebar();
         } else {
           setShowLocationSidebar(true);
           if (!isMediumAndUp) {
@@ -596,6 +596,7 @@ function QuestPlayer(props) {
   }
 
   function toggleSidebar() {
+    console.log("toggle sidebar")
     var padding = {};
 
     if (sidebarRef.current.location && sidebarRef.current.legend) {

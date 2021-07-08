@@ -124,6 +124,8 @@ const QuestActions = ({
   });
 
   function selectAction(event) {
+    console.log("select action")
+    console.log(event)
     const actionIndex = findWithAttr(quest.actions, "id", event.target.id);
     const action = quest.actions[actionIndex];
 

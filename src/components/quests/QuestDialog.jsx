@@ -177,11 +177,11 @@ const QuestObjectivesDialog = (props) => {
         </List>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="secondary">
-          Keep Playing
-        </Button>
-        <Button onClick={restartQuest} color="primary">
+        <Button onClick={restartQuest} color="secondary">
           Restart Quest
+        </Button>
+        <Button onClick={onClose} color="primary">
+          Keep Playing
         </Button>
       </DialogActions>
     </Dialog>
@@ -220,7 +220,17 @@ const QuestCompleteDialog = (props) => {
 };
 
 const QuestItemDialog = (props) => {
-  const { quest, item, viewQuestItem, selectLocation, takeQuestItem, operateQuestItem, findWithAttr, open, onClose } = props;
+  const {
+    quest,
+    item,
+    viewQuestItem,
+    selectLocation,
+    takeQuestItem,
+    operateQuestItem,
+    findWithAttr,
+    open,
+    onClose,
+  } = props;
 
   return (
     item && (
@@ -253,10 +263,10 @@ const QuestItemDialog = (props) => {
       </Dialog>
     )
   );
-}
+};
 
 const QuestBeginDialog = (props) => {
-  const { quest, beginQuest, open, onClose } = props;
+  const { quest, location, beginQuest, open, onClose } = props;
 
   return (
     <Dialog
@@ -267,9 +277,37 @@ const QuestBeginDialog = (props) => {
     >
       <DialogTitle id="quest-begin-dialog-title">{quest.title}</DialogTitle>
       <DialogContent>
-        <DialogContentText id="quest-begin-dialog-description">
-          {quest.description}
+        <DialogContentText id="quest-objectives-dialog-description">
+          Complete these objectives to finish the quest.
         </DialogContentText>
+        <List component="nav">
+          {quest.objectives &&
+            quest.objectives
+              .filter((obj) => {
+                return obj.isPrimary === true;
+              })
+              .map((obj) => {
+                return (
+                  <ListItem
+                    button
+                    key={obj.id}
+                  >
+                    <ListItemIcon>
+                      {obj.isComplete ? (
+                        <CheckBox />
+                      ) : (
+                        <CheckBoxOutlineBlankIcon />
+                      )}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={
+                        <Typography variant="subtitle1">{obj.text}</Typography>
+                      }
+                    />
+                  </ListItem>
+                );
+              })}
+        </List>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="secondary">
@@ -281,12 +319,10 @@ const QuestBeginDialog = (props) => {
       </DialogActions>
     </Dialog>
   );
-}
+};
 
 function toggleView(props) {
-  const {
-    dialogType,
-  } = props;
+  const { dialogType } = props;
 
   // var questComplete = true;
   // updateDialogType(null);
@@ -302,17 +338,17 @@ function toggleView(props) {
 
   switch (dialogType) {
     case "item":
-      return <QuestItemDialog {...props} />
+      return <QuestItemDialog {...props} />;
     case "begin":
-      return <QuestBeginDialog {...props} />
+      return <QuestBeginDialog {...props} />;
     case "complete":
       return <QuestCompleteDialog {...props} />;
     default:
       // if (questComplete !== true) {
-        return <QuestObjectivesDialog {...props} />;
-      // } else {
-        // return <QuestCompleteDialog {...props} />;
-      // }
+      return <QuestObjectivesDialog {...props} />;
+    // } else {
+    // return <QuestCompleteDialog {...props} />;
+    // }
   }
 }
 
