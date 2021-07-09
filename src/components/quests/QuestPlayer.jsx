@@ -228,9 +228,9 @@ function QuestPlayer(props) {
 
   const previewLocation = useCallback(
     (loc) => {
-      console.log("preview location");
-      console.log(positionRef.current);
-      console.log(loc);
+      // console.log("preview location");
+      // console.log(positionRef.current);
+      // console.log(loc);
       var from = [positionRef.current.longitude, positionRef.current.latitude];
       var to = [loc.longitude, loc.latitude];
       var coords = [from, to];
@@ -243,9 +243,9 @@ function QuestPlayer(props) {
         padding = { left: 75, right: 250, top: 50, bottom: 150 };
       } else {
         // setShowLegend(false);
-        padding = { left: 75, right: 100, top: 50, bottom: 125 };
-        console.log("bottom padding is correct.");
-        console.log("so what else is affecting it?");
+        padding = { left: 75, right: 100, top: 50, bottom: 50 };
+        // console.log("bottom padding is correct.");
+        // console.log("so what else is affecting it?");
       }
 
       setShowLocationSidebar(false);
@@ -258,17 +258,18 @@ function QuestPlayer(props) {
           padding: padding,
         });
       }, timeout);
-      console.log("fit bounds");
-      console.log(bounds);
-      mapRef.current.easeTo({
-        padding: {
-          bottom: 0
-        },
-        duration: timeout,
-      });
-
+      // console.log("fit bounds");
+      // console.log(bounds);
+      if (!showLegend) {
+        mapRef.current.easeTo({
+          padding: {
+            bottom: 0
+          },
+          duration: timeout,
+        });
+      }
     },
-    [isMediumAndUp, selectLocation, positionRef]
+    [isMediumAndUp, selectLocation, positionRef, showLegend]
   );
 
   const viewStartingPoint = useCallback(() => {
