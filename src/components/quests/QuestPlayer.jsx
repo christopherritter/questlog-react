@@ -612,13 +612,6 @@ function QuestPlayer(props) {
           showLocation(selectedLocation);
         }
       } else {
-        console.log("too far away");
-        // mapRef.current.easeTo({
-        //   padding: {
-        //     bottom: 0
-        //   },
-        //   duration: 600,
-        // });
         previewLocation(selectedLocation);
       }
     }
