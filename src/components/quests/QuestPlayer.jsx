@@ -228,26 +228,45 @@ function QuestPlayer(props) {
 
   const previewLocation = useCallback(
     (loc) => {
+      console.log("preview location");
+      console.log(positionRef.current);
+      console.log(loc);
       var from = [positionRef.current.longitude, positionRef.current.latitude];
       var to = [loc.longitude, loc.latitude];
       var coords = [from, to];
       var multiPt = multiPoint(coords);
       var bounds = bbox(multiPt);
       var padding = {};
+      var timeout = 250;
 
       if (isMediumAndUp) {
         padding = { left: 75, right: 250, top: 50, bottom: 150 };
       } else {
-        padding = { left: 75, right: 100, top: 50, bottom: 50 };
+        // setShowLegend(false);
+        padding = { left: 75, right: 100, top: 50, bottom: 125 };
+        console.log("bottom padding is correct.");
+        console.log("so what else is affecting it?");
       }
 
       setShowLocationSidebar(false);
 
-      setTimeout(function(){ selectLocation(loc.id)}, 600);
-
-      mapRef.current.fitBounds(bounds, {
-        padding: padding,
+      setTimeout(function () {
+        selectLocation(loc.id);
+      }, 600);
+      setTimeout(function () {
+        mapRef.current.fitBounds(bounds, {
+          padding: padding,
+        });
+      }, timeout);
+      console.log("fit bounds");
+      console.log(bounds);
+      mapRef.current.easeTo({
+        padding: {
+          bottom: 0
+        },
+        duration: timeout,
       });
+
     },
     [isMediumAndUp, selectLocation, positionRef]
   );
@@ -310,6 +329,7 @@ function QuestPlayer(props) {
 
   const showLocation = useCallback(
     (loc) => {
+      console.log("show location");
       var padding = {
         left: 0,
         right: 0,
@@ -445,6 +465,7 @@ function QuestPlayer(props) {
   }
 
   function toggleLegend() {
+    console.log("toggle legend");
     var padding = {};
     if (showLegend) {
       if (isMediumAndUp) {
@@ -590,13 +611,19 @@ function QuestPlayer(props) {
           showLocation(selectedLocation);
         }
       } else {
+        console.log("too far away");
+        // mapRef.current.easeTo({
+        //   padding: {
+        //     bottom: 0
+        //   },
+        //   duration: 600,
+        // });
         previewLocation(selectedLocation);
       }
     }
   }
 
   function toggleSidebar() {
-    console.log("toggle sidebar")
     var padding = {};
 
     if (sidebarRef.current.location && sidebarRef.current.legend) {

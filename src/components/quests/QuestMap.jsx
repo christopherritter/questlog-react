@@ -18,7 +18,7 @@ const QuestMap = ({ width, height, quest }) => {
     });
     var multiPt = multiPoint(coords);
     var bounds = bbox(multiPt);
-    var padding = { left: 50, right: 50, top: 50, bottom: 75 };
+    var padding = { left: 15, right: 15, top: 15, bottom: 25 };
 
     mapRef.current.fitBounds(bounds, {
       padding: padding,
