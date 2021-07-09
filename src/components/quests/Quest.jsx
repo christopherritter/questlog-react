@@ -491,6 +491,8 @@ const Quest = (props) => {
   return (
     <QuestContext.Provider
       value={{
+        questId,
+        role,
         quest,
         location,
         entry,

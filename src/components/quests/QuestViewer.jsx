@@ -96,7 +96,11 @@ const QuestViewer = () => {
           </Grid>
         </Container>
         {quest.region && (
-          <QuestMap quest={quest} width={"100%"} height={"400px"} />
+          <QuestMap
+            quest={quest}
+            width={"100%"}
+            height={"400px"}
+          />
         )}
       </Paper>
       <Footer />

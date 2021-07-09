@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 
 const QuestMapMarker = (props) => {
   const classes = useStyles(props);
-  const { location: currentLocation } = useContext(QuestContext);
+  const { location: currentLocation, role } = useContext(QuestContext);
   const { location, viewLocation } = props;
   const markerRef = useRef();
 
@@ -100,7 +100,7 @@ const QuestMapMarker = (props) => {
         className={
           classes.marker
           + " " +
-          (currentLocation
+          (role && currentLocation
             ? location.id === currentLocation.id
               ? classes.green
               : classes.hidden
