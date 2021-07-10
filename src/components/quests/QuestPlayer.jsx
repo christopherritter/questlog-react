@@ -330,7 +330,6 @@ function QuestPlayer(props) {
 
   const showLocation = useCallback(
     (loc) => {
-      console.log("show location");
       var padding = {
         left: 0,
         right: 0,
@@ -466,7 +465,6 @@ function QuestPlayer(props) {
   }
 
   function toggleLegend() {
-    console.log("toggle legend");
     var padding = {};
     if (showLegend) {
       if (isMediumAndUp) {
@@ -502,8 +500,14 @@ function QuestPlayer(props) {
 
       mapRef.current.easeTo({
         padding: padding,
-        duration: 1000,
+        duration: 500,
       });
+
+      if (location && location.id) {
+        setTimeout(function () {
+          handleLocationOverview();
+        }, 500);
+      }
     }
   }
 
@@ -735,6 +739,19 @@ function QuestPlayer(props) {
 
   function handleClick(event) {
     event.preventDefault();
+  }
+
+  function handleLocationOverview() {
+    var coords = quest.locations.map((location) => {
+      return [location.longitude, location.latitude];
+    });
+    var multiPt = multiPoint(coords);
+    var bounds = bbox(multiPt);
+    var padding = { left: 50, right: 50, top: 50, bottom: 50 };
+
+    mapRef.current.fitBounds(bounds, {
+      padding: padding,
+    });
   }
 
   return (
