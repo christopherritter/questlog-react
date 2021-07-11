@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
 
@@ -45,9 +45,16 @@ const useStyles = makeStyles((theme) => ({
 
 const QuestActions = (props) => {
   const classes = useStyles();
-  const { quest, addAction, updateAction, removeAction, actionTypes } =
-    useContext(QuestContext);
-  var id = 0, idList = [0];
+  const {
+    quest,
+    addAction,
+    updateAction,
+    removeAction,
+    actionTypes,
+    findWithAttr,
+  } = useContext(QuestContext);
+  var id = 0,
+    idList = [0];
 
   if (quest.actions && quest.actions.length > 0) {
     quest.actions.forEach((obj) => {
@@ -71,23 +78,20 @@ const QuestActions = (props) => {
     targetId: "",
     effects: [],
   };
-
   const [action, setAction] = useState(initialActionState);
+  const [open, setOpen] = React.useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
 
-  // useEffect(() => {
-  //   if (props.action) {
-  //     setAction(props.action);
-  //   }
-  // }, [props.action]);
+  const actionRef = useRef();
+
+  useEffect(() => {
+    actionRef.current = action;
+  }, [action]);
 
   function onChangeAction(event) {
     const { name, value } = event.target;
     setAction({ ...action, [name]: value });
   }
-
-  const [open, setOpen] = React.useState(false);
-
-  const [selectedIndex, setSelectedIndex] = useState(-1);
 
   function handleViewAction({ action, index }) {
     setSelectedIndex(index);
@@ -139,7 +143,26 @@ const QuestActions = (props) => {
 
   function handleSelectType(event) {
     const { name, value } = event.target;
-    setAction({ ...action, [name]: value });
+    var locationIndex = findWithAttr(quest.locations, "id", props.locationId);
+    var nextLocationId, previousLocationId;
+
+    if (value === "next") {
+      if (locationIndex === quest.locations.length - 1) {
+        nextLocationId = quest.locations[0].id;
+      } else {
+        nextLocationId = quest.locations[locationIndex + 1].id;
+      }
+      setAction({ ...action, type: value, targetId: nextLocationId });
+    } else if (value === "back") {
+      if (locationIndex > 0) {
+        previousLocationId = quest.locations[locationIndex - 1].id;
+      } else {
+        previousLocationId = quest.locations[quest.locations.length - 1].id;
+      }
+      setAction({ ...action, type: value, targetId: previousLocationId });
+    } else {
+      setAction({ ...action, type: value, targetId: "" });
+    }
   }
 
   const handleChangeEffects = (event) => {
@@ -155,10 +178,12 @@ const QuestActions = (props) => {
       }
     }
 
-    setAction({ ...action, effects: effects })
+    setAction({ ...action, effects: effects });
   };
 
   const switchTarget = (type) => {
+    var locationIndex = findWithAttr(quest.locations, "id", action.targetId);
+    var nextLocation = quest.locations[locationIndex];
     switch (type) {
       case "look":
         return (
@@ -248,6 +273,13 @@ const QuestActions = (props) => {
               })}
           </Select>
         );
+      case "back":
+      case "next":
+      return (
+        <Select native value={action.targetId} disabled>
+          <option value={nextLocation.id}>{nextLocation.name}</option>
+        </Select>
+      );
       default:
         return (
           <Select
@@ -329,9 +361,7 @@ const QuestActions = (props) => {
             className={classes.formControl}
             fullWidth
           >
-            <InputLabel id="effects-mutiple-checkbox-label">
-              Effects
-            </InputLabel>
+            <InputLabel id="effects-mutiple-checkbox-label">Effects</InputLabel>
             <Select
               labelId="effects-mutiple-checkbox-label"
               id="demo-mutiple-checkbox"

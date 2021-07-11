@@ -20,6 +20,9 @@ import WalkIcon from "mdi-material-ui/Walk";
 import BackpackIcon from "mdi-material-ui/BagPersonal";
 import HandPointingIcon from "mdi-material-ui/HandPointingRight";
 import EyeIcon from "mdi-material-ui/Eye";
+import NextIcon from "mdi-material-ui/ArrowRightCircle";
+import BackIcon from "mdi-material-ui/ArrowLeftCircle";
+
 
 const styles = (theme) => ({
   root: {
@@ -88,6 +91,10 @@ const DialogQuestActions = withStyles(styles)(
             return takeQuestItem(action);
           case "operate":
             return operateQuestItem(action);
+          case "next":
+            return console.log("action type: next");
+          case "back":
+            return console.log("action type: back");
           default:
             return;
         }
@@ -362,6 +369,10 @@ const switchIcon = (type) => {
       return <BackpackIcon />;
     case "operate":
       return <HandPointingIcon />;
+    case "next":
+      return <NextIcon />;
+    case "back":
+      return <BackIcon />;
     default:
       return;
   }

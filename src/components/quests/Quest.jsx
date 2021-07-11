@@ -408,7 +408,7 @@ const Quest = (props) => {
       });
   }
 
-  // Misc
+  // Types
 
   const markerTypes = [
     {
@@ -473,6 +473,14 @@ const Quest = (props) => {
     {
       name: "Operate",
       value: "operate",
+    },
+    {
+      name: "Next",
+      value: "next",
+    },
+    {
+      name: "Back",
+      value: "back",
     },
   ];
 
