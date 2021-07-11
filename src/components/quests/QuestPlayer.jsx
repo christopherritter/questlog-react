@@ -228,9 +228,6 @@ function QuestPlayer(props) {
 
   const previewLocation = useCallback(
     (loc) => {
-      // console.log("preview location");
-      // console.log(positionRef.current);
-      // console.log(loc);
       var from = [positionRef.current.longitude, positionRef.current.latitude];
       var to = [loc.longitude, loc.latitude];
       var coords = [from, to];
@@ -242,25 +239,20 @@ function QuestPlayer(props) {
       if (isMediumAndUp) {
         padding = { left: 75, right: 250, top: 50, bottom: 150 };
       } else {
-        // setShowLegend(false);
         padding = { left: 75, right: 100, top: 50, bottom: 50 };
-        // console.log("bottom padding is correct.");
-        // console.log("so what else is affecting it?");
       }
-
-      setShowLocationSidebar(false);
 
       setTimeout(function () {
         selectLocation(loc.id);
       }, 600);
+
       setTimeout(function () {
         mapRef.current.fitBounds(bounds, {
           padding: padding,
         });
       }, timeout);
-      // console.log("fit bounds");
-      // console.log(bounds);
-      if (!showLegend) {
+
+      if (sidebarRef.legend === false) {
         mapRef.current.easeTo({
           padding: {
             bottom: 0
@@ -269,7 +261,7 @@ function QuestPlayer(props) {
         });
       }
     },
-    [isMediumAndUp, selectLocation, positionRef, showLegend]
+    [isMediumAndUp, selectLocation, positionRef, sidebarRef]
   );
 
   const viewStartingPoint = useCallback(() => {
@@ -504,6 +496,10 @@ function QuestPlayer(props) {
       });
 
       if (location && location.id) {
+        setTimeout(function () {
+          previewLocation(location);
+        }, 500);
+      } else {
         setTimeout(function () {
           handleLocationOverview();
         }, 500);
