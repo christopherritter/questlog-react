@@ -142,7 +142,7 @@ const QuestActions = (props) => {
   }
 
   function handleSelectType(event) {
-    const { name, value } = event.target;
+    const { value } = event.target;
     var locationIndex = findWithAttr(quest.locations, "id", props.locationId);
     var nextLocationId, previousLocationId;
 

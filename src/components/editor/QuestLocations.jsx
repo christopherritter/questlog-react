@@ -111,14 +111,7 @@ function QuestLocations() {
   const [location, locationRef, setLocation] =
     useRefState(initialLocationState);
 
-  // useEffect(() => {
-  //   if (props.location) {
-  //     setLocation(props.location);
-  //   }
-  // }, [props.location, setLocation]);
-
   function handleChangeLocation(event) {
-    console.log("handle change location")
     const { name, value } = event.target;
     setLocation({ ...location, [name]: value });
   }
