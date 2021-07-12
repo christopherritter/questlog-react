@@ -137,7 +137,7 @@ const DialogActions = withStyles((theme) => ({
 }))(MuiDialogActions);
 
 const QuestObjectivesDialog = (props) => {
-  const { quest, location, open, restartQuest, onClose } = props;
+  const { quest, open, restartQuest, onClose } = props;
 
   return (
     <Dialog
@@ -164,7 +164,6 @@ const QuestObjectivesDialog = (props) => {
                   <ListItem
                     button
                     key={obj.id}
-                    selected={obj.id === location.id}
                   >
                     <ListItemIcon>
                       {obj.isComplete ? (

@@ -268,7 +268,7 @@ function QuestLocations() {
               <QuestMapMarker
                 location={el}
                 key={index}
-                selectLocation={(loc) => handleViewLocation(loc)}
+                viewLocation={(loc) => handleViewLocation(loc)}
               ></QuestMapMarker>
             ))}
           </MapGL>
