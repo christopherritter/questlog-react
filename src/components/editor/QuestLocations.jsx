@@ -100,7 +100,7 @@ function QuestLocations() {
   };
 
   const initialLocationState = {
-    id: "location-" + id,
+    id: "",
     name: "",
     order: 0,
     latitude: 0,

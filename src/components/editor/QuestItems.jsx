@@ -84,7 +84,7 @@ const QuestItems = () => {
   };
 
   const initialItemState = {
-    id: "item-" + id,
+    id: "",
     name: "",
     description: "",
     locationId: "",

@@ -57,7 +57,7 @@ const QuestObjectives = () => {
   }
 
   const initialObjectiveState = {
-    id: "objective-" + id,
+    id: "",
     text: "",
     isPrimary: false,
     isComplete: false,
