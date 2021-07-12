@@ -41,11 +41,11 @@ const useStyles = makeStyles((theme) => ({
   },
   topRowButton: {
     marginRight: theme.spacing(1),
-    height: "2.90em"
+    height: "2.90em",
   },
   button: {
     marginTop: theme.spacing(3),
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
   },
   avatar: {
     display: "inline",
@@ -73,7 +73,8 @@ const QuestEntries = () => {
     removeEntry,
     publishQuest,
   } = useContext(QuestContext);
-  var id = 0, idList = [0];
+  var id = 0,
+    idList = [0];
 
   if (quest.entries && quest.entries.length > 0) {
     quest.entries.forEach((obj) => {
@@ -113,18 +114,15 @@ const QuestEntries = () => {
 
   const [entry, entryRef, setEntry] = useRefState(initialEntryState);
 
-  const currentLocations = [...quest.locations];
-  
-  const orderedLocations = currentLocations.sort((a, b) =>
+  const orderedLocations = [...quest.locations].sort((a, b) =>
     Number(a.order) > Number(b.order) ? 1 : -1
   );
 
-  const alphabetizedLocations = currentLocations.sort((a, b) =>
+  const alphabetizedLocations = [...quest.locations].sort((a, b) =>
     a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
   );
 
-  const currentEntries = [...quest.entries];
-  const orderedEntries = currentEntries.sort((a, b) => {
+  const orderedEntries = [...quest.entries].sort((a, b) => {
     return Number(a.order) - Number(b.order);
   });
 
@@ -137,7 +135,7 @@ const QuestEntries = () => {
   function handleChangeEntry(event) {
     const { name, value } = event.target;
     setEntry({ ...entry, [name]: value });
-  };
+  }
 
   function handleChangeObjectives(event) {
     const { value } = event.target;
@@ -153,7 +151,7 @@ const QuestEntries = () => {
     }
 
     setEntry({ ...entry, objectives: objectives });
-  };
+  }
 
   function handleChangeRequirements(event) {
     const { value } = event.target;
@@ -169,7 +167,7 @@ const QuestEntries = () => {
     }
 
     setEntry({ ...entry, requirements: requirements });
-  };
+  }
 
   function handleChangeExpirations(event) {
     const { value } = event.target;
@@ -185,12 +183,12 @@ const QuestEntries = () => {
     }
 
     setEntry({ ...entry, expirations: expirations });
-  };
+  }
 
   function handleSelectLocation(event) {
     const { name, value } = event.target;
     setEntry({ ...entry, [name]: value });
-  };
+  }
 
   function handleAddEntry(e) {
     e.preventDefault();
@@ -227,11 +225,11 @@ const QuestEntries = () => {
     const selectedEntry = { ...entry };
     setSelectedIndex(index);
     setEntry(selectedEntry);
-  };
+  }
 
   function handleAddAction(id) {
-    const actionsArr = [ ...entry.actions ];
-    actionsArr.push(id)
+    const actionsArr = [...entry.actions];
+    actionsArr.push(id);
 
     setEntry({ ...entry, actions: actionsArr });
   }
@@ -258,7 +256,7 @@ const QuestEntries = () => {
               setEntry(initialEntryState);
               setSelectedIndex(-1);
             }}
-            className={ classes.topRowButton }
+            className={classes.topRowButton}
           >
             Create New
           </Button>
@@ -446,7 +444,12 @@ const QuestEntries = () => {
                   orderedLocations.map((location) => (
                     <li key={location.id}>
                       <ul>
-                        <ListSubheader><Avatar className={classes.avatar}>{ location.order }</Avatar>{location.name}</ListSubheader>
+                        <ListSubheader>
+                          <Avatar className={classes.avatar}>
+                            {location.order}
+                          </Avatar>
+                          {location.name}
+                        </ListSubheader>
                         {quest.entries &&
                           orderedEntries
                             .filter((entry) => {
@@ -530,27 +533,27 @@ const QuestEntries = () => {
             Publish
           </Button>
           <Button
-          variant="contained"
-          color="default"
-          component={RouterLink}
-          to={`/quest/` + quest.questId + `/read`}
-          className={classes.button}
-        >
-          Read
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          component={RouterLink}
-          to={`/quest/` + quest.questId + `/play`}
-          className={classes.button}
-        >
-          Play
-        </Button>
+            variant="contained"
+            color="default"
+            component={RouterLink}
+            to={`/quest/` + quest.questId + `/read`}
+            className={classes.button}
+          >
+            Read
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            component={RouterLink}
+            to={`/quest/` + quest.questId + `/play`}
+            className={classes.button}
+          >
+            Play
+          </Button>
         </Box>
       </Box>
     </>
   );
-}
+};
 
 export default QuestEntries;
