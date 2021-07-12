@@ -133,19 +133,23 @@ const QuestActions = ({
     const actionIndex = findWithAttr(quest.actions, "id", event.target.id);
     const action = quest.actions[actionIndex];
 
-    switch (action.type) {
-      case "look":
-        return viewQuestItem(action.targetId);
-      case "move":
-      case "next":
-      case "back":
-        return selectLocation(action.targetId);
-      case "take":
-        return takeQuestItem(action);
-      case "operate":
-        return operateQuestItem(action);
-      default:
-        return;
+    if (action.type) {
+      switch (action.type) {
+        case "look":
+          return viewQuestItem(action.targetId);
+        case "move":
+        case "next":
+        case "back":
+          return selectLocation(action.targetId);
+        case "take":
+          return takeQuestItem(action);
+        case "operate":
+          return operateQuestItem(action);
+        default:
+          return;
+      }
+    } else {
+      console.log("no action type");
     }
   }
 
