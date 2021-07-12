@@ -42,7 +42,12 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 10,
   },
   hidden: {
-    display: "none"
+    color: "#fff",
+    backgroundColor: grey[800],
+    zIndex: 10,
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
   }
 }));
 
