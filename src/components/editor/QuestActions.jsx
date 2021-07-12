@@ -56,13 +56,10 @@ const QuestActions = (props) => {
   var id = 0,
     idList = [0];
 
-  // console.log('entry actions');
-  // console.log(props.entry.actions);
-
-  if (props.entry.actions && props.entry.actions.length > 0) {
-    props.entry.actions.forEach((obj) => {
+  if (quest.actions && quest.actions.length > 0) {
+    quest.actions.forEach((obj) => {
       var idNumber,
-        matches = obj.match(/\d+$/);
+        matches = obj.id.match(/\d+$/);
 
       if (matches) {
         idNumber = matches[0];
@@ -149,7 +146,7 @@ const QuestActions = (props) => {
     const orderedLocations = currentLocations.sort((a, b) =>
       Number(a.order) > Number(b.order) ? 1 : -1
     );
-    var locationIndex = findWithAttr(orderedLocations, "id", props.entry.locationId);
+    var locationIndex = findWithAttr(orderedLocations, "id", props.locationId);
     var nextLocationId, previousLocationId;
 
     if (value === "next") {
@@ -439,7 +436,7 @@ const QuestActions = (props) => {
           {quest.actions &&
             quest.actions
               .filter((action) => {
-                return props.entry.actions.includes(action.id);
+                return props.actions.includes(action.id);
               })
               .map((action, index) => (
                 <ListItem

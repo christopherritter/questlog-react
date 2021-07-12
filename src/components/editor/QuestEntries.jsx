@@ -339,7 +339,8 @@ const QuestEntries = () => {
 
             <QuestActions
               // action={props.action}
-              entry={entry}
+              locationId={entry.locationId}
+              actions={entry.actions}
               addActionToEntry={handleAddAction}
               removeActionFromEntry={handleRemoveAction}
               // updateAction={updateAction}
