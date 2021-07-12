@@ -192,10 +192,7 @@ const QuestEntries = () => {
 
   function handleAddEntry(e) {
     e.preventDefault();
-    addEntry({
-      id: "entry-" + id,
-      ...entry,
-    });
+    addEntry({ ...entry });
     setEntry(initialEntryState);
     setSelectedIndex(-1);
   }
