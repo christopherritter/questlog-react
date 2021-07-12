@@ -114,8 +114,13 @@ const QuestEntries = () => {
   const [entry, entryRef, setEntry] = useRefState(initialEntryState);
 
   const currentLocations = [...quest.locations];
+  
   const orderedLocations = currentLocations.sort((a, b) =>
     Number(a.order) > Number(b.order) ? 1 : -1
+  );
+
+  const alphabetizedLocations = currentLocations.sort((a, b) =>
+    a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
   );
 
   const currentEntries = [...quest.entries];
@@ -312,7 +317,7 @@ const QuestEntries = () => {
               >
                 <option value={undefined}></option>
                 {quest.locations &&
-                  quest.locations.map((location) => {
+                  alphabetizedLocations.map((location) => {
                     return (
                       <option value={location.id} key={location.id}>
                         {location.name}
