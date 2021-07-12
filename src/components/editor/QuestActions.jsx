@@ -422,6 +422,7 @@ const QuestActions = (props) => {
               component="div"
               className={classes.actionListSubheader}
               id="nested-list-subheader"
+              disableSticky
             >
               Actions
             </ListSubheader>
