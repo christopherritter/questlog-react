@@ -116,9 +116,9 @@ function QuestLocations() {
   const [location, locationRef, setLocation] =
     useRefState(initialLocationState);
 
-  const orderedLocations = quest.locations.sort((a, b) => {
-    return a.order - b.order;
-  });
+  // const orderedLocations = quest.locations.sort((a, b) => {
+  //   return a.order - b.order;
+  // });
 
   function handleChangeLocation(event) {
     const { name, value } = event.target;
@@ -235,8 +235,8 @@ function QuestLocations() {
       case "list":
         return (
           <List component="nav">
-            {orderedLocations &&
-              orderedLocations.map((location, index) => {
+            {quest.locations &&
+              quest.locations.map((location, index) => {
                 return (
                   <ListItem
                     button

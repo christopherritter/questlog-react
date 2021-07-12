@@ -113,13 +113,13 @@ const QuestEntries = () => {
 
   const [entry, entryRef, setEntry] = useRefState(initialEntryState);
 
-  const orderedLocations = quest.locations.sort((a, b) => {
-    return a.order - b.order;
-  });
+  // const orderedLocations = quest.locations.sort((a, b) => {
+  //   return a.order - b.order;
+  // });
 
-  const orderedEntries = quest.entries.sort((a, b) => {
-    return a.order - b.order;
-  });
+  // const orderedEntries = quest.entries.sort((a, b) => {
+  //   return a.order - b.order;
+  // });
 
   // useEffect(() => {
   //   if (entry) {
@@ -435,13 +435,13 @@ const QuestEntries = () => {
           <Grid container spacing={2}>
             <Grid item sm={12}>
               <List component="nav" subheader={<li />}>
-                {orderedLocations &&
-                  orderedLocations.map((location) => (
+                {quest.locations &&
+                  quest.locations.map((location) => (
                     <li key={location.id}>
                       <ul>
                         <ListSubheader><Avatar className={classes.avatar}>{ location.order }</Avatar>{location.name}</ListSubheader>
-                        {orderedEntries &&
-                          orderedEntries
+                        {quest.entries &&
+                          quest.entries
                             .filter((entry) => {
                               return entry.locationId === location.id;
                             })
