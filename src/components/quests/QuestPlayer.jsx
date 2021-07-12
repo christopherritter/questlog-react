@@ -543,6 +543,7 @@ function QuestPlayer(props) {
   }
 
   function handleSelectJournalItem() {
+    setDialogType("journal");
     setOpenDialog(true);
   }
 

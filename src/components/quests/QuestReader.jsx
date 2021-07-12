@@ -427,6 +427,7 @@ function QuestReader(props) {
   }
 
   function handleSelectJournalItem() {
+    setDialogType("journal");
     setOpenDialog(true);
   }
 
