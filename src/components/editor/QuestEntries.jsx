@@ -5,6 +5,7 @@ import QuestContext from "../../contexts/QuestContext.jsx";
 import QuestActions from "./QuestActions.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
+import { grey } from "@material-ui/core/colors";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
@@ -20,6 +21,7 @@ import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,6 +46,20 @@ const useStyles = makeStyles((theme) => ({
   button: {
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(1)
+  },
+  avatar: {
+    display: "inline",
+    color: "#fff",
+    fontSize: "0.85em",
+    fontWeight: "normal",
+    paddingTop: theme.spacing(0.25),
+    paddingBottom: theme.spacing(0.25),
+    paddingRight: theme.spacing(0.75),
+    paddingLeft: theme.spacing(0.75),
+    marginRight: theme.spacing(1),
+    backgroundColor: grey[600],
+    width: theme.spacing(3),
+    height: theme.spacing(3),
   },
 }));
 
@@ -96,6 +112,14 @@ const QuestEntries = () => {
   };
 
   const [entry, entryRef, setEntry] = useRefState(initialEntryState);
+
+  const orderedLocations = quest.locations.sort((a, b) => {
+    return a.order - b.order;
+  });
+
+  const orderedEntries = quest.entries.sort((a, b) => {
+    return a.order - b.order;
+  });
 
   // useEffect(() => {
   //   if (entry) {
@@ -411,13 +435,13 @@ const QuestEntries = () => {
           <Grid container spacing={2}>
             <Grid item sm={12}>
               <List component="nav" subheader={<li />}>
-                {quest.locations &&
-                  quest.locations.map((location) => (
+                {orderedLocations &&
+                  orderedLocations.map((location) => (
                     <li key={location.id}>
                       <ul>
-                        <ListSubheader>{location.name}</ListSubheader>
-                        {quest.entries &&
-                          quest.entries
+                        <ListSubheader><Avatar className={classes.avatar}>{ location.order }</Avatar>{location.name}</ListSubheader>
+                        {orderedEntries &&
+                          orderedEntries
                             .filter((entry) => {
                               return entry.locationId === location.id;
                             })

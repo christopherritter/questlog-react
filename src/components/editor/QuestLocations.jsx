@@ -22,11 +22,12 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
+import Avatar from "@material-ui/core/Avatar";
 
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 
-import MapMarkerCircleIcon from "mdi-material-ui/MapMarkerCircle";
+import { grey } from "@material-ui/core/colors";
 import ListAltIcon from "mdi-material-ui/FormatListBulleted";
 import MapIcon from "mdi-material-ui/Map";
 
@@ -52,6 +53,10 @@ const useStyles = makeStyles((theme) => ({
   },
   viewHandler: {
     verticalAlign: "middle",
+  },
+  avatar: {
+    color: "#fff",
+    backgroundColor: grey[800],
   },
 }));
 
@@ -110,6 +115,10 @@ function QuestLocations() {
 
   const [location, locationRef, setLocation] =
     useRefState(initialLocationState);
+
+  const orderedLocations = quest.locations.sort((a, b) => {
+    return a.order - b.order;
+  });
 
   function handleChangeLocation(event) {
     const { name, value } = event.target;
@@ -226,17 +235,17 @@ function QuestLocations() {
       case "list":
         return (
           <List component="nav">
-            {quest.locations &&
-              quest.locations.map((location, index) => {
+            {orderedLocations &&
+              orderedLocations.map((location, index) => {
                 return (
                   <ListItem
                     button
                     key={location.id}
                     selected={selectedIndex === index}
-                    onClick={(event) => handleListItemClick(location, index)}
+                    onClick={() => handleListItemClick(location, index)}
                   >
                     <ListItemIcon>
-                      <MapMarkerCircleIcon />
+                      <Avatar className={classes.avatar}>{ location.order }</Avatar>
                     </ListItemIcon>
                     <ListItemText
                       primary={
