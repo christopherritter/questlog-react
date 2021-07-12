@@ -111,10 +111,9 @@ const QuestActions = (props) => {
 
   function handleSaveAction() {
     addAction({
-      id: "action-" + id,
       ...action,
     });
-    props.addActionToEntry("action-" + id);
+    props.addActionToEntry(action.id);
     setSelectedIndex(-1);
     setAction(initialActionState);
     setOpen(false);
@@ -275,11 +274,11 @@ const QuestActions = (props) => {
         );
       case "back":
       case "next":
-      return (
-        <Select native value={action.targetId} disabled>
-          <option value={nextLocation.id}>{nextLocation.name}</option>
-        </Select>
-      );
+        return (
+          <Select native value={action.targetId} disabled>
+            <option value={nextLocation.id}>{nextLocation.name}</option>
+          </Select>
+        );
       default:
         return (
           <Select

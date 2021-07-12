@@ -383,9 +383,7 @@ const Quest = (props) => {
   }
 
   function handleRemoveAction(action) {
-    console.log(action.id);
-    console.log(quest.actions.filter((a) => a.id !== action.id));
-    quest.actions.map((a) => console.log(a));
+    console.log("Quest: handleRemoveAction", action.id);
     const updatedActions = quest.actions.filter((a) => a.id !== action.id);
     setQuest({ ...quest, actions: updatedActions });
     // setActionIndex(-1);
