@@ -65,14 +65,15 @@ const QuestActions = (props) => {
         idNumber = matches[0];
       }
 
-      idList.push(idNumber);
+      idList.push(Number(idNumber));
     });
 
-    id = Math.max(...idList) + 1;
+    id = Math.max(...idList);
+    id = id + 1;
   }
 
   const initialActionState = {
-    id: "action-" + id,
+    id: id,
     text: "",
     type: "",
     targetId: "",
@@ -112,8 +113,9 @@ const QuestActions = (props) => {
   function handleSaveAction() {
     addAction({
       ...action,
+      id: "action-" + id,
     });
-    props.addActionToEntry(action.id);
+    props.addActionToEntry("action-" + id);
     setSelectedIndex(-1);
     setAction(initialActionState);
     setOpen(false);
