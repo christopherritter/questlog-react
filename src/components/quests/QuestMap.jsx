@@ -2,8 +2,8 @@ import React, { useRef } from "react";
 import MapGL from "@urbica/react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-import bbox from "@turf/bbox";
-import { multiPoint } from "@turf/helpers";
+// import bbox from "@turf/bbox";
+// import { multiPoint } from "@turf/helpers";
 
 import QuestMapMarker from "./QuestMapMarker.jsx";
 
@@ -12,18 +12,19 @@ const QuestMap = ({ width, height, quest }) => {
 
   function handleSelectLocation(event) { event.preventDefault() }
   
-  function handleLocationOverview() {
-    var coords = quest.locations.map((location) => {
-      return [location.longitude, location.latitude];
-    });
-    var multiPt = multiPoint(coords);
-    var bounds = bbox(multiPt);
-    var padding = { left: 15, right: 15, top: 15, bottom: 60 };
+  // function handleLocationOverview() {
+  //   console.log("handleLocationOverview");
+  //   var coords = quest.locations.map((location) => {
+  //     return [location.longitude, location.latitude];
+  //   });
+  //   var multiPt = multiPoint(coords);
+  //   var bounds = bbox(multiPt);
+  //   var padding = { left: 185, right: 0, top: 0, bottom: 0 };
 
-    mapRef.current.fitBounds(bounds, {
-      padding: padding,
-    });
-  }
+  //   mapRef.current.fitBounds(bounds, {
+  //     padding: padding,
+  //   });
+  // }
 
   return (
     <MapGL
@@ -36,7 +37,7 @@ const QuestMap = ({ width, height, quest }) => {
       bearing={quest.region.bearing}
       pitch={quest.region.pitch}
       zoom={quest.region.zoom}
-      onLoad={handleLocationOverview}
+      // onLoad={handleLocationOverview}
     >
       {quest.locations.map((el, index) => (
         <QuestMapMarker
