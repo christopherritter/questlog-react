@@ -119,7 +119,7 @@ function QuestLocations() {
 
   const currentLocations = [...quest.locations];
   const orderedLocations = currentLocations.sort((a, b) =>
-    a.order > b.order ? 1 : -1
+    Number(a.order) > Number(b.order) ? 1 : -1
   );
 
   function handleChangeLocation(event) {

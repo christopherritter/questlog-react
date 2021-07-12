@@ -115,12 +115,12 @@ const QuestEntries = () => {
 
   const currentLocations = [...quest.locations];
   const orderedLocations = currentLocations.sort((a, b) =>
-    a.order > b.order ? 1 : -1
+    Number(a.order) > Number(b.order) ? 1 : -1
   );
 
   const currentEntries = [...quest.entries];
   const orderedEntries = currentEntries.sort((a, b) => {
-    return a.order - b.order;
+    return Number(a.order) - Number(b.order);
   });
 
   // useEffect(() => {
