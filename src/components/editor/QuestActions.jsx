@@ -142,21 +142,25 @@ const QuestActions = (props) => {
 
   function handleSelectType(event) {
     const { value } = event.target;
-    var locationIndex = findWithAttr(quest.locations, "id", props.locationId);
+    const currentLocations = [...quest.locations];
+    const orderedLocations = currentLocations.sort((a, b) =>
+      Number(a.order) > Number(b.order) ? 1 : -1
+    );
+    var locationIndex = findWithAttr(orderedLocations, "id", props.locationId);
     var nextLocationId, previousLocationId;
 
     if (value === "next") {
-      if (locationIndex === quest.locations.length - 1) {
-        nextLocationId = quest.locations[0].id;
+      if (locationIndex === orderedLocations.length - 1) {
+        nextLocationId = orderedLocations[0].id;
       } else {
-        nextLocationId = quest.locations[locationIndex + 1].id;
+        nextLocationId = orderedLocations[locationIndex + 1].id;
       }
       setAction({ ...action, type: value, targetId: nextLocationId });
     } else if (value === "back") {
       if (locationIndex > 0) {
-        previousLocationId = quest.locations[locationIndex - 1].id;
+        previousLocationId = orderedLocations[locationIndex - 1].id;
       } else {
-        previousLocationId = quest.locations[quest.locations.length - 1].id;
+        previousLocationId = orderedLocations[orderedLocations.length - 1].id;
       }
       setAction({ ...action, type: value, targetId: previousLocationId });
     } else {
