@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useContext, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useContext,
+  useCallback,
+} from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import MapGL from "@urbica/react-map-gl";
@@ -72,7 +78,8 @@ function QuestLocations() {
     markerTypes,
   } = useContext(QuestContext);
 
-  var id = 0, idList = [0];
+  var id = 0,
+    idList = [0];
 
   if (quest.locations && quest.locations.length > 0) {
     quest.locations.forEach((obj) => {
@@ -115,41 +122,10 @@ function QuestLocations() {
   const [location, locationRef, setLocation] =
     useRefState(initialLocationState);
 
-
   const currentLocations = [...quest.locations];
   const orderedLocations = currentLocations.sort((a, b) =>
     Number(a.order) > Number(b.order) ? 1 : -1
   );
-
-  function handleChangeLocation(event) {
-    const { name, value } = event.target;
-    setLocation({ ...location, [name]: value });
-  }
-
-  function handleToggleLocation(event) {
-    const { name, checked } = event.target;
-    setLocation({ ...location, [name]: checked });
-  }
-
-  function handleAddLocation(e) {
-    e.preventDefault();
-    addLocation({
-      ...location,
-      id: "location-" + id,
-    });
-    setLocation(initialLocationState);
-    updateSelectedIndex(-1);
-  }
-
-  function handleUpdateLocation(e) {
-    e.preventDefault();
-    updateLocation({
-      ...location,
-    });
-    clearLocation();
-    setLocation(initialLocationState);
-    updateSelectedIndex(-1);
-  }
 
   const handleRemoveLocation = (e) => {
     e.preventDefault();
@@ -179,12 +155,13 @@ function QuestLocations() {
   const selectedIndexRef = useRef(-1);
   const updateSelectedIndex = (index) => {
     setSelectedIndex(index);
-  }
+  };
+
+  const mapRef = useRef();
 
   useEffect(() => {
     selectedIndexRef.current = selectedIndex;
   }, [selectedIndex]);
-
 
   // useEffect(() => {
   //   updateSelectedIndex(locationIndex);
@@ -200,7 +177,7 @@ function QuestLocations() {
       longitude: lngLat.lng,
     };
 
-    if (selectedIndexRef.current === -1 ) {
+    if (selectedIndexRef.current === -1) {
       setLocation(updatedLocation);
     }
   };
@@ -209,26 +186,58 @@ function QuestLocations() {
     const selectedLocation = { ...quest.locations[index] };
     updateSelectedIndex(index);
     setLocation(selectedLocation);
+    mapRef.current.easeTo({
+      center: {
+        lat: selectedLocation.latitude,
+        lng: selectedLocation.longitude,
+      },
+      bearing: selectedLocation.bearing,
+      pitch: selectedLocation.pitch,
+      zoom: selectedLocation.zoom,
+      duration: 600,
+    });
   };
 
-  const onMarkerDragStart = useCallback((event, id, index) => {
-    const updatedLocation = {
-      ...quest.locations[index],
-      latitude: event.lat,
-      longitude: event.lng,
-    };
-    updateSelectedIndex(index);
-    setLocation(updatedLocation);
-  }, [quest.locations, setLocation]);
+  const onMarkerDragStart = useCallback(
+    (event, id, index) => {
+      const updatedLocation = {
+        ...quest.locations[index],
+        latitude: event.lat,
+        longitude: event.lng,
+      };
+      updateSelectedIndex(index);
+      setLocation(updatedLocation);
+    },
+    [quest.locations, setLocation]
+  );
 
-  const onMarkerDragEnd = useCallback((event) => {
-    const updatedLocation = {
-      ...locationRef.current,
-      latitude: event.lat,
-      longitude: event.lng,
-    };
-    setLocation(updatedLocation);
-  }, [locationRef, setLocation]);
+  const onMarkerDragEnd = useCallback(
+    (event) => {
+      const updatedLocation = {
+        ...locationRef.current,
+        latitude: event.lat,
+        longitude: event.lng,
+      };
+      setLocation(updatedLocation);
+      mapRef.current.easeTo({
+        center: {
+          lat: updatedLocation.latitude,
+          lng: updatedLocation.longitude,
+        },
+        bearing: updatedLocation.bearing,
+        pitch: updatedLocation.pitch,
+        zoom: updatedLocation.zoom,
+        duration: 600,
+      });
+    },
+    [locationRef, setLocation]
+  );
+
+  const handleListItemClick = (location, index) => {
+    const selectedLocation = { ...location };
+    updateSelectedIndex(index);
+    setLocation(selectedLocation);
+  };
 
   const renderView = (view) => {
     switch (view) {
@@ -245,7 +254,9 @@ function QuestLocations() {
                     onClick={() => handleListItemClick(location, index)}
                   >
                     <ListItemIcon>
-                      <Avatar className={classes.avatar}>{ location.order }</Avatar>
+                      <Avatar className={classes.avatar}>
+                        {location.order}
+                      </Avatar>
                     </ListItemIcon>
                     <ListItemText
                       primary={
@@ -262,6 +273,7 @@ function QuestLocations() {
       default:
         return (
           <MapGL
+            ref={(ref) => (mapRef.current = ref && ref.getMap())}
             latitude={quest.region.latitude}
             longitude={quest.region.longitude}
             bearing={quest.region.bearing}
@@ -280,7 +292,7 @@ function QuestLocations() {
                 viewLocation={() => handleViewLocation(el, index)}
                 draggable
                 onDragStart={(event) => onMarkerDragStart(event, el, index)}
-                onDragEnd={(event) => onMarkerDragEnd(event) }
+                onDragEnd={(event) => onMarkerDragEnd(event)}
               ></QuestMapMarker>
             ))}
           </MapGL>
@@ -288,11 +300,36 @@ function QuestLocations() {
     }
   };
 
-  const handleListItemClick = (location, index) => {
-    const selectedLocation = { ...location };
-    updateSelectedIndex(index);
-    setLocation(selectedLocation);
-  };
+  function handleChangeLocation(event) {
+    const { name, value } = event.target;
+    setLocation({ ...location, [name]: value });
+  }
+
+  function handleToggleLocation(event) {
+    const { name, checked } = event.target;
+    setLocation({ ...location, [name]: checked });
+  }
+
+  function handleAddLocation(e) {
+    e.preventDefault();
+    addLocation({
+      ...location,
+      id: "location-" + id,
+    });
+    setLocation(initialLocationState);
+    updateSelectedIndex(-1);
+  }
+
+  function handleUpdateLocation(e) {
+    console.log("handle update location", location);
+    e.preventDefault();
+    updateLocation({
+      ...location,
+    });
+    clearLocation();
+    setLocation(initialLocationState);
+    updateSelectedIndex(-1);
+  }
 
   function handleSelectMarker(event) {
     const { name, value } = event.target;
