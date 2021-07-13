@@ -65,7 +65,6 @@ function QuestLocations() {
   const {
     quest,
     addLocation,
-    findWithAttr,
     updateLocation,
     clearLocation,
     removeLocation,
@@ -177,15 +176,14 @@ function QuestLocations() {
   };
 
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
+  const selectedIndexRef = useRef(-1);
   const updateSelectedIndex = (index) => {
     setSelectedIndex(index);
   }
 
-  // useEffect((event) => {
-  //   console.log("selected index effect")
-  //   console.log(selectedIndex)
-
-  // }, [selectedIndex]);
+  useEffect(() => {
+    selectedIndexRef.current = selectedIndex;
+  }, [selectedIndex]);
 
 
   // useEffect(() => {
@@ -201,13 +199,13 @@ function QuestLocations() {
       latitude: lngLat.lat,
       longitude: lngLat.lng,
     };
-    if (selectedIndex === -1 ) {
+
+    if (selectedIndexRef.current === -1 ) {
       setLocation(updatedLocation);
     }
   };
 
-  const handleViewLocation = (locationId) => {
-    const index = findWithAttr(quest.locations, "id", locationId);
+  const handleViewLocation = (id, index) => {
     const selectedLocation = { ...quest.locations[index] };
     updateSelectedIndex(index);
     setLocation(selectedLocation);
@@ -260,7 +258,7 @@ function QuestLocations() {
               <QuestMapMarker
                 location={el}
                 key={index}
-                viewLocation={(loc) => handleViewLocation(loc)}
+                viewLocation={() => handleViewLocation(el, index)}
               ></QuestMapMarker>
             ))}
           </MapGL>
