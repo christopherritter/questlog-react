@@ -135,17 +135,8 @@ function QuestLocations() {
   function handleAddLocation(e) {
     e.preventDefault();
     addLocation({
+      ...location,
       id: "location-" + id,
-      name: location.name,
-      latitude: location.latitude,
-      longitude: location.longitude,
-      bearing: location.bearing,
-      pitch: location.pitch,
-      zoom: location.zoom,
-      image: location.image,
-      marker: location.marker,
-      order: location.order,
-      isLandmark: location.isLandmark,
     });
     setLocation(initialLocationState);
     updateSelectedIndex(-1);
@@ -154,17 +145,7 @@ function QuestLocations() {
   function handleUpdateLocation(e) {
     e.preventDefault();
     updateLocation({
-      id: location.id,
-      name: location.name,
-      latitude: location.latitude,
-      longitude: location.longitude,
-      bearing: location.bearing,
-      pitch: location.pitch,
-      zoom: location.zoom,
-      image: location.image,
-      marker: location.marker,
-      order: location.order,
-      isLandmark: location.isLandmark,
+      ...location,
     });
     clearLocation();
     setLocation(initialLocationState);
