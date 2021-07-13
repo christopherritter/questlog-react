@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useEffect, useRef, useContext, useCallback } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 import MapGL from "@urbica/react-map-gl";
@@ -211,6 +211,25 @@ function QuestLocations() {
     setLocation(selectedLocation);
   };
 
+  const onMarkerDragStart = useCallback((event, id, index) => {
+    const updatedLocation = {
+      ...quest.locations[index],
+      latitude: event.lat,
+      longitude: event.lng,
+    };
+    updateSelectedIndex(index);
+    setLocation(updatedLocation);
+  }, [quest.locations, setLocation]);
+
+  const onMarkerDragEnd = useCallback((event) => {
+    const updatedLocation = {
+      ...locationRef.current,
+      latitude: event.lat,
+      longitude: event.lng,
+    };
+    setLocation(updatedLocation);
+  }, [locationRef, setLocation]);
+
   const renderView = (view) => {
     switch (view) {
       case "list":
@@ -259,6 +278,9 @@ function QuestLocations() {
                 location={el}
                 key={index}
                 viewLocation={() => handleViewLocation(el, index)}
+                draggable
+                onDragStart={(event) => onMarkerDragStart(event, el, index)}
+                onDragEnd={(event) => onMarkerDragEnd(event) }
               ></QuestMapMarker>
             ))}
           </MapGL>
