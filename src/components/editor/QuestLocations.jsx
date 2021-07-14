@@ -67,6 +67,11 @@ const useStyles = makeStyles((theme) => ({
     color: "#fff",
     backgroundColor: grey[800],
   },
+  editorSidebar: {
+    position: "sticky",
+    top: 0,
+    zIndex: 10000,
+  },
 }));
 
 function QuestLocations() {
@@ -385,7 +390,7 @@ function QuestLocations() {
       </Grid>
       <Grid container spacing={2} className={classes.root}>
         <Grid item md={4} sm={12}>
-          <form noValidate>
+          <form noValidate className={classes.editorSidebar}>
             <Grid container spacing={2}>
               <Grid item sm={8}>
                 <TextField

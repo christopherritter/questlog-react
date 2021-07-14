@@ -24,6 +24,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(1)
   },
+  editorSidebar: {
+    position: "sticky",
+    top: 0,
+    zIndex: 10000,
+  },
 }));
 
 const QuestRegion = () => {
@@ -38,7 +43,7 @@ const QuestRegion = () => {
           <Typography variant="h4">Region</Typography>
         </Grid>
         <Grid item md={4}>
-          <form noValidate>
+          <form noValidate className={classes.editorSidebar}>
             <TextField
               variant="outlined"
               margin="normal"

@@ -37,6 +37,11 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
     height: "2.90em"
   },
+  editorSidebar: {
+    position: "sticky",
+    top: 0,
+    zIndex: 10000,
+  },
 }));
 
 const QuestObjectives = () => {
@@ -142,7 +147,7 @@ const QuestObjectives = () => {
       </Grid>
       <Grid container spacing={2} className={classes.root}>
         <Grid item md={4} sm={12}>
-          <form noValidate>
+          <form noValidate className={classes.editorSidebar}>
             <TextField
               variant="outlined"
               margin="normal"

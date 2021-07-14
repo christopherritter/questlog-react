@@ -64,6 +64,11 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(3),
     height: theme.spacing(3),
   },
+  editorSidebar: {
+    position: "sticky",
+    top: 0,
+    zIndex: 10000,
+  },
 }));
 
 const QuestItems = () => {
@@ -261,7 +266,7 @@ const QuestItems = () => {
       </Grid>
       <Grid container spacing={2} className={classes.root}>
         <Grid item md={4} sm={12}>
-          <form noValidate>
+          <form noValidate className={classes.editorSidebar}>
             <Grid container spacing={2}>
               <Grid item sm={8}>
                 <TextField
