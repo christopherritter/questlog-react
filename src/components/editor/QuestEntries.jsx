@@ -242,7 +242,7 @@ const QuestEntries = () => {
 
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container>
         <Grid item md={4} sm={12}>
           <Typography variant="h4" gutterBottom>
             Entries
@@ -443,8 +443,8 @@ const QuestEntries = () => {
                 {quest.locations &&
                   orderedLocations.map((location) => (
                     <li key={location.id}>
-                      <ul>
-                        <ListSubheader>
+                      <ul style={{paddingLeft: "0.5em"}}>
+                        <ListSubheader disableSticky>
                           <Avatar className={classes.avatar}>
                             {location.order}
                           </Avatar>

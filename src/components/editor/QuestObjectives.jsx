@@ -122,7 +122,7 @@ const QuestObjectives = () => {
 
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container>
         <Grid item md={4} sm={12}>
           <Typography variant="h4">Objectives</Typography>
         </Grid>

@@ -216,7 +216,7 @@ const QuestItems = () => {
 
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container>
         <Grid item md={4} sm={12}>
           <Typography variant="h4" gutterBottom>
             Items
@@ -416,8 +416,8 @@ const QuestItems = () => {
                 {quest.locations &&
                   quest.locations.map((location) => (
                     <li key={location.id}>
-                      <ul>
-                        <ListSubheader>{location.name}</ListSubheader>
+                      <ul style={{paddingLeft: "0.5em"}}>
+                        <ListSubheader disableSticky>{location.name}</ListSubheader>
                         {quest.items &&
                           quest.items
                             .filter((item) => {

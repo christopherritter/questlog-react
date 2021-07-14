@@ -33,7 +33,7 @@ const QuestRegion = () => {
 
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container>
         <Grid item sm={12}>
           <Typography variant="h4">Region</Typography>
         </Grid>

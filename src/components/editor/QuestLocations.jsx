@@ -341,7 +341,7 @@ function QuestLocations() {
 
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container>
         <Grid item md={4} sm={12}>
           <Typography variant="h4" gutterBottom>
             Locations
