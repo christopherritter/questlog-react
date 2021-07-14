@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
     position: "sticky",
     bottom: "1em",
-    zIndex: 10000,
+    zIndex: 1000,
   },
   button: {
     marginTop: theme.spacing(3),
@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
   editorSidebar: {
     position: "sticky",
     top: 0,
-    zIndex: 10000,
+    zIndex: 1000,
   },
 }));
 
