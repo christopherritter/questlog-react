@@ -443,7 +443,7 @@ const QuestEntries = () => {
                 {quest.locations &&
                   orderedLocations.map((location) => (
                     <li key={location.id}>
-                      <ul style={{paddingLeft: "0.5em"}}>
+                      <ul style={{ paddingLeft: "0.5em" }}>
                         <ListSubheader disableSticky>
                           <Avatar className={classes.avatar}>
                             {location.order}

@@ -5,6 +5,7 @@ import QuestContext from "../../contexts/QuestContext.jsx";
 import QuestActions from "./QuestActions.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
+import { grey } from "@material-ui/core/colors";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
@@ -20,6 +21,7 @@ import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,25 +44,34 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     marginTop: theme.spacing(3),
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
   },
   topRowButton: {
     marginRight: theme.spacing(1),
-    height: "2.90em"
+    height: "2.90em",
+  },
+  avatar: {
+    display: "inline",
+    color: "#fff",
+    fontSize: "0.85em",
+    fontWeight: "normal",
+    paddingTop: theme.spacing(0.25),
+    paddingBottom: theme.spacing(0.25),
+    paddingRight: theme.spacing(0.75),
+    paddingLeft: theme.spacing(0.75),
+    marginRight: theme.spacing(1),
+    backgroundColor: grey[600],
+    width: theme.spacing(3),
+    height: theme.spacing(3),
   },
 }));
 
 const QuestItems = () => {
   const classes = useStyles();
-  const {
-    quest,
-    addItem,
-    updateItem,
-    clearItem,
-    removeItem,
-    publishQuest,
-  } = useContext(QuestContext);
-  var id = 0, idList = [0];
+  const { quest, addItem, updateItem, clearItem, removeItem, publishQuest } =
+    useContext(QuestContext);
+  var id = 0,
+    idList = [0];
 
   if (quest.items && quest.items.length > 0) {
     quest.items.forEach((obj) => {
@@ -99,6 +110,18 @@ const QuestItems = () => {
   };
 
   const [item, itemRef, setItem] = useRefState(initialItemState);
+
+  const orderedLocations = [...quest.locations].sort((a, b) =>
+    Number(a.order) > Number(b.order) ? 1 : -1
+  );
+
+  const alphabetizedLocations = [...quest.locations].sort((a, b) =>
+    a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
+  );
+
+  const orderedItems = [...quest.items].sort((a, b) => {
+    return Number(a.order) - Number(b.order);
+  });
 
   // useEffect(() => {
   //   if (props.item) {
@@ -157,12 +180,12 @@ const QuestItems = () => {
     }
 
     setItem({ ...item, expirations: expirations });
-  };
+  }
 
   function handleSelectLocation(event) {
     const { name, value } = event.target;
     setItem({ ...item, [name]: value });
-  };
+  }
 
   function handleAddItem(e) {
     e.preventDefault();
@@ -172,7 +195,7 @@ const QuestItems = () => {
     });
     setItem(initialItemState);
     setSelectedIndex(-1);
-  };
+  }
 
   function handleUpdateItem(e) {
     e.preventDefault();
@@ -180,14 +203,14 @@ const QuestItems = () => {
     clearItem();
     setItem(initialItemState);
     setSelectedIndex(-1);
-  };
+  }
 
   function handleRemoveItem(e) {
     e.preventDefault();
     removeItem(item);
     setItem(initialItemState);
     setSelectedIndex(-1);
-  };
+  }
 
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
 
@@ -202,13 +225,13 @@ const QuestItems = () => {
   };
 
   function handleAddAction(id) {
-    const actionsArr = [ ...item.actions ];
-    actionsArr.push(id)
+    const actionsArr = [...item.actions];
+    actionsArr.push(id);
 
     setItem({ ...item, actions: actionsArr });
   }
 
-  function handleRemoveAction(action) {   
+  function handleRemoveAction(action) {
     const updatedActions = item.actions.filter((i) => i !== action.id);
 
     setItem({ ...item, actions: updatedActions });
@@ -230,7 +253,7 @@ const QuestItems = () => {
               setItem(initialItemState);
               setSelectedIndex(-1);
             }}
-            className={ classes.topRowButton }
+            className={classes.topRowButton}
           >
             Create New
           </Button>
@@ -289,7 +312,7 @@ const QuestItems = () => {
               >
                 <option value={undefined}></option>
                 {quest.locations &&
-                  quest.locations.map((location) => {
+                  alphabetizedLocations.map((location) => {
                     return (
                       <option value={location.id} key={location.id}>
                         {location.name}
@@ -414,12 +437,17 @@ const QuestItems = () => {
             <Grid item sm={12}>
               <List component="nav" subheader={<li />}>
                 {quest.locations &&
-                  quest.locations.map((location) => (
+                  orderedLocations.map((location) => (
                     <li key={location.id}>
-                      <ul style={{paddingLeft: "0.5em"}}>
-                        <ListSubheader disableSticky>{location.name}</ListSubheader>
+                      <ul style={{ paddingLeft: "0.5em" }}>
+                        <ListSubheader disableSticky>
+                          <Avatar className={classes.avatar}>
+                            {location.order}
+                          </Avatar>
+                          {location.name}
+                        </ListSubheader>
                         {quest.items &&
-                          quest.items
+                          orderedItems
                             .filter((item) => {
                               return item.locationId === location.id;
                             })
@@ -501,23 +529,23 @@ const QuestItems = () => {
             Publish
           </Button>
           <Button
-          variant="contained"
-          color="default"
-          component={RouterLink}
-          to={`/quest/` + quest.questId + `/read`}
-          className={classes.button}
-        >
-          Read
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          component={RouterLink}
-          to={`/quest/` + quest.questId + `/play`}
-          className={classes.button}
-        >
-          Play
-        </Button>
+            variant="contained"
+            color="default"
+            component={RouterLink}
+            to={`/quest/` + quest.questId + `/read`}
+            className={classes.button}
+          >
+            Read
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            component={RouterLink}
+            to={`/quest/` + quest.questId + `/play`}
+            className={classes.button}
+          >
+            Play
+          </Button>
         </Box>
       </Box>
     </>
