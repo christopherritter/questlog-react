@@ -16,6 +16,7 @@
     "@turf/distance": "^6.4.0",
     "@turf/helpers": "^6.4.0",
     "@urbica/react-map-gl": "^1.14.3",
+    "cross-spawn": "^7.0.3",
     "firebase": "^8.6.1",
     "mapbox-gl": "^2.3.0",
     "mdi-material-ui": "^6.22.1",
