@@ -357,8 +357,6 @@ const Quest = (props) => {
   // Actions may be taken by the user to move the story
   // They are associated with Entries and Items
 
-  // const [actionIndex, setActionIndex] = useState(-1);
-
   const [action, setAction] = useState();
 
   function handleAddAction(action) {
