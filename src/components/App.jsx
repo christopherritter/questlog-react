@@ -34,9 +34,9 @@ import DotsVertical from "mdi-material-ui/DotsVertical";
 
 // added to avoid a build error on Vercel
 import isexe from "isexe";
+import yallist from "yallist";
 
-if (process.env.NODE_ENV !== "production") console.log(isexe);
-// added to check for build error on Vercel
+if (process.env.NODE_ENV !== "production") console.log(isexe, yallist);
 
 const useStyles = makeStyles((theme) => ({
   root: {
