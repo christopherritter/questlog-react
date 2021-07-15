@@ -54,7 +54,7 @@ const QuestLegend = (props) => {
               Legend
             </Typography>
           </Grid>
-          <Grid item>
+          <Grid item xs={1}>
             <IconButton
               aria-label="delete"
               className={classes.margin}
