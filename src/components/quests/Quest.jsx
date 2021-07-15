@@ -218,8 +218,6 @@ const Quest = (props) => {
   // Short text entries that are displayed at a location
   // Usually provide readers with a set of actions to choose from
 
-  // const [entryIndex, setEntryIndex] = useState(-1);
-
   const [entry, setEntry] = useState();
 
   function handleAddEntry(entry) {
