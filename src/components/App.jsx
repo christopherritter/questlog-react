@@ -32,6 +32,11 @@ import Menu from "@material-ui/core/Menu";
 import CompassOutline from "mdi-material-ui/CompassOutline";
 import DotsVertical from "mdi-material-ui/DotsVertical";
 
+// added to avoid a build error on Vercel
+import isexe from "isexe";
+
+if (process.env.NODE_ENV !== "production") console.log(isexe);
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -68,8 +73,8 @@ const App = () => {
   let match = useRouteMatch("/quest/");
 
   useEffect(() => {
-    ReactGA.set({ page: history.location.pathname })
-    ReactGA.pageview(history.location.pathname)
+    ReactGA.set({ page: history.location.pathname });
+    ReactGA.pageview(history.location.pathname);
   }, [history.location.pathname]);
 
   useEffect(() => {
@@ -77,7 +82,7 @@ const App = () => {
       clearQuest();
     }
   }, [match]);
-  
+
   // useEffect(() => {
   //   if (currentUser) {
   //     setLoggedIn(true);
