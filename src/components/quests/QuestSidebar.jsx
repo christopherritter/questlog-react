@@ -130,18 +130,18 @@ const QuestActions = ({
   });
 
   const selectAction = useCallback(
-    (event, actionType) => {
-      console.log("selectAction", event.target.id);
-      const actionIndex = findWithAttr(quest.actions, "id", event.target.id);
+    (event, actionType, actionTarget) => {
+      console.log("selectAction", actionTarget);
+      const actionIndex = findWithAttr(quest.actions, "id", actionTarget);
       const action = quest.actions[actionIndex];
       
       switch (actionType) {
         case "look":
-          return viewQuestItem(action.targetId);
+          return viewQuestItem(actionTarget);
         case "move":
         case "next":
         case "back":
-          return selectLocation(action.targetId);
+          return selectLocation(actionTarget);
         case "take":
           return takeQuestItem(action);
         case "operate":
@@ -169,7 +169,7 @@ const QuestActions = ({
           return filteredActions.includes(result.id);
         })
         .map((action, index) => (
-          <ListItem button key={index} onClick={(event) => selectAction(event, action.type)}>
+          <ListItem button key={index} onClick={(event) => selectAction(event, action.type, action.targetId)}>
             <ListItemIcon>{switchIcon(action.type)}</ListItemIcon>
             <ListItemText
               primary={
