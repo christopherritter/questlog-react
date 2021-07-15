@@ -166,8 +166,18 @@ const QuestActions = (props) => {
       }
       setAction({ ...action, type: value, targetId: previousLocationId });
     } else {
-      setAction({ ...action, type: value, targetId: "" });
-    }
+      setAction({ ...action, type: value });
+    } 
+  }
+
+  function handleSelectLocation(event) {
+    const { value } = event.target;
+    setAction({ ...action, targetId: value });
+  }
+
+  function handleSelectItem(event) {
+    const { value } = event.target;
+    setAction({ ...action, targetId: value });
   }
 
   const handleChangeEffects = (event) => {
@@ -195,7 +205,7 @@ const QuestActions = (props) => {
           <Select
             native
             value={action.targetId}
-            onChange={handleSelectType}
+            onChange={handleSelectItem}
             inputProps={{
               name: "targetId",
               id: "actionTarget",
@@ -217,7 +227,7 @@ const QuestActions = (props) => {
           <Select
             native
             value={action.targetId}
-            onChange={handleSelectType}
+            onChange={handleSelectLocation}
             inputProps={{
               name: "targetId",
               id: "actionTarget",
@@ -239,7 +249,7 @@ const QuestActions = (props) => {
           <Select
             native
             value={action.targetId}
-            onChange={handleSelectType}
+            onChange={handleSelectItem}
             inputProps={{
               name: "targetId",
               id: "actionTarget",
@@ -261,7 +271,7 @@ const QuestActions = (props) => {
           <Select
             native
             value={action.targetId}
-            onChange={handleSelectType}
+            onChange={handleSelectItem}
             inputProps={{
               name: "targetId",
               id: "actionTarget",
@@ -290,7 +300,6 @@ const QuestActions = (props) => {
           <Select
             native
             value={action.targetId}
-            onChange={handleSelectType}
             inputProps={{
               name: "targetId",
               id: "actionTarget",
