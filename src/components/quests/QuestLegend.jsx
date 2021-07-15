@@ -38,7 +38,7 @@ const QuestLegend = (props) => {
 
   const currentLocations = [...quest.locations];
   const sortedLocations = currentLocations.sort((a, b) =>
-    a.order > b.order ? 1 : -1
+    Number(a.order) > Number(b.order) ? 1 : -1
   );
 
   function onListItemClick(loc) {
