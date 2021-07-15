@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useCallback } from "react";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
 
@@ -129,13 +129,13 @@ const QuestActions = ({
     }
   });
 
-  function selectAction(event) {
-    console.log("selectAction", event.target.id);
-    const actionIndex = findWithAttr(quest.actions, "id", event.target.id);
-    const action = quest.actions[actionIndex];
-
-    if (action.type) {
-      switch (action.type) {
+  const selectAction = useCallback(
+    (event, actionType) => {
+      console.log("selectAction", event.target.id);
+      const actionIndex = findWithAttr(quest.actions, "id", event.target.id);
+      const action = quest.actions[actionIndex];
+      
+      switch (actionType) {
         case "look":
           return viewQuestItem(action.targetId);
         case "move":
@@ -149,10 +149,9 @@ const QuestActions = ({
         default:
           return;
       }
-    } else {
-      console.log("no action type");
-    }
-  }
+    },
+    [quest.actions, operateQuestItem, takeQuestItem, viewQuestItem, selectLocation]
+  );
 
   function findWithAttr(array, attr, value) {
     for (var i = 0; i < array.length; i += 1) {
@@ -170,7 +169,7 @@ const QuestActions = ({
           return filteredActions.includes(result.id);
         })
         .map((action, index) => (
-          <ListItem button key={index} onClick={selectAction}>
+          <ListItem button key={index} onClick={(event) => selectAction(event, action.type)}>
             <ListItemIcon>{switchIcon(action.type)}</ListItemIcon>
             <ListItemText
               primary={
