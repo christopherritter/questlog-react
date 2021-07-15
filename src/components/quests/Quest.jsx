@@ -242,12 +242,10 @@ const Quest = (props) => {
   function handleRemoveEntry(entry) {
     const updatedEntries = quest.entries.filter((ent) => ent.id !== entry.id);
     setQuest({ ...quest, entries: updatedEntries });
-    // setEntryIndex(-1);
     setEntry(null);
   }
 
   function handleClearEntry() {
-    // setEntryIndex(-1);
     setEntry(null);
   }
 
