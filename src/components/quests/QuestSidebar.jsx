@@ -130,8 +130,7 @@ const QuestActions = ({
   });
 
   const selectAction = useCallback(
-    (event, actionType, actionTarget) => {
-      console.log("selectAction", actionTarget);
+    (actionType, actionTarget) => {
       const actionIndex = findWithAttr(quest.actions, "id", actionTarget);
       const action = quest.actions[actionIndex];
       
@@ -169,7 +168,7 @@ const QuestActions = ({
           return filteredActions.includes(result.id);
         })
         .map((action, index) => (
-          <ListItem button key={index} onClick={(event) => selectAction(event, action.type, action.targetId)}>
+          <ListItem button key={index} onClick={() => selectAction(action.type, action.targetId)}>
             <ListItemIcon>{switchIcon(action.type)}</ListItemIcon>
             <ListItemText
               primary={
