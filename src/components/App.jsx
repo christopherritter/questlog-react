@@ -36,7 +36,6 @@ import DotsVertical from "mdi-material-ui/DotsVertical";
 import isexe from "isexe";
 
 if (process.env.NODE_ENV !== "production") console.log(isexe);
-// added to check for build error on Vercel
 
 const useStyles = makeStyles((theme) => ({
   root: {
