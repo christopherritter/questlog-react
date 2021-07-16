@@ -410,49 +410,127 @@ const Quest = (props) => {
 
   const markerTypes = [
     {
-      name: "Home",
-      value: "home",
+      name: "Alert",
+      value: "alert",
+    },
+    {
+      name: "Baby",
+      value: "baby",
     },
     {
       name: "Barn",
       value: "barn",
     },
     {
-      name: "Tractor",
-      value: "tractor",
+      name: "Baseball bat",
+      value: "baseball-bat",
     },
     {
-      name: "Grass",
-      value: "grass",
+      name: "Baseball diamond",
+      value: "baseball-diamond",
     },
     {
-      name: "Corn",
-      value: "corn",
+      name: "Bridge",
+      value: "bridge",
+    },
+    {
+      name: "Bug",
+      value: "bug",
+    },
+    {
+      name: "Campfire",
+      value: "campfire",
     },
     {
       name: "Church",
       value: "church",
     },
     {
-      name: "Road",
-      value: "road",
+      name: "Corn",
+      value: "corn",
     },
     {
-      name: "Home (Outline)",
+      name: "Deathly Hallows",
+      value: "deathly-hallows",
+    },
+    {
+      name: "Grass",
+      value: "grass",
+    },
+    {
+      name: "Home",
+      value: "home",
+    },
+    {
+      name: "Home (outline)",
       value: "home-outline",
+    },
+    {
+      name: "Parking",
+      value: "parking",
+    },
+    {
+      name: "Mountain",
+      value: "mountain",
+    },
+    {
+      name: "Paw",
+      value: "paw",
+    },
+    {
+      name: "Playground",
+      value: "playground",
+    },
+    {
+      name: "Poison",
+      value: "poison",
+    },
+    {
+      name: "Restaurant",
+      value: "restaurant",
+    },
+    {
+      name: "Road",
+      value: "road",
     },
     {
       name: "Routes",
       value: "routes",
     },
+
     {
       name: "Sign",
       value: "sign",
     },
     {
-      name: "Campfire",
-      value: "campfire",
+      name: "Skull",
+      value: "skull",
     },
+    {
+      name: "Telescope",
+      value: "telescope",
+    },
+    {
+      name: "Tornado",
+      value: "tornado",
+    },
+    {
+      name: "Tractor",
+      value: "tractor",
+    },
+    {
+      name: "Tree",
+      value: "tree",
+    },
+    {
+      name: "Tree (pine)",
+      value: "pine-tree",
+    },
+
+    
+    
+
+    
   ];
 
   const actionTypes = [

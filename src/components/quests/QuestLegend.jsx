@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
+import QuestMapSymbol from "./QuestMapSymbol.jsx";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -13,7 +14,6 @@ import ListItemText from "@material-ui/core/ListItemText";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -76,7 +76,7 @@ const QuestLegend = (props) => {
                   onClick={() => onListItemClick(loc)}
                 >
                   <ListItemIcon>
-                    <LocationOnIcon />
+                    <QuestMapSymbol location={loc} />
                   </ListItemIcon>
                   <ListItemText
                     primary={
