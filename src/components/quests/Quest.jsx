@@ -205,10 +205,12 @@ const Quest = (props) => {
       (loc) => loc.id !== location.id
     );
     setQuest({ ...quest, locations: updatedLocations });
+    // setLocationIndex(-1);
     setLocation(null);
   }
 
   function handleClearLocation() {
+    // setLocationIndex(-1);
     setLocation(null);
   }
 
