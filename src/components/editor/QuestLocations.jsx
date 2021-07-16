@@ -329,7 +329,6 @@ function QuestLocations() {
   }
 
   function handleUpdateLocation(e) {
-    console.log("handle update location", location);
     e.preventDefault();
     updateLocation({
       ...location,
