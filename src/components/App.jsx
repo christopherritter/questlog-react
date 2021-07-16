@@ -37,7 +37,6 @@ import isexe from "isexe";
 import yallist from "yallist";
 
 if (process.env.NODE_ENV !== "production") console.log(isexe, yallist);
-// added comment to check for build errors on Vercel
 
 const useStyles = makeStyles((theme) => ({
   root: {
