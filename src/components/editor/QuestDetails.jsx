@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import Uploading from "../utils/UploadImageToS3WithReactS3.jsx";
+import ImageUploader from "../utils/UploadImageToS3WithReactS3.jsx";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
 
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     marginTop: theme.spacing(3),
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
   },
   editorSidebar: {
     position: "sticky",
@@ -33,6 +33,14 @@ const useStyles = makeStyles((theme) => ({
 function QuestDetails() {
   const classes = useStyles();
   const { quest, updateDetails, publishQuest } = useContext(QuestContext);
+
+  function handleUpload(key) {
+    updateDetails({ target: { name: "image", value: key } });
+  }
+
+  function handleRemove() {
+    updateDetails({ target: { name: "image", value: "" } });
+  }
 
   return (
     <>
@@ -78,6 +86,10 @@ function QuestDetails() {
               value={quest.description}
               onChange={updateDetails}
             />
+            <ImageUploader
+              onUpload={(e) => handleUpload(e)}
+              onRemove={handleRemove}
+            />
           </form>
         </Grid>
       </Grid>
@@ -108,9 +120,6 @@ function QuestDetails() {
         >
           Play
         </Button>
-      </Box>
-      <Box display="flex">
-        <Uploading />
       </Box>
     </>
   );
