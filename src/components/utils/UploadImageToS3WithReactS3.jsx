@@ -54,7 +54,7 @@ const UploadImageToS3WithReactS3 = (props) => {
           onChange={handleFileInput}
         />
       </Button>
-      {/* <Button variant="contained" onClick={() => handleUpload(selectedFile)}>Upload to S3</Button> */}
+      <Button variant="contained" onClick={() => handleUpload(selectedFile)}>Upload to S3</Button>
       {quest.image.length > 0 && (
         <Button variant="contained" onClick={handleRemove}>Remove Cover Art</Button>
       )}
