@@ -47,7 +47,7 @@ const UploadImageToS3WithReactS3 = (props) => {
         variant="contained"
         component="label"
       >
-        Upload File
+        Select File
         <input
           type="file"
           hidden
