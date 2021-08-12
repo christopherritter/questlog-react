@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { Link as RouterLink } from "react-router-dom";
+import Uploading from "../utils/UploadImageToS3WithReactS3.jsx";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
 
@@ -107,6 +108,9 @@ function QuestDetails() {
         >
           Play
         </Button>
+      </Box>
+      <Box display="flex">
+        <Uploading />
       </Box>
     </>
   );
