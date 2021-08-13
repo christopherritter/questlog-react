@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { uploadFile, deleteFile } from "react-s3";
 
+import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 
 import QuestContext from "../../contexts/QuestContext.jsx";
@@ -41,24 +42,38 @@ const UploadImageToS3WithReactS3 = (props) => {
   };
 
   return (
-    <div>
-      <h5>Cover Art</h5>
-      <Button
-        variant="contained"
-        component="label"
-      >
-        Select File
-        <input
-          type="file"
-          hidden
-          onChange={handleFileInput}
-        />
-      </Button>
-      <Button variant="contained" onClick={() => handleUpload(selectedFile)}>Upload to S3</Button>
+    <Grid container>
+      <Grid item sm={12}>
+        <h5>Cover Art</h5>
+      </Grid>
+
       {quest.image.length > 0 && (
-        <Button variant="contained" onClick={handleRemove}>Remove Cover Art</Button>
+        <>
+          <Grid item sm={6}>
+            <img src={'https://questlog-images.s3.us-east-2.amazonaws.com/' + quest.image} alt="Cover art" width="100%" />
+          </Grid>
+          <Grid item sm={6}>
+            <Button variant="contained" onClick={handleRemove}>Remove Cover Art</Button>
+          </Grid>
+        </>
       )}
-    </div>
+
+      <Grid item sm={12}>
+        <Button
+          variant="contained"
+          component="label"
+        >
+          { quest.image.length > 0 ? "Change Cover Art" : "Upload Cover Art" }
+          <input
+            type="file"
+            hidden
+            onChange={handleFileInput}
+          />
+        </Button>
+        <Button variant="contained" onClick={() => handleUpload(selectedFile)}>Upload to S3</Button>
+      </Grid>
+
+    </Grid>
   );
 };
 

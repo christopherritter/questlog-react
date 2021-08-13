@@ -43,8 +43,18 @@ const QuestViewer = () => {
   return (
     <>
       <Paper elevation={0} className={classes.root} square>
+        {quest.image.length > 0 && (
+          <img
+            src={
+              "https://questlog-images.s3.us-east-2.amazonaws.com/" +
+              quest.image
+            }
+            alt="Cover art"
+            width="100%"
+          />
+        )}
         <Container>
-          <Grid container>
+          <Grid container spacing={0}>
             <Grid sm={12} item>
               <Typography
                 variant="h2"
@@ -96,11 +106,7 @@ const QuestViewer = () => {
           </Grid>
         </Container>
         {quest.region && (
-          <QuestMap
-            quest={quest}
-            width={"100%"}
-            height={"400px"}
-          />
+          <QuestMap quest={quest} width={"100%"} height={"400px"} />
         )}
       </Paper>
       <Footer />
